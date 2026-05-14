@@ -16,7 +16,7 @@ function PublishersPage() {
   const load = async () => {
     // publishers are profiles that have at least one task
     const { data: tasks } = await supabase.from("tasks").select("publisher_id");
-    const publisherIds = Array.from(new Set((tasks ?? []).map(t => t.publisher_id).filter(Boolean)));
+    const publisherIds = Array.from(new Set((tasks ?? []).map(t => t.publisher_id).filter((x): x is string => !!x)));
     if (publisherIds.length === 0) { setRows([]); return; }
     const { data: profiles } = await supabase.from("profiles").select("*").in("id", publisherIds);
     const { data: subs } = await supabase.from("task_submissions").select("status, task:tasks(publisher_id)");
