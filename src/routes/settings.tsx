@@ -12,15 +12,22 @@ export const Route = createFileRoute("/settings")({ component: SettingsPage });
 
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
-  const [form, setForm] = useState({ activation_fee: 0, withdrawal_fee: 0, minimum_withdrawal: 0 });
+  const [form, setForm] = useState({
+    activation_fee: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0,
+  });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     supabase.from("settings").select("*").limit(1).maybeSingle().then(({ data }) => {
-      if (data) { setRow(data); setForm({
-        activation_fee: Number(data.activation_fee), withdrawal_fee: Number(data.withdrawal_fee),
-        minimum_withdrawal: Number(data.minimum_withdrawal),
-      }); }
+      if (data) {
+        setRow(data);
+        setForm({
+          activation_fee: Number(data.activation_fee),
+          withdrawal_fee: Number(data.withdrawal_fee),
+          minimum_withdrawal: Number(data.minimum_withdrawal),
+          publisher_task_tax: Number(data.publisher_task_tax ?? 0),
+        });
+      }
     });
   }, []);
 
@@ -35,7 +42,7 @@ function SettingsPage() {
   return (
     <AdminShell title="Settings">
       <Card className="max-w-xl">
-        <CardHeader><CardTitle>Platform fees</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Platform fees & taxes</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div>
             <Label>Activation fee ($)</Label>
@@ -51,6 +58,14 @@ function SettingsPage() {
             <Label>Minimum withdrawal ($)</Label>
             <Input type="number" step="0.01" value={form.minimum_withdrawal}
               onChange={(e) => setForm(f => ({ ...f, minimum_withdrawal: Number(e.target.value) }))} />
+          </div>
+          <div>
+            <Label>Publisher task tax (%)</Label>
+            <Input type="number" step="0.01" value={form.publisher_task_tax}
+              onChange={(e) => setForm(f => ({ ...f, publisher_task_tax: Number(e.target.value) }))} />
+            <p className="text-xs text-muted-foreground mt-1">
+              Percentage deducted from a publisher's balance whenever they publish a new task.
+            </p>
           </div>
           <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
         </CardContent>
