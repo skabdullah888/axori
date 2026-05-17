@@ -22,7 +22,8 @@ function AppealsPage() {
   const load = async () => {
     const { data } = await supabase
       .from("appeals")
-      .select("*, profile:profiles!appeals_user_id_fkey(*), submission:task_submissions(*, task:tasks(*), proofs:task_submission_proofs(*))")
+      .select("*, profile:profiles!appeals_user_id_fkey(*), submission:task_submissions!inner(*, task:tasks(*, publisher:profiles(*)), proofs:task_submission_proofs(*))")
+      .eq("submission.status", "rejected")
       .order("created_at", { ascending: false });
     setRows(data ?? []);
   };
@@ -102,11 +103,17 @@ function AppealsPage() {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div><div className="text-muted-foreground">User</div><div>{open.profile?.username}</div></div>
                 <div><div className="text-muted-foreground">Task</div><div>{open.submission?.task?.title}</div></div>
+                <div><div className="text-muted-foreground">Publisher</div><div>{open.submission?.task?.publisher?.username ?? "—"}</div></div>
                 <div><div className="text-muted-foreground">Reward</div><div>{fmtMoney(open.submission?.task?.reward)}</div></div>
-                <div><div className="text-muted-foreground">Status</div><div><StatusPill status={open.status} /></div></div>
+                <div><div className="text-muted-foreground">Submission status</div><div><StatusPill status={open.submission?.status ?? "—"} /></div></div>
+                <div><div className="text-muted-foreground">Appeal status</div><div><StatusPill status={open.status} /></div></div>
               </div>
               <div>
-                <div className="text-xs text-muted-foreground mb-1">User reason</div>
+                <div className="text-xs text-muted-foreground mb-1">Publisher's rejection response</div>
+                <div className="bg-muted/30 rounded-md p-3 text-sm">{open.submission?.note || "No note provided by publisher."}</div>
+              </div>
+              <div>
+                <div className="text-xs text-muted-foreground mb-1">User's appeal reason</div>
                 <div className="bg-muted/30 rounded-md p-3 text-sm">{open.reason}</div>
               </div>
               {open.submission?.proofs?.length > 0 && (

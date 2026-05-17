@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Gavel, Wallet, FileCheck, Users, Building2,
+  LayoutDashboard, Gavel, Wallet, Users, Building2,
   ListTodo, Bell, Settings as SettingsIcon, ShieldAlert, LogOut,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +11,6 @@ const items = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/appeals", label: "Appeals Center", icon: Gavel },
   { to: "/payments", label: "Payments", icon: Wallet },
-  { to: "/submissions", label: "Submissions", icon: FileCheck },
   { to: "/users", label: "Users", icon: Users },
   { to: "/publishers", label: "Publishers", icon: Building2 },
   { to: "/tasks", label: "Tasks", icon: ListTodo },
@@ -22,6 +22,35 @@ const items = [
 export function AdminSidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const navigate = useNavigate();
+  const [unread, setUnread] = useState(0);
+
+  const loadUnread = async () => {
+    const { count } = await supabase
+      .from("notifications")
+      .select("id", { count: "exact", head: true })
+      .eq("admin_targeted", true)
+      .eq("read", false);
+    setUnread(count ?? 0);
+  };
+
+  useEffect(() => {
+    loadUnread();
+    const ch = supabase.channel("sb-notif-rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "notifications" }, () => loadUnread())
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, []);
+
+  // Reset badge when visiting notifications page
+  useEffect(() => {
+    if (path === "/notifications" && unread > 0) {
+      supabase.from("notifications")
+        .update({ read: true })
+        .eq("admin_targeted", true)
+        .eq("read", false)
+        .then(() => loadUnread());
+    }
+  }, [path]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -38,6 +67,7 @@ export function AdminSidebar() {
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
+          const showBadge = it.to === "/notifications" && unread > 0;
           return (
             <Link
               key={it.to}
@@ -50,7 +80,12 @@ export function AdminSidebar() {
               )}
             >
               <Icon className="h-4 w-4" />
-              {it.label}
+              <span className="flex-1">{it.label}</span>
+              {showBadge && (
+                <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold">
+                  {unread > 99 ? "99+" : unread}
+                </span>
+              )}
             </Link>
           );
         })}

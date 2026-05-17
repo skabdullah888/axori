@@ -5,15 +5,22 @@ import { AdminShell } from "@/components/admin-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Ban, ShieldCheck } from "lucide-react";
+import { Ban, ShieldCheck, Pencil } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/users")({ component: UsersPage });
 
+type StatusFilter = "all" | "active" | "inactive" | "banned";
+
 function UsersPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<StatusFilter>("all");
+  const [edit, setEdit] = useState<any | null>(null);
+  const [form, setForm] = useState({ balance: 0, trust_score: 100 });
 
   const load = async () => {
     const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
@@ -28,21 +35,48 @@ function UsersPage() {
     return () => { supabase.removeChannel(ch); };
   }, []);
 
-  const setStatus = async (id: string, status: "active" | "banned") => {
+  const setStatus = async (id: string, status: "active" | "banned" | "inactive") => {
     const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
     if (error) toast.error(error.message); else toast.success(`User ${status}`);
   };
-  const setTrust = async (id: string, trust: number) => {
-    const { error } = await supabase.from("profiles").update({ trust_score: trust }).eq("id", id);
-    if (error) toast.error(error.message); else toast.success("Trust updated");
+
+  const openEdit = (r: any) => {
+    setEdit(r);
+    setForm({ balance: Number(r.balance ?? 0), trust_score: Number(r.trust_score ?? 100) });
   };
 
-  const filtered = rows.filter(r => !search || r.username?.toLowerCase().includes(search.toLowerCase()));
+  const saveEdit = async () => {
+    if (!edit) return;
+    const { error } = await supabase.from("profiles")
+      .update({ balance: form.balance, trust_score: form.trust_score })
+      .eq("id", edit.id);
+    if (error) toast.error(error.message);
+    else { toast.success("User updated"); setEdit(null); }
+  };
+
+  const filtered = rows.filter(r => {
+    if (filter !== "all" && r.status !== filter) return false;
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return r.username?.toLowerCase().includes(q) || r.id?.toLowerCase().includes(q);
+  });
 
   return (
     <AdminShell title="Users Management">
-      <div className="mb-4 max-w-sm">
-        <Input placeholder="Search username…" value={search} onChange={(e) => setSearch(e.target.value)} />
+      <div className="flex flex-wrap gap-2 mb-4 items-center">
+        <Input
+          placeholder="Search by username or user ID…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-sm"
+        />
+        <div className="flex gap-2">
+          {(["all", "active", "inactive", "banned"] as StatusFilter[]).map(f => (
+            <Button key={f} size="sm" variant={filter === f ? "default" : "secondary"} onClick={() => setFilter(f)}>
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </Button>
+          ))}
+        </div>
       </div>
       <Card><CardContent className="p-0">
         {filtered.length === 0 ? <EmptyState message="No users." /> : (
@@ -51,6 +85,7 @@ function UsersPage() {
               <thead className="bg-muted/30 text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="text-left px-4 py-3">Username</th>
+                  <th className="text-left px-4 py-3">User ID</th>
                   <th className="text-left px-4 py-3">Balance</th>
                   <th className="text-left px-4 py-3">Trust</th>
                   <th className="text-left px-4 py-3">Status</th>
@@ -62,26 +97,26 @@ function UsersPage() {
                 {filtered.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 font-medium">{r.username}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.id.slice(0, 8)}…</td>
                     <td className="px-4 py-3">{fmtMoney(r.balance)}</td>
-                    <td className="px-4 py-3">
-                      <Input
-                        type="number"
-                        defaultValue={r.trust_score}
-                        className="w-20 h-8"
-                        onBlur={(e) => {
-                          const v = Number(e.target.value);
-                          if (v !== r.trust_score) setTrust(r.id, v);
-                        }}
-                      />
-                    </td>
+                    <td className="px-4 py-3">{r.trust_score}</td>
                     <td className="px-4 py-3"><StatusPill status={r.status} /></td>
                     <td className="px-4 py-3 text-muted-foreground">{fmtDate(r.created_at)}</td>
                     <td className="px-4 py-3 text-right">
-                      {r.status === "active" ? (
-                        <Button size="sm" variant="destructive" onClick={() => setStatus(r.id, "banned")}><Ban className="h-4 w-4 mr-1" />Ban</Button>
-                      ) : (
-                        <Button size="sm" onClick={() => setStatus(r.id, "active")}><ShieldCheck className="h-4 w-4 mr-1" />Unban</Button>
-                      )}
+                      <div className="inline-flex gap-2">
+                        <Button size="sm" variant="secondary" onClick={() => openEdit(r)}>
+                          <Pencil className="h-4 w-4 mr-1" />Edit
+                        </Button>
+                        {r.status === "banned" ? (
+                          <Button size="sm" onClick={() => setStatus(r.id, "active")}>
+                            <ShieldCheck className="h-4 w-4 mr-1" />Unban
+                          </Button>
+                        ) : (
+                          <Button size="sm" variant="destructive" onClick={() => setStatus(r.id, "banned")}>
+                            <Ban className="h-4 w-4 mr-1" />Ban
+                          </Button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -90,6 +125,40 @@ function UsersPage() {
           </div>
         )}
       </CardContent></Card>
+
+      <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Edit user — {edit?.username}</DialogTitle></DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Balance ($)</Label>
+              <Input type="number" step="0.01" value={form.balance}
+                onChange={(e) => setForm(f => ({ ...f, balance: Number(e.target.value) }))} />
+            </div>
+            <div>
+              <Label>Trust score</Label>
+              <Input type="number" value={form.trust_score}
+                onChange={(e) => setForm(f => ({ ...f, trust_score: Number(e.target.value) }))} />
+            </div>
+            <div>
+              <Label>Status</Label>
+              <div className="flex gap-2 mt-1">
+                {(["active", "inactive", "banned"] as const).map(s => (
+                  <Button key={s} size="sm"
+                    variant={edit?.status === s ? "default" : "secondary"}
+                    onClick={async () => { await setStatus(edit.id, s); setEdit({ ...edit, status: s }); }}>
+                    {s}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setEdit(null)}>Cancel</Button>
+            <Button onClick={saveEdit}>Save changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AdminShell>
   );
 }
