@@ -12,12 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteImport } from './routes/users'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as SkControlPanel99RouteImport } from './routes/sk-control-panel-99'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SecurityLogsRouteImport } from './routes/security-logs'
 import { Route as PublishersRouteImport } from './routes/publishers'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AppealsRouteImport } from './routes/appeals'
 import { Route as IndexRouteImport } from './routes/index'
@@ -35,6 +35,11 @@ const TasksRoute = TasksRouteImport.update({
 const SubmissionsRoute = SubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SkControlPanel99Route = SkControlPanel99RouteImport.update({
+  id: '/sk-control-panel-99',
+  path: '/sk-control-panel-99',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -62,11 +67,6 @@ const NotificationsRoute = NotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -87,12 +87,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/appeals': typeof AppealsRoute
   '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/payments': typeof PaymentsRoute
   '/publishers': typeof PublishersRoute
   '/security-logs': typeof SecurityLogsRoute
   '/settings': typeof SettingsRoute
+  '/sk-control-panel-99': typeof SkControlPanel99Route
   '/submissions': typeof SubmissionsRoute
   '/tasks': typeof TasksRoute
   '/users': typeof UsersRoute
@@ -101,12 +101,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/appeals': typeof AppealsRoute
   '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/payments': typeof PaymentsRoute
   '/publishers': typeof PublishersRoute
   '/security-logs': typeof SecurityLogsRoute
   '/settings': typeof SettingsRoute
+  '/sk-control-panel-99': typeof SkControlPanel99Route
   '/submissions': typeof SubmissionsRoute
   '/tasks': typeof TasksRoute
   '/users': typeof UsersRoute
@@ -116,12 +116,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/appeals': typeof AppealsRoute
   '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
   '/notifications': typeof NotificationsRoute
   '/payments': typeof PaymentsRoute
   '/publishers': typeof PublishersRoute
   '/security-logs': typeof SecurityLogsRoute
   '/settings': typeof SettingsRoute
+  '/sk-control-panel-99': typeof SkControlPanel99Route
   '/submissions': typeof SubmissionsRoute
   '/tasks': typeof TasksRoute
   '/users': typeof UsersRoute
@@ -132,12 +132,12 @@ export interface FileRouteTypes {
     | '/'
     | '/appeals'
     | '/dashboard'
-    | '/login'
     | '/notifications'
     | '/payments'
     | '/publishers'
     | '/security-logs'
     | '/settings'
+    | '/sk-control-panel-99'
     | '/submissions'
     | '/tasks'
     | '/users'
@@ -146,12 +146,12 @@ export interface FileRouteTypes {
     | '/'
     | '/appeals'
     | '/dashboard'
-    | '/login'
     | '/notifications'
     | '/payments'
     | '/publishers'
     | '/security-logs'
     | '/settings'
+    | '/sk-control-panel-99'
     | '/submissions'
     | '/tasks'
     | '/users'
@@ -160,12 +160,12 @@ export interface FileRouteTypes {
     | '/'
     | '/appeals'
     | '/dashboard'
-    | '/login'
     | '/notifications'
     | '/payments'
     | '/publishers'
     | '/security-logs'
     | '/settings'
+    | '/sk-control-panel-99'
     | '/submissions'
     | '/tasks'
     | '/users'
@@ -175,12 +175,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppealsRoute: typeof AppealsRoute
   DashboardRoute: typeof DashboardRoute
-  LoginRoute: typeof LoginRoute
   NotificationsRoute: typeof NotificationsRoute
   PaymentsRoute: typeof PaymentsRoute
   PublishersRoute: typeof PublishersRoute
   SecurityLogsRoute: typeof SecurityLogsRoute
   SettingsRoute: typeof SettingsRoute
+  SkControlPanel99Route: typeof SkControlPanel99Route
   SubmissionsRoute: typeof SubmissionsRoute
   TasksRoute: typeof TasksRoute
   UsersRoute: typeof UsersRoute
@@ -207,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/submissions'
       fullPath: '/submissions'
       preLoaderRoute: typeof SubmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sk-control-panel-99': {
+      id: '/sk-control-panel-99'
+      path: '/sk-control-panel-99'
+      fullPath: '/sk-control-panel-99'
+      preLoaderRoute: typeof SkControlPanel99RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -244,13 +251,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -279,12 +279,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppealsRoute: AppealsRoute,
   DashboardRoute: DashboardRoute,
-  LoginRoute: LoginRoute,
   NotificationsRoute: NotificationsRoute,
   PaymentsRoute: PaymentsRoute,
   PublishersRoute: PublishersRoute,
   SecurityLogsRoute: SecurityLogsRoute,
   SettingsRoute: SettingsRoute,
+  SkControlPanel99Route: SkControlPanel99Route,
   SubmissionsRoute: SubmissionsRoute,
   TasksRoute: TasksRoute,
   UsersRoute: UsersRoute,
@@ -292,3 +292,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
