@@ -8,7 +8,7 @@ export function AdminShell({ title, children }: { title: string; children: React
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !isAuthed) navigate({ to: "/login" });
+    if (!loading && !isAuthed) navigate({ to: "/sk-control-panel-99" });
   }, [loading, isAuthed, navigate]);
 
   if (loading || !isAuthed) {
