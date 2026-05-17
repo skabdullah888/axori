@@ -22,7 +22,8 @@ function AppealsPage() {
   const load = async () => {
     const { data } = await supabase
       .from("appeals")
-      .select("*, profile:profiles!appeals_user_id_fkey(*), submission:task_submissions(*, task:tasks(*), proofs:task_submission_proofs(*))")
+      .select("*, profile:profiles!appeals_user_id_fkey(*), submission:task_submissions!inner(*, task:tasks(*, publisher:profiles(*)), proofs:task_submission_proofs(*))")
+      .eq("submission.status", "rejected")
       .order("created_at", { ascending: false });
     setRows(data ?? []);
   };
