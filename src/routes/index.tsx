@@ -9,7 +9,7 @@ function Index() {
   const navigate = useNavigate();
   useEffect(() => {
     if (loading) return;
-    navigate({ to: isAuthed ? "/dashboard" : "/login" });
+    navigate({ to: isAuthed ? "/dashboard" : "/sk-control-panel-99" });
   }, [isAuthed, loading, navigate]);
   return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
 }

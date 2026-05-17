@@ -54,7 +54,7 @@ export function AdminSidebar() {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: "/login" });
+    navigate({ to: "/sk-control-panel-99" });
   };
 
   return (
