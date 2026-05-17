@@ -64,6 +64,7 @@ export type Database = {
       }
       notifications: {
         Row: {
+          admin_targeted: boolean
           created_at: string
           id: string
           message: string
@@ -73,6 +74,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          admin_targeted?: boolean
           created_at?: string
           id?: string
           message: string
@@ -82,6 +84,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          admin_targeted?: boolean
           created_at?: string
           id?: string
           message?: string
@@ -106,8 +109,11 @@ export type Database = {
           created_at: string
           id: string
           method: string | null
+          receiver_number: string | null
           reference: string | null
+          sender_number: string | null
           status: string
+          trnx_id: string | null
           type: string
           updated_at: string
           user_id: string | null
@@ -117,8 +123,11 @@ export type Database = {
           created_at?: string
           id?: string
           method?: string | null
+          receiver_number?: string | null
           reference?: string | null
+          sender_number?: string | null
           status?: string
+          trnx_id?: string | null
           type: string
           updated_at?: string
           user_id?: string | null
@@ -128,8 +137,11 @@ export type Database = {
           created_at?: string
           id?: string
           method?: string | null
+          receiver_number?: string | null
           reference?: string | null
+          sender_number?: string | null
           status?: string
+          trnx_id?: string | null
           type?: string
           updated_at?: string
           user_id?: string | null
@@ -227,6 +239,7 @@ export type Database = {
           activation_fee: number
           id: string
           minimum_withdrawal: number
+          publisher_task_tax: number
           updated_at: string
           withdrawal_fee: number
         }
@@ -234,6 +247,7 @@ export type Database = {
           activation_fee?: number
           id?: string
           minimum_withdrawal?: number
+          publisher_task_tax?: number
           updated_at?: string
           withdrawal_fee?: number
         }
@@ -241,6 +255,7 @@ export type Database = {
           activation_fee?: number
           id?: string
           minimum_withdrawal?: number
+          publisher_task_tax?: number
           updated_at?: string
           withdrawal_fee?: number
         }
