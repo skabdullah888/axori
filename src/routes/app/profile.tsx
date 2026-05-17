@@ -32,7 +32,7 @@ function ProfilePage() {
       ]);
       setMethods(pm.data ?? []);
       setSettings(s.data);
-      if (s.data?.activation_amount) setForm((f) => ({ ...f, amount: String(s.data.activation_amount) }));
+      if (s.data?.activation_amount) setForm((f) => ({ ...f, amount: String(s.data!.activation_amount) }));
     })();
   }, []);
 
