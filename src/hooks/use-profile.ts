@@ -1,0 +1,46 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/use-auth";
+
+export type Profile = {
+  id: string;
+  user_id: string;
+  username: string;
+  email: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  balance: number;
+  trust_score: number;
+  status: string;
+  is_publisher: boolean;
+  referral_code: string | null;
+  referred_by: string | null;
+  activated_at: string | null;
+  last_activation_request_at: string | null;
+  created_at: string;
+};
+
+export function useProfile() {
+  const { session } = useAuth();
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const reload = async () => {
+    if (!session?.user) { setProfile(null); setLoading(false); return; }
+    const { data } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+    setProfile(data as Profile | null);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    reload();
+    if (!session?.user) return;
+    const ch = supabase.channel(`profile-${session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles", filter: `user_id=eq.${session.user.id}` }, reload)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.id]);
+
+  return { profile, loading, reload, isActive: profile?.status === "active" };
+}
