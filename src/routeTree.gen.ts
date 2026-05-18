@@ -25,87 +25,31 @@ import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AppProfileRouteImport } from './routes/app/profile'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
+import { Route as AppTasksRouteImport } from './routes/app/tasks'
+import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
+import { Route as AppSubmissionsRouteImport } from './routes/app/submissions'
+import { Route as AppAppealsRouteImport } from './routes/app/appeals'
 
-const UsersRoute = UsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TasksRoute = TasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SubmissionsRoute = SubmissionsRouteImport.update({
-  id: '/submissions',
-  path: '/submissions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SkControlPanel99Route = SkControlPanel99RouteImport.update({
-  id: '/sk-control-panel-99',
-  path: '/sk-control-panel-99',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SecurityLogsRoute = SecurityLogsRouteImport.update({
-  id: '/security-logs',
-  path: '/security-logs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PublishersRoute = PublishersRouteImport.update({
-  id: '/publishers',
-  path: '/publishers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaymentsRoute = PaymentsRouteImport.update({
-  id: '/payments',
-  path: '/payments',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppealsRoute = AppealsRouteImport.update({
-  id: '/appeals',
-  path: '/appeals',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRegisterRoute = AuthRegisterRouteImport.update({
-  id: '/auth/register',
-  path: '/auth/register',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppProfileRoute = AppProfileRouteImport.update({
-  id: '/app/profile',
-  path: '/app/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/app/dashboard',
-  path: '/app/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const UsersRoute = UsersRouteImport.update({ id: '/users', path: '/users', getParentRoute: () => rootRouteImport } as any)
+const TasksRoute = TasksRouteImport.update({ id: '/tasks', path: '/tasks', getParentRoute: () => rootRouteImport } as any)
+const SubmissionsRoute = SubmissionsRouteImport.update({ id: '/submissions', path: '/submissions', getParentRoute: () => rootRouteImport } as any)
+const SkControlPanel99Route = SkControlPanel99RouteImport.update({ id: '/sk-control-panel-99', path: '/sk-control-panel-99', getParentRoute: () => rootRouteImport } as any)
+const SettingsRoute = SettingsRouteImport.update({ id: '/settings', path: '/settings', getParentRoute: () => rootRouteImport } as any)
+const SecurityLogsRoute = SecurityLogsRouteImport.update({ id: '/security-logs', path: '/security-logs', getParentRoute: () => rootRouteImport } as any)
+const PublishersRoute = PublishersRouteImport.update({ id: '/publishers', path: '/publishers', getParentRoute: () => rootRouteImport } as any)
+const PaymentsRoute = PaymentsRouteImport.update({ id: '/payments', path: '/payments', getParentRoute: () => rootRouteImport } as any)
+const NotificationsRoute = NotificationsRouteImport.update({ id: '/notifications', path: '/notifications', getParentRoute: () => rootRouteImport } as any)
+const DashboardRoute = DashboardRouteImport.update({ id: '/dashboard', path: '/dashboard', getParentRoute: () => rootRouteImport } as any)
+const AppealsRoute = AppealsRouteImport.update({ id: '/appeals', path: '/appeals', getParentRoute: () => rootRouteImport } as any)
+const IndexRoute = IndexRouteImport.update({ id: '/', path: '/', getParentRoute: () => rootRouteImport } as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({ id: '/auth/register', path: '/auth/register', getParentRoute: () => rootRouteImport } as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({ id: '/auth/login', path: '/auth/login', getParentRoute: () => rootRouteImport } as any)
+const AppProfileRoute = AppProfileRouteImport.update({ id: '/app/profile', path: '/app/profile', getParentRoute: () => rootRouteImport } as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({ id: '/app/dashboard', path: '/app/dashboard', getParentRoute: () => rootRouteImport } as any)
+const AppTasksRoute = AppTasksRouteImport.update({ id: '/app/tasks', path: '/app/tasks', getParentRoute: () => rootRouteImport } as any)
+const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({ id: '/app/tasks/$taskId', path: '/app/tasks/$taskId', getParentRoute: () => rootRouteImport } as any)
+const AppSubmissionsRoute = AppSubmissionsRouteImport.update({ id: '/app/submissions', path: '/app/submissions', getParentRoute: () => rootRouteImport } as any)
+const AppAppealsRoute = AppAppealsRouteImport.update({ id: '/app/appeals', path: '/app/appeals', getParentRoute: () => rootRouteImport } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,6 +66,10 @@ export interface FileRoutesByFullPath {
   '/users': typeof UsersRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/tasks': typeof AppTasksRoute
+  '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/app/submissions': typeof AppSubmissionsRoute
+  '/app/appeals': typeof AppAppealsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
 }
@@ -140,6 +88,10 @@ export interface FileRoutesByTo {
   '/users': typeof UsersRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/tasks': typeof AppTasksRoute
+  '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/app/submissions': typeof AppSubmissionsRoute
+  '/app/appeals': typeof AppAppealsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
 }
@@ -159,6 +111,10 @@ export interface FileRoutesById {
   '/users': typeof UsersRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/tasks': typeof AppTasksRoute
+  '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/app/submissions': typeof AppSubmissionsRoute
+  '/app/appeals': typeof AppAppealsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
 }
@@ -179,6 +135,10 @@ export interface FileRouteTypes {
     | '/users'
     | '/app/dashboard'
     | '/app/profile'
+    | '/app/tasks'
+    | '/app/tasks/$taskId'
+    | '/app/submissions'
+    | '/app/appeals'
     | '/auth/login'
     | '/auth/register'
   fileRoutesByTo: FileRoutesByTo
@@ -197,6 +157,10 @@ export interface FileRouteTypes {
     | '/users'
     | '/app/dashboard'
     | '/app/profile'
+    | '/app/tasks'
+    | '/app/tasks/$taskId'
+    | '/app/submissions'
+    | '/app/appeals'
     | '/auth/login'
     | '/auth/register'
   id:
@@ -215,6 +179,10 @@ export interface FileRouteTypes {
     | '/users'
     | '/app/dashboard'
     | '/app/profile'
+    | '/app/tasks'
+    | '/app/tasks/$taskId'
+    | '/app/submissions'
+    | '/app/appeals'
     | '/auth/login'
     | '/auth/register'
   fileRoutesById: FileRoutesById
@@ -234,124 +202,36 @@ export interface RootRouteChildren {
   UsersRoute: typeof UsersRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppTasksRoute: typeof AppTasksRoute
+  AppTasksTaskIdRoute: typeof AppTasksTaskIdRoute
+  AppSubmissionsRoute: typeof AppSubmissionsRoute
+  AppAppealsRoute: typeof AppAppealsRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/users': {
-      id: '/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof UsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tasks': {
-      id: '/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof TasksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/submissions': {
-      id: '/submissions'
-      path: '/submissions'
-      fullPath: '/submissions'
-      preLoaderRoute: typeof SubmissionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sk-control-panel-99': {
-      id: '/sk-control-panel-99'
-      path: '/sk-control-panel-99'
-      fullPath: '/sk-control-panel-99'
-      preLoaderRoute: typeof SkControlPanel99RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/security-logs': {
-      id: '/security-logs'
-      path: '/security-logs'
-      fullPath: '/security-logs'
-      preLoaderRoute: typeof SecurityLogsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/publishers': {
-      id: '/publishers'
-      path: '/publishers'
-      fullPath: '/publishers'
-      preLoaderRoute: typeof PublishersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/payments': {
-      id: '/payments'
-      path: '/payments'
-      fullPath: '/payments'
-      preLoaderRoute: typeof PaymentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/appeals': {
-      id: '/appeals'
-      path: '/appeals'
-      fullPath: '/appeals'
-      preLoaderRoute: typeof AppealsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/register': {
-      id: '/auth/register'
-      path: '/auth/register'
-      fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/profile': {
-      id: '/app/profile'
-      path: '/app/profile'
-      fullPath: '/app/profile'
-      preLoaderRoute: typeof AppProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/dashboard': {
-      id: '/app/dashboard'
-      path: '/app/dashboard'
-      fullPath: '/app/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    '/users': { id: '/users'; path: '/users'; fullPath: '/users'; preLoaderRoute: typeof UsersRouteImport; parentRoute: typeof rootRouteImport }
+    '/tasks': { id: '/tasks'; path: '/tasks'; fullPath: '/tasks'; preLoaderRoute: typeof TasksRouteImport; parentRoute: typeof rootRouteImport }
+    '/submissions': { id: '/submissions'; path: '/submissions'; fullPath: '/submissions'; preLoaderRoute: typeof SubmissionsRouteImport; parentRoute: typeof rootRouteImport }
+    '/sk-control-panel-99': { id: '/sk-control-panel-99'; path: '/sk-control-panel-99'; fullPath: '/sk-control-panel-99'; preLoaderRoute: typeof SkControlPanel99RouteImport; parentRoute: typeof rootRouteImport }
+    '/settings': { id: '/settings'; path: '/settings'; fullPath: '/settings'; preLoaderRoute: typeof SettingsRouteImport; parentRoute: typeof rootRouteImport }
+    '/security-logs': { id: '/security-logs'; path: '/security-logs'; fullPath: '/security-logs'; preLoaderRoute: typeof SecurityLogsRouteImport; parentRoute: typeof rootRouteImport }
+    '/publishers': { id: '/publishers'; path: '/publishers'; fullPath: '/publishers'; preLoaderRoute: typeof PublishersRouteImport; parentRoute: typeof rootRouteImport }
+    '/payments': { id: '/payments'; path: '/payments'; fullPath: '/payments'; preLoaderRoute: typeof PaymentsRouteImport; parentRoute: typeof rootRouteImport }
+    '/notifications': { id: '/notifications'; path: '/notifications'; fullPath: '/notifications'; preLoaderRoute: typeof NotificationsRouteImport; parentRoute: typeof rootRouteImport }
+    '/dashboard': { id: '/dashboard'; path: '/dashboard'; fullPath: '/dashboard'; preLoaderRoute: typeof DashboardRouteImport; parentRoute: typeof rootRouteImport }
+    '/appeals': { id: '/appeals'; path: '/appeals'; fullPath: '/appeals'; preLoaderRoute: typeof AppealsRouteImport; parentRoute: typeof rootRouteImport }
+    '/': { id: '/'; path: '/'; fullPath: '/'; preLoaderRoute: typeof IndexRouteImport; parentRoute: typeof rootRouteImport }
+    '/auth/register': { id: '/auth/register'; path: '/auth/register'; fullPath: '/auth/register'; preLoaderRoute: typeof AuthRegisterRouteImport; parentRoute: typeof rootRouteImport }
+    '/auth/login': { id: '/auth/login'; path: '/auth/login'; fullPath: '/auth/login'; preLoaderRoute: typeof AuthLoginRouteImport; parentRoute: typeof rootRouteImport }
+    '/app/profile': { id: '/app/profile'; path: '/app/profile'; fullPath: '/app/profile'; preLoaderRoute: typeof AppProfileRouteImport; parentRoute: typeof rootRouteImport }
+    '/app/dashboard': { id: '/app/dashboard'; path: '/app/dashboard'; fullPath: '/app/dashboard'; preLoaderRoute: typeof AppDashboardRouteImport; parentRoute: typeof rootRouteImport }
+    '/app/tasks': { id: '/app/tasks'; path: '/app/tasks'; fullPath: '/app/tasks'; preLoaderRoute: typeof AppTasksRouteImport; parentRoute: typeof rootRouteImport }
+    '/app/tasks/$taskId': { id: '/app/tasks/$taskId'; path: '/app/tasks/$taskId'; fullPath: '/app/tasks/$taskId'; preLoaderRoute: typeof AppTasksTaskIdRouteImport; parentRoute: typeof rootRouteImport }
+    '/app/submissions': { id: '/app/submissions'; path: '/app/submissions'; fullPath: '/app/submissions'; preLoaderRoute: typeof AppSubmissionsRouteImport; parentRoute: typeof rootRouteImport }
+    '/app/appeals': { id: '/app/appeals'; path: '/app/appeals'; fullPath: '/app/appeals'; preLoaderRoute: typeof AppAppealsRouteImport; parentRoute: typeof rootRouteImport }
   }
 }
 
@@ -370,6 +250,10 @@ const rootRouteChildren: RootRouteChildren = {
   UsersRoute: UsersRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
+  AppTasksRoute: AppTasksRoute,
+  AppTasksTaskIdRoute: AppTasksTaskIdRoute,
+  AppSubmissionsRoute: AppSubmissionsRoute,
+  AppAppealsRoute: AppAppealsRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }

@@ -29,7 +29,7 @@ function TasksPage() {
     if (session?.user) {
       const { data: subs } = await supabase.from("task_submissions").select("task_id")
         .eq("user_id", session.user.id);
-      setMine(new Set((subs ?? []).map((s) => s.task_id)));
+      setMine(new Set((subs ?? []).map((s) => s.task_id).filter((id): id is string => !!id)));
     }
   };
 
