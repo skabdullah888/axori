@@ -23,8 +23,12 @@ import { Route as AppealsRouteImport } from './routes/appeals'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AppTasksRouteImport } from './routes/app/tasks'
+import { Route as AppSubmissionsRouteImport } from './routes/app/submissions'
 import { Route as AppProfileRouteImport } from './routes/app/profile'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
+import { Route as AppAppealsRouteImport } from './routes/app/appeals'
+import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
 
 const UsersRoute = UsersRouteImport.update({
   id: '/users',
@@ -96,6 +100,16 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTasksRoute = AppTasksRouteImport.update({
+  id: '/app/tasks',
+  path: '/app/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppSubmissionsRoute = AppSubmissionsRouteImport.update({
+  id: '/app/submissions',
+  path: '/app/submissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/app/profile',
   path: '/app/profile',
@@ -105,6 +119,16 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/app/dashboard',
   path: '/app/dashboard',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppAppealsRoute = AppAppealsRouteImport.update({
+  id: '/app/appeals',
+  path: '/app/appeals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
+  id: '/$taskId',
+  path: '/$taskId',
+  getParentRoute: () => AppTasksRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -120,10 +144,14 @@ export interface FileRoutesByFullPath {
   '/submissions': typeof SubmissionsRoute
   '/tasks': typeof TasksRoute
   '/users': typeof UsersRoute
+  '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/submissions': typeof AppSubmissionsRoute
+  '/app/tasks': typeof AppTasksRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -138,10 +166,14 @@ export interface FileRoutesByTo {
   '/submissions': typeof SubmissionsRoute
   '/tasks': typeof TasksRoute
   '/users': typeof UsersRoute
+  '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/submissions': typeof AppSubmissionsRoute
+  '/app/tasks': typeof AppTasksRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -157,10 +189,14 @@ export interface FileRoutesById {
   '/submissions': typeof SubmissionsRoute
   '/tasks': typeof TasksRoute
   '/users': typeof UsersRoute
+  '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/submissions': typeof AppSubmissionsRoute
+  '/app/tasks': typeof AppTasksRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -177,10 +213,14 @@ export interface FileRouteTypes {
     | '/submissions'
     | '/tasks'
     | '/users'
+    | '/app/appeals'
     | '/app/dashboard'
     | '/app/profile'
+    | '/app/submissions'
+    | '/app/tasks'
     | '/auth/login'
     | '/auth/register'
+    | '/app/tasks/$taskId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -195,10 +235,14 @@ export interface FileRouteTypes {
     | '/submissions'
     | '/tasks'
     | '/users'
+    | '/app/appeals'
     | '/app/dashboard'
     | '/app/profile'
+    | '/app/submissions'
+    | '/app/tasks'
     | '/auth/login'
     | '/auth/register'
+    | '/app/tasks/$taskId'
   id:
     | '__root__'
     | '/'
@@ -213,10 +257,14 @@ export interface FileRouteTypes {
     | '/submissions'
     | '/tasks'
     | '/users'
+    | '/app/appeals'
     | '/app/dashboard'
     | '/app/profile'
+    | '/app/submissions'
+    | '/app/tasks'
     | '/auth/login'
     | '/auth/register'
+    | '/app/tasks/$taskId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -232,8 +280,11 @@ export interface RootRouteChildren {
   SubmissionsRoute: typeof SubmissionsRoute
   TasksRoute: typeof TasksRoute
   UsersRoute: typeof UsersRoute
+  AppAppealsRoute: typeof AppAppealsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppSubmissionsRoute: typeof AppSubmissionsRoute
+  AppTasksRoute: typeof AppTasksRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
@@ -338,6 +389,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/tasks': {
+      id: '/app/tasks'
+      path: '/app/tasks'
+      fullPath: '/app/tasks'
+      preLoaderRoute: typeof AppTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/submissions': {
+      id: '/app/submissions'
+      path: '/app/submissions'
+      fullPath: '/app/submissions'
+      preLoaderRoute: typeof AppSubmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/profile': {
       id: '/app/profile'
       path: '/app/profile'
@@ -352,8 +417,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/appeals': {
+      id: '/app/appeals'
+      path: '/app/appeals'
+      fullPath: '/app/appeals'
+      preLoaderRoute: typeof AppAppealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/tasks/$taskId': {
+      id: '/app/tasks/$taskId'
+      path: '/$taskId'
+      fullPath: '/app/tasks/$taskId'
+      preLoaderRoute: typeof AppTasksTaskIdRouteImport
+      parentRoute: typeof AppTasksRoute
+    }
   }
 }
+
+interface AppTasksRouteChildren {
+  AppTasksTaskIdRoute: typeof AppTasksTaskIdRoute
+}
+
+const AppTasksRouteChildren: AppTasksRouteChildren = {
+  AppTasksTaskIdRoute: AppTasksTaskIdRoute,
+}
+
+const AppTasksRouteWithChildren = AppTasksRoute._addFileChildren(
+  AppTasksRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -368,8 +459,11 @@ const rootRouteChildren: RootRouteChildren = {
   SubmissionsRoute: SubmissionsRoute,
   TasksRoute: TasksRoute,
   UsersRoute: UsersRoute,
+  AppAppealsRoute: AppAppealsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppProfileRoute: AppProfileRoute,
+  AppSubmissionsRoute: AppSubmissionsRoute,
+  AppTasksRoute: AppTasksRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
