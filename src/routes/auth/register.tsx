@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link, useSearch } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Sparkles, AlertCircle } from "lucide-react";
+import { Sparkles, AlertCircle, Eye, EyeOff, MailCheck } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -26,8 +26,10 @@ function RegisterPage() {
   const { isAuthed, loading } = useAuth();
   const { ref } = useSearch({ from: "/auth/register" });
   const [form, setForm] = useState({ username: "", email: "", phone: "", password: "", referral_code: ref || "" });
+  const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     if (!loading && isAuthed) navigate({ to: "/app/dashboard" });
@@ -38,7 +40,7 @@ function RegisterPage() {
     setError(""); setBusy(true);
     try {
       const data = schema.parse(form);
-      const { error } = await supabase.auth.signUp({
+      const { data: res, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
@@ -47,7 +49,12 @@ function RegisterPage() {
         },
       });
       if (error) throw error;
-      navigate({ to: "/app/dashboard" });
+      // If email confirmation required, session will be null
+      if (!res.session) {
+        setSent(true);
+      } else {
+        navigate({ to: "/app/dashboard" });
+      }
     } catch (e: any) {
       setError(e?.message ?? "Sign up failed");
     } finally {
@@ -57,6 +64,25 @@ function RegisterPage() {
 
   const upd = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  if (sent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/10 p-4">
+        <div className="w-full max-w-md bg-card/60 backdrop-blur-xl border border-border rounded-2xl p-8 text-center shadow-2xl">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/50 mb-4 shadow-lg shadow-primary/30">
+            <MailCheck className="h-7 w-7 text-primary-foreground" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Verify your email</h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            We sent a verification link to <span className="font-medium text-foreground">{form.email}</span>. Click the link to activate your account, then sign in.
+          </p>
+          <Link to="/auth/login" className="inline-block mt-6">
+            <Button className="bg-gradient-to-r from-primary to-primary/80">Go to sign in</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/10 p-4">
@@ -83,7 +109,12 @@ function RegisterPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="p">Password</Label>
-            <Input id="p" type="password" value={form.password} onChange={upd("password")} required />
+            <div className="relative">
+              <Input id="p" type={showPw ? "text" : "password"} value={form.password} onChange={upd("password")} required className="pr-10" />
+              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" tabIndex={-1} aria-label={showPw ? "Hide password" : "Show password"}>
+                {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="r">Referral code <span className="text-muted-foreground text-xs">(optional)</span></Label>
