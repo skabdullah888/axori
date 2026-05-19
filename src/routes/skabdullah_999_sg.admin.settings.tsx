@@ -13,7 +13,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({ comp
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_fee: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0,
+    activation_fee: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0,
   });
   const [saving, setSaving] = useState(false);
 
@@ -26,6 +26,7 @@ function SettingsPage() {
           withdrawal_fee: Number(data.withdrawal_fee),
           minimum_withdrawal: Number(data.minimum_withdrawal),
           publisher_task_tax: Number(data.publisher_task_tax ?? 0),
+          referral_bonus: Number(data.referral_bonus ?? 0),
         });
       }
     });
