@@ -52,6 +52,10 @@ function AdminInbox() {
   const [rows, setRows] = useState<any[]>([]);
   const [filter, setFilter] = useState<string>("all");
   const [edit, setEdit] = useState<any | null>(null);
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [filter]);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const load = async () => {
     let q = supabase.from("notifications")
