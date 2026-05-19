@@ -121,15 +121,12 @@ function DashboardPage() {
         </Link>
       )}
 
-      <div className="relative">
-        {!isActive && !loading && <LockOverlay message={`Activate your account (৳${Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-          <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
-          <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
-          <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
-          <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
-          <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
+        <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
+        <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
+        <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
+        <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
