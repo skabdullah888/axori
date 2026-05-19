@@ -143,21 +143,6 @@ const AppAppealsRoute = AppAppealsRouteImport.update({
   path: '/app/appeals',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppWalletRoute = AppWalletRouteImport.update({
-  id: '/app/wallet',
-  path: '/app/wallet',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppDepositRoute = AppDepositRouteImport.update({
-  id: '/app/deposit',
-  path: '/app/deposit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppWithdrawRoute = AppWithdrawRouteImport.update({
-  id: '/app/withdraw',
-  path: '/app/withdraw',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
   id: '/$taskId',
   path: '/$taskId',
