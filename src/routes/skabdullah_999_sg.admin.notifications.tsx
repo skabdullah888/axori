@@ -293,6 +293,10 @@ function HistoryPanel() {
           </table>
         </div>
       )}
-    </CardContent></Card>
+    </CardContent>
+    <div className="p-3">
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+    </div>
+    </Card>
   );
 }
