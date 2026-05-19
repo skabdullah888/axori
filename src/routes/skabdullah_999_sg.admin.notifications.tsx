@@ -150,16 +150,16 @@ function ComposePanel() {
     try {
       if (mode === "user") {
         if (!target.trim()) { toast.error("Enter a username or user ID"); return; }
-        // Resolve target: try id first, then username
+        // Resolve target: accept auth user ID, profile ID, or username
         let userId: string | null = null;
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(target.trim());
         if (isUuid) {
-          const { data } = await supabase.from("profiles").select("id").eq("id", target.trim()).maybeSingle();
-          userId = data?.id ?? null;
+          const { data } = await supabase.from("profiles").select("user_id").or(`user_id.eq.${target.trim()},id.eq.${target.trim()}`).maybeSingle();
+          userId = data?.user_id ?? target.trim();
         }
         if (!userId) {
-          const { data } = await supabase.from("profiles").select("id").eq("username", target.trim()).maybeSingle();
-          userId = data?.id ?? null;
+          const { data } = await supabase.from("profiles").select("user_id").eq("username", target.trim()).maybeSingle();
+          userId = data?.user_id ?? null;
         }
         if (!userId) { toast.error("User not found"); return; }
         const { error } = await supabase.from("notifications").insert({ user_id: userId, type, title, message });
@@ -167,9 +167,9 @@ function ComposePanel() {
         toast.success("Notification sent");
       } else {
         // Global: insert one row per active user
-        const { data: users } = await supabase.from("profiles").select("id").eq("status", "active");
+        const { data: users } = await supabase.from("profiles").select("user_id").eq("status", "active").not("user_id", "is", null);
         if (!users?.length) { toast.error("No active users"); return; }
-        const rows = users.map(u => ({ user_id: u.id, type, title, message }));
+        const rows = users.map(u => ({ user_id: u.user_id, type, title, message }));
         const { error } = await supabase.from("notifications").insert(rows);
         if (error) throw error;
         toast.success(`Sent to ${users.length} users`);
