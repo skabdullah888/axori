@@ -407,6 +407,14 @@ function PublishPage() {
           </TabsContent>
         </Tabs>
       </div>
+      <RejectDialog
+        open={!!rejectSub}
+        title="Reject submission?"
+        description="Select a reason or write a custom message. The user will see this reason."
+        presets={PUBLISHER_REJECT_PRESETS}
+        onCancel={() => setRejectSub(null)}
+        onConfirm={(reason) => rejectSub && reviewSub(rejectSub.id, false, rejectSub.task_id, rejectSub.user_id, rejectSub._reward, reason)}
+      />
     </UserShell>
   );
 }
