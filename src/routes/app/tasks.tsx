@@ -354,7 +354,7 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
               placeholder="Add any notes, comments, or extra context for the publisher…" />
           </div>
           <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
-            {busy ? "Submitting…" : `Submit & earn $${Number(task.reward).toFixed(2)}`}
+            {busy ? "Submitting…" : `Submit & earn ৳{Number(task.reward).toFixed(2)}`}
           </Button>
         </form>
 

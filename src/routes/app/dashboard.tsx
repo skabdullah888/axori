@@ -119,7 +119,7 @@ function DashboardPage() {
       )}
 
       <div className="relative">
-        {!isActive && !loading && <LockOverlay message={`Activate your account ($${Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
+        {!isActive && !loading && <LockOverlay message={`Activate your account (৳{Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix="$" gradient="bg-gradient-to-br from-primary to-primary/60" />
           <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix="$" gradient="bg-gradient-to-br from-success to-success/60" />

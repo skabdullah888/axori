@@ -52,7 +52,7 @@ function WithdrawPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user) return;
-    if (amt < minAmt) { toast.error(`Minimum withdrawal is $${minAmt.toFixed(2)}`); return; }
+    if (amt < minAmt) { toast.error(`Minimum withdrawal is ৳{minAmt.toFixed(2)}`); return; }
     if (amt > balance) { toast.error("Insufficient balance"); return; }
     setBusy(true);
     const { error } = await supabase.from("payments").insert({

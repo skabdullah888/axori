@@ -165,7 +165,7 @@ function TaskDetailPage() {
                     placeholder="Add any notes or links for the publisher…" required={proofType === "text"} />
                 </div>
                 <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
-                  {!isActive ? "🔒 Activate account to submit" : busy ? "Submitting…" : `Submit and earn $${Number(task.reward).toFixed(2)}`}
+                  {!isActive ? "🔒 Activate account to submit" : busy ? "Submitting…" : `Submit and earn ৳{Number(task.reward).toFixed(2)}`}
                 </Button>
               </form>
             )}

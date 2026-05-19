@@ -161,7 +161,7 @@ function PublishPage() {
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",
-      message: approve ? `You earned $${taskReward.toFixed(2)}` : "Your submission was rejected by the publisher.",
+      message: approve ? `You earned ৳{taskReward.toFixed(2)}` : "Your submission was rejected by the publisher.",
       type: approve ? "submission_approved" : "submission_rejected",
     });
     toast.success(approve ? "Approved & user paid" : "Rejected");
@@ -280,7 +280,7 @@ function PublishPage() {
 
                   <Button type="submit" disabled={busy || insufficient || !form.reward || !form.total_slots}
                     className="w-full bg-gradient-to-r from-primary to-primary/80">
-                    {busy ? "Publishing…" : insufficient ? "Insufficient balance" : `Publish task ($${totalCost.toFixed(2)})`}
+                    {busy ? "Publishing…" : insufficient ? "Insufficient balance" : `Publish task (৳{totalCost.toFixed(2)})`}
                   </Button>
                   {insufficient && (
                     <p className="text-xs text-center text-muted-foreground">
