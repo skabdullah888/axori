@@ -103,7 +103,7 @@ function AdminInbox() {
       <Card><CardContent className="p-0">
         {rows.length === 0 ? <EmptyState message="No admin notifications." /> : (
           <div className="divide-y divide-border">
-            {rows.map(r => (
+            {paged.map(r => (
               <div key={r.id} className={`p-4 flex items-start gap-4 ${r.read ? "" : "bg-primary/5"}`}>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
