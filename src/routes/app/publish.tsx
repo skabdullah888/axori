@@ -18,6 +18,14 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/app/publish")({ component: PublishPage });
 
 const CATEGORIES = ["social", "video", "signup", "review", "survey", "general"];
+const PROOF_FIELD_TYPES = [
+  { value: "text", label: "Text answer" },
+  { value: "image", label: "Screenshot upload" },
+  { value: "link", label: "URL / link" },
+  { value: "username", label: "Username / ID" },
+] as const;
+
+type ProofField = { id: string; type: string; label: string; required: boolean };
 
 function PublishPage() {
   const { session } = useAuth();
@@ -26,10 +34,16 @@ function PublishPage() {
   const [tasks, setTasks] = useState<any[]>([]);
   const [pendingSubs, setPendingSubs] = useState<any[]>([]);
   const [busy, setBusy] = useState(false);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [proofFields, setProofFields] = useState<ProofField[]>([
+    { id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true },
+  ]);
   const [form, setForm] = useState({
     title: "", description: "", instructions: "", category: "general",
-    reward: "", total_slots: "1", proof_type: "image", proof_count: "1",
+    reward: "", total_slots: "1",
   });
+
 
   const load = async () => {
     if (!session?.user) return;
