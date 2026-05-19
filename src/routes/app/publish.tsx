@@ -18,6 +18,14 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/app/publish")({ component: PublishPage });
 
 const CATEGORIES = ["social", "video", "signup", "review", "survey", "general"];
+const PROOF_FIELD_TYPES = [
+  { value: "text", label: "Text answer" },
+  { value: "image", label: "Screenshot upload" },
+  { value: "link", label: "URL / link" },
+  { value: "username", label: "Username / ID" },
+] as const;
+
+type ProofField = { id: string; type: string; label: string; required: boolean };
 
 function PublishPage() {
   const { session } = useAuth();
@@ -26,10 +34,16 @@ function PublishPage() {
   const [tasks, setTasks] = useState<any[]>([]);
   const [pendingSubs, setPendingSubs] = useState<any[]>([]);
   const [busy, setBusy] = useState(false);
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [proofFields, setProofFields] = useState<ProofField[]>([
+    { id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true },
+  ]);
   const [form, setForm] = useState({
     title: "", description: "", instructions: "", category: "general",
-    reward: "", total_slots: "1", proof_type: "image", proof_count: "1",
+    reward: "", total_slots: "1",
   });
+
 
   const load = async () => {
     if (!session?.user) return;
@@ -71,24 +85,57 @@ function PublishPage() {
     if (insufficient) { toast.error("Insufficient balance to publish this task"); return; }
     if ((profile as any).publisher_restricted) { toast.error("Publisher access is restricted"); return; }
     setBusy(true);
-    const { data: task, error } = await supabase.from("tasks").insert({
-      publisher_id: session.user.id,
-      title: form.title, description: form.description, instructions: form.instructions,
-      category: form.category, reward, total_slots: slots,
-      proof_type: form.proof_type, proof_count: Number(form.proof_count) || 1,
-      status: "active",
-    }).select().single();
-    if (error || !task) { toast.error(error?.message ?? "Failed"); setBusy(false); return; }
-    const newBalance = balance - totalCost;
-    await supabase.from("profiles").update({ balance: newBalance, is_publisher: true }).eq("user_id", session.user.id);
-    await supabase.from("payments").insert({
-      user_id: session.user.id, type: "task_publish_hold", amount: totalCost,
-      status: "approved", reference: task.id,
-    });
-    toast.success("Task published!");
-    setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1", proof_type: "image", proof_count: "1" });
-    setBusy(false);
+    try {
+      // Verify profile exists (backend validation)
+      const { data: prof } = await supabase.from("profiles").select("id").eq("user_id", session.user.id).maybeSingle();
+      if (!prof) { toast.error("Your profile is missing. Please re-login."); setBusy(false); return; }
+
+      // Validate proof fields
+      const cleanFields = proofFields.filter(f => f.label.trim().length > 0);
+      if (cleanFields.length === 0) { toast.error("Add at least one proof requirement"); setBusy(false); return; }
+
+      // Upload banner if present
+      let banner_url: string | null = null;
+      if (bannerFile) {
+        if (bannerFile.size > 5 * 1024 * 1024) { toast.error("Banner must be under 5MB"); setBusy(false); return; }
+        if (!bannerFile.type.startsWith("image/")) { toast.error("Banner must be an image"); setBusy(false); return; }
+        const path = `${session.user.id}/${Date.now()}-${bannerFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+        const { error: upErr } = await supabase.storage.from("task-banners").upload(path, bannerFile);
+        if (upErr) { toast.error(upErr.message); setBusy(false); return; }
+        banner_url = supabase.storage.from("task-banners").getPublicUrl(path).data.publicUrl;
+      }
+
+      const primaryProofType = cleanFields.find(f => f.type === "image")?.type ?? cleanFields[0].type;
+      const proofCount = cleanFields.filter(f => f.type === "image").length || 1;
+
+      const { data: task, error } = await supabase.from("tasks").insert({
+        publisher_id: session.user.id,
+        title: form.title, description: form.description, instructions: form.instructions,
+        category: form.category, reward, total_slots: slots,
+        proof_type: primaryProofType, proof_count: proofCount,
+        proof_fields: cleanFields as any,
+        banner_url,
+        status: "active",
+      }).select().single();
+      if (error || !task) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
+
+      const newBalance = balance - totalCost;
+      await supabase.from("profiles").update({ balance: newBalance, is_publisher: true }).eq("user_id", session.user.id);
+      await supabase.from("payments").insert({
+        user_id: session.user.id, type: "task_publish_hold", amount: totalCost,
+        status: "approved", reference: task.id,
+      });
+      toast.success("Task published!");
+      setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
+      setBannerFile(null); setBannerPreview(null);
+      setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to publish");
+    } finally {
+      setBusy(false);
+    }
   };
+
 
   const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number) => {
     const { error } = await supabase.from("task_submissions").update({
@@ -154,6 +201,26 @@ function PublishPage() {
                     <Textarea value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} rows={2} /></div>
                   <div className="space-y-2"><Label>Detailed instructions</Label>
                     <Textarea value={form.instructions} onChange={(e) => setForm(f => ({ ...f, instructions: e.target.value }))} rows={4} required /></div>
+                  {/* Banner upload */}
+                  <div className="space-y-2">
+                    <Label>Task banner (optional, max 5MB)</Label>
+                    <div className="border-2 border-dashed border-border rounded-xl p-4 hover:border-primary/40 transition-colors">
+                      {bannerPreview ? (
+                        <div className="relative">
+                          <img src={bannerPreview} alt="banner preview" className="w-full max-h-48 object-cover rounded-lg" />
+                          <Button type="button" size="sm" variant="destructive" className="absolute top-2 right-2"
+                            onClick={() => { setBannerFile(null); setBannerPreview(null); }}>Remove</Button>
+                        </div>
+                      ) : (
+                        <input type="file" accept="image/*" onChange={(e) => {
+                          const f = e.target.files?.[0]; if (!f) return;
+                          if (f.size > 5 * 1024 * 1024) { toast.error("Banner must be under 5MB"); return; }
+                          setBannerFile(f); setBannerPreview(URL.createObjectURL(f));
+                        }} className="block w-full text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-primary file:text-primary-foreground file:cursor-pointer" />
+                      )}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2"><Label>Category</Label>
                       <Select value={form.category} onValueChange={(v) => setForm(f => ({ ...f, category: v }))}>
@@ -161,27 +228,47 @@ function PublishPage() {
                         <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2"><Label>Proof type</Label>
-                      <Select value={form.proof_type} onValueChange={(v) => setForm(f => ({ ...f, proof_type: v }))}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="image">Image</SelectItem>
-                          <SelectItem value="text">Text</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
                     <div className="space-y-2"><Label>Reward / slot ($)</Label>
                       <Input type="number" step="0.01" min="0.01" value={form.reward}
                         onChange={(e) => setForm(f => ({ ...f, reward: e.target.value }))} required /></div>
-                    <div className="space-y-2"><Label>Total slots</Label>
-                      <Input type="number" min="1" value={form.total_slots}
-                        onChange={(e) => setForm(f => ({ ...f, total_slots: e.target.value }))} required /></div>
-                    <div className="space-y-2"><Label>Proof count</Label>
-                      <Input type="number" min="1" max="10" value={form.proof_count}
-                        onChange={(e) => setForm(f => ({ ...f, proof_count: e.target.value }))} required /></div>
                   </div>
+                  <div className="space-y-2"><Label>Total slots</Label>
+                    <Input type="number" min="1" value={form.total_slots}
+                      onChange={(e) => setForm(f => ({ ...f, total_slots: e.target.value }))} required /></div>
+
+                  {/* Dynamic proof fields */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Proof requirements</Label>
+                      <Button type="button" size="sm" variant="outline" onClick={() =>
+                        setProofFields(p => [...p, { id: crypto.randomUUID(), type: "text", label: "", required: true }])
+                      }><Plus className="h-3 w-3" /> Add field</Button>
+                    </div>
+                    <div className="space-y-2">
+                      {proofFields.map((field, idx) => (
+                        <div key={field.id} className="flex gap-2 items-start p-3 rounded-lg bg-accent/30 border border-border">
+                          <div className="flex-1 grid grid-cols-2 gap-2">
+                            <Input placeholder="Field label (e.g. Your TikTok URL)" value={field.label}
+                              onChange={(e) => setProofFields(p => p.map(f => f.id === field.id ? { ...f, label: e.target.value } : f))} />
+                            <Select value={field.type} onValueChange={(v) =>
+                              setProofFields(p => p.map(f => f.id === field.id ? { ...f, type: v } : f))}>
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                {PROOF_FIELD_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          {proofFields.length > 1 && (
+                            <Button type="button" size="icon" variant="ghost"
+                              onClick={() => setProofFields(p => p.filter(f => f.id !== field.id))}>
+                              <XCircle className="h-4 w-4 text-destructive" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
 
                   <div className="rounded-xl bg-accent/40 border border-border p-4 space-y-1 text-sm">
                     <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
