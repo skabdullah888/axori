@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Sparkles, AlertCircle } from "lucide-react";
+import { Sparkles, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ function LoginPage() {
   const { isAuthed, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -46,8 +47,16 @@ function LoginPage() {
             <Input id="e" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="p">Password</Label>
-            <Input id="p" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div className="flex items-center justify-between">
+              <Label htmlFor="p">Password</Label>
+              <Link to="/auth/forgot-password" className="text-xs text-primary hover:underline">Forgot password?</Link>
+            </div>
+            <div className="relative">
+              <Input id="p" type={showPw ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required className="pr-10" />
+              <button type="button" onClick={() => setShowPw(v => !v)} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" tabIndex={-1} aria-label={showPw ? "Hide password" : "Show password"}>
+                {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
           {error && (
             <div className="flex items-center gap-2 rounded-md bg-destructive/15 text-destructive text-sm px-3 py-2">
