@@ -92,7 +92,16 @@ function WithdrawPage() {
             <form onSubmit={submit} className="space-y-4">
               <div className="space-y-2">
                 <Label>Payout method</Label>
-                <Input placeholder="e.g. bKash, USDT, PayPal…" value={form.method} onChange={(e) => setForm((f) => ({ ...f, method: e.target.value }))} required />
+                {methods.length > 0 ? (
+                  <Select value={form.method} onValueChange={(v) => setForm((f) => ({ ...f, method: v }))}>
+                    <SelectTrigger><SelectValue placeholder="Select method" /></SelectTrigger>
+                    <SelectContent>
+                      {methods.map((m) => (<SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input placeholder="e.g. bKash, USDT, PayPal…" value={form.method} onChange={(e) => setForm((f) => ({ ...f, method: e.target.value }))} required />
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Your receiving account / address</Label>
