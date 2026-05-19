@@ -14,6 +14,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { RejectDialog } from "@/components/reject-dialog";
+
+const PUBLISHER_REJECT_PRESETS = [
+  "Proof is invalid or fake",
+  "Task instructions not followed",
+  "Incomplete proof",
+  "Duplicate submission",
+  "Low quality submission",
+];
 
 export const Route = createFileRoute("/app/publish")({
   head: () => ({ meta: [{ title: "Publish Task — Earn Hub" }] }),
@@ -46,6 +55,7 @@ function PublishPage() {
     title: "", description: "", instructions: "", category: "general",
     reward: "", total_slots: "1",
   });
+  const [rejectSub, setRejectSub] = useState<any | null>(null);
 
 
   const load = async () => {
@@ -140,9 +150,10 @@ function PublishPage() {
   };
 
 
-  const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number) => {
+  const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number, reason?: string) => {
     const { error } = await supabase.from("task_submissions").update({
       status: approve ? "approved" : "rejected",
+      note: approve ? null : (reason ?? null),
       updated_at: new Date().toISOString(),
     }).eq("id", subId);
     if (error) { toast.error(error.message); return; }
@@ -164,10 +175,11 @@ function PublishPage() {
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",
-      message: approve ? `You earned ৳${taskReward.toFixed(2)}` : "Your submission was rejected by the publisher.",
+      message: approve ? `You earned ৳${taskReward.toFixed(2)}` : `Your submission was rejected by the publisher. Reason: ${reason ?? "No reason provided"}`,
       type: approve ? "submission_approved" : "submission_rejected",
     });
     toast.success(approve ? "Approved & user paid" : "Rejected");
+    setRejectSub(null);
   };
 
   const stats = {
@@ -357,7 +369,7 @@ function PublishPage() {
                             <CheckCircle2 className="h-4 w-4" /> Approve & Pay
                           </Button>
                           <Button size="sm" variant="destructive"
-                            onClick={() => reviewSub(s.id, false, s.task_id, s.user_id, Number(task?.reward ?? 0))}>
+                            onClick={() => setRejectSub({ ...s, _reward: Number(task?.reward ?? 0) })}>
                             <XCircle className="h-4 w-4" /> Reject
                           </Button>
                         </div>
@@ -395,6 +407,14 @@ function PublishPage() {
           </TabsContent>
         </Tabs>
       </div>
+      <RejectDialog
+        open={!!rejectSub}
+        title="Reject submission?"
+        description="Select a reason or write a custom message. The user will see this reason."
+        presets={PUBLISHER_REJECT_PRESETS}
+        onCancel={() => setRejectSub(null)}
+        onConfirm={(reason) => rejectSub && reviewSub(rejectSub.id, false, rejectSub.task_id, rejectSub.user_id, rejectSub._reward, reason)}
+      />
     </UserShell>
   );
 }
