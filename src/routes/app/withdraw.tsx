@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/app/withdraw")({
-  head: () => ({ meta: [{ title: "Withdraw — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Withdraw — Axora" }] }),
   component: WithdrawPage,
 });
 

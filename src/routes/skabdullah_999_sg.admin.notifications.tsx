@@ -14,7 +14,7 @@ import { Check, Trash2, Pencil, Send, Bell } from "lucide-react";
 import { fmtDate, EmptyState } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/notifications")({
-  head: () => ({ meta: [{ title: "Admin Notifications — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Admin Notifications — Axora" }] }),
   component: NotificationsPage,
 });
 

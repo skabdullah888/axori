@@ -9,7 +9,7 @@ import { Ban, ShieldCheck, AlertTriangle } from "lucide-react";
 import { EmptyState } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/publishers")({
-  head: () => ({ meta: [{ title: "Admin Publishers — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Admin Publishers — Axora" }] }),
   component: PublishersPage,
 });
 

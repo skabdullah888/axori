@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/app/submissions")({
-  head: () => ({ meta: [{ title: "My Submissions — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "My Submissions — Axora" }] }),
   component: SubmissionsPage,
 });
 

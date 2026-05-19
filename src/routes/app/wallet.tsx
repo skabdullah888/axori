@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const Route = createFileRoute("/app/wallet")({
-  head: () => ({ meta: [{ title: "Wallet — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Wallet — Axora" }] }),
   component: WalletPage,
 });
 

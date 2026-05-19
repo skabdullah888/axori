@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/login")({
-  head: () => ({ meta: [{ title: "Login — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Login — Axora" }] }),
   component: LoginPage,
 });
 

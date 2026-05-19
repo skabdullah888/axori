@@ -2,14 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Wallet, TrendingUp, Clock, CheckCircle2, ListTodo, Users2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell, LockOverlay } from "@/components/user-shell";
+import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const Route = createFileRoute("/app/dashboard")({ component: DashboardPage });
+export const Route = createFileRoute("/app/dashboard")({
+  head: () => ({ meta: [{ title: "Dashboard — Axora" }] }),
+  component: DashboardPage,
+});
 
 function StatCard({ icon: Icon, label, value, gradient, suffix = "" }: any) {
   return (
@@ -82,7 +85,7 @@ function DashboardPage() {
               <Badge variant="outline" className={isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}>
                 {isActive ? "✓ Account Active" : "⚠ Account Inactive"}
               </Badge>
-              {profile?.referral_code && (
+              {profile?.referral_code && isActive && (
                 <Badge variant="outline" className="border-primary/40 text-primary">Ref: {profile.referral_code}</Badge>
               )}
             </div>
@@ -118,15 +121,12 @@ function DashboardPage() {
         </Link>
       )}
 
-      <div className="relative">
-        {!isActive && !loading && <LockOverlay message={`Activate your account (৳${Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-          <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
-          <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
-          <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
-          <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
-          <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
+        <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
+        <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
+        <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
+        <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

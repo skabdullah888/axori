@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/app/tasks")({
-  head: () => ({ meta: [{ title: "Tasks — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Tasks — Axora" }] }),
   component: TasksPage,
 });
 

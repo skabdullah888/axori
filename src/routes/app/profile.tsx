@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/app/profile")({
-  head: () => ({ meta: [{ title: "Profile — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Profile — Axora" }] }),
   component: ProfilePage,
 });
 

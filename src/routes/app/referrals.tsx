@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/referrals")({
-  head: () => ({ meta: [{ title: "Referrals — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Referrals — Axora" }] }),
   component: ReferralsPage,
 });
 

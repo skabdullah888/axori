@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
-  head: () => ({ meta: [{ title: "Task Details — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Task Details — Axora" }] }),
   component: TaskDetailPage,
 });
 
