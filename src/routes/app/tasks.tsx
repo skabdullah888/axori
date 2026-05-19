@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, Clock, Coins, Users2, ArrowRight, ListTodo } from "lucide-react";
+import { Search, Clock, Coins, Users2, ArrowRight, ListTodo, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell, LockOverlay } from "@/components/user-shell";
+import { UserShell } from "@/components/user-shell";
+import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent } from "@/components/ui/card";
