@@ -43,10 +43,11 @@ function WithdrawPage() {
   }, [session?.user?.id]);
 
   const minAmt = Number(settings?.minimum_withdrawal ?? 10);
-  const fee = Number(settings?.withdrawal_fee ?? 0);
+  const feePct = Number(settings?.withdrawal_fee ?? 0);
   const balance = Number(profile?.balance ?? 0);
   const amt = Number(form.amount || 0);
-  const willReceive = Math.max(0, amt - fee);
+  const feeAmt = +(amt * feePct / 100).toFixed(2);
+  const willReceive = Math.max(0, amt - feeAmt);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
