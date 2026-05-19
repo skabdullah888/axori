@@ -70,6 +70,14 @@ function SettingsPage() {
               Percentage deducted from a publisher's balance whenever they publish a new task.
             </p>
           </div>
+          <div>
+            <Label>Referral bonus (৳)</Label>
+            <Input type="number" step="0.01" value={form.referral_bonus}
+              onChange={(e) => setForm(f => ({ ...f, referral_bonus: Number(e.target.value) }))} />
+            <p className="text-xs text-muted-foreground mt-1">
+              Amount credited to the referrer when their referred user activates their account.
+            </p>
+          </div>
           <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
         </CardContent>
       </Card>
