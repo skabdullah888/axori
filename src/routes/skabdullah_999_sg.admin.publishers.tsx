@@ -44,6 +44,9 @@ function PublishersPage() {
   };
 
   useEffect(() => { load(); }, []);
+  const [page, setPage] = useState(1);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const restrict = async (id: string, restricted: boolean) => {
     const { error } = await supabase.from("profiles").update({ publisher_restricted: restricted }).eq("id", id);
