@@ -40,6 +40,22 @@ function RegisterPage() {
     setError(""); setBusy(true);
     try {
       const data = schema.parse(form);
+
+      // Pre-check duplicates against profiles (username/email/phone)
+      const { data: dupes } = await supabase
+        .from("profiles")
+        .select("username,email,phone")
+        .or(
+          `username.ilike.${data.username},email.ilike.${data.email},phone.eq.${data.phone}`,
+        );
+      if (dupes && dupes.length > 0) {
+        const d = dupes[0] as { username: string; email: string | null; phone: string | null };
+        if (d.username?.toLowerCase() === data.username.toLowerCase()) throw new Error("This username is already taken");
+        if (d.email?.toLowerCase() === data.email.toLowerCase()) throw new Error("An account with this email already exists");
+        if (d.phone === data.phone) throw new Error("An account with this phone number already exists");
+        throw new Error("An account with these details already exists");
+      }
+
       const { data: res, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -49,14 +65,18 @@ function RegisterPage() {
         },
       });
       if (error) throw error;
-      // If email confirmation required, session will be null
       if (!res.session) {
         setSent(true);
       } else {
         navigate({ to: "/app/dashboard" });
       }
     } catch (e: any) {
-      setError(e?.message ?? "Sign up failed");
+      const msg = e?.message ?? "Sign up failed";
+      // Translate DB unique-violation if it slips through
+      if (/profiles_username_unique/i.test(msg)) setError("This username is already taken");
+      else if (/profiles_email_unique/i.test(msg) || /already registered/i.test(msg)) setError("An account with this email already exists");
+      else if (/profiles_phone_unique/i.test(msg)) setError("An account with this phone number already exists");
+      else setError(msg);
     } finally {
       setBusy(false);
     }
