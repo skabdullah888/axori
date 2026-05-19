@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, Clock, Coins, Users2, ArrowRight, ListTodo } from "lucide-react";
+import { Search, Clock, Coins, Users2, ArrowRight, ListTodo, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell, LockOverlay } from "@/components/user-shell";
+import { UserShell } from "@/components/user-shell";
+import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent } from "@/components/ui/card";
@@ -57,10 +58,21 @@ function TasksPage() {
     return arr;
   }, [tasks, q, cat, sort]);
 
+  const [activationOpen, setActivationOpen] = useState(false);
+
   return (
     <UserShell title="Browse Tasks">
+      <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative">
-        {!isActive && <LockOverlay message="Activate your account to start completing tasks." />}
+        {!isActive && (
+          <div className="mb-5 p-4 rounded-xl bg-warning/10 border border-warning/30 flex items-center gap-3">
+            <Lock className="h-5 w-5 text-warning shrink-0" />
+            <p className="text-sm">
+              Your account is <span className="font-semibold text-warning">inactive</span>. You can browse tasks, but you must activate to submit.{" "}
+              <Link to="/app/profile" className="underline font-medium">Activate now</Link>
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-col md:flex-row gap-3 mb-5">
           <div className="relative flex-1">
@@ -108,11 +120,17 @@ function TasksPage() {
                       <span className="flex items-center gap-1"><Users2 className="h-3 w-3" /> {remaining}/{t.total_slots} slots</span>
                       {t.deadline && <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(t.deadline).toLocaleDateString()}</span>}
                     </div>
-                    <Link to="/app/tasks/$taskId" params={{ taskId: t.id }} className="block">
-                      <Button className="w-full" variant={submitted ? "secondary" : "default"} disabled={submitted}>
-                        {submitted ? "Already submitted" : <>Start task <ArrowRight className="h-4 w-4" /></>}
+                    {!isActive ? (
+                      <Button className="w-full" variant="secondary" onClick={() => setActivationOpen(true)}>
+                        <Lock className="h-4 w-4" /> Submit Task (locked)
                       </Button>
-                    </Link>
+                    ) : (
+                      <Link to="/app/tasks/$taskId" params={{ taskId: t.id }} className="block">
+                        <Button className="w-full" variant={submitted ? "secondary" : "default"} disabled={submitted}>
+                          {submitted ? "Already submitted" : <>Submit Task <ArrowRight className="h-4 w-4" /></>}
+                        </Button>
+                      </Link>
+                    )}
                   </CardContent>
                 </Card>
               );
