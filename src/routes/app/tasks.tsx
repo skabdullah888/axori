@@ -124,11 +124,17 @@ function TasksPage() {
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-full md:w-40"><SelectValue /></SelectTrigger>
             <SelectContent>
+              <SelectItem value="random">Random</SelectItem>
               <SelectItem value="new">Newest</SelectItem>
               <SelectItem value="reward">Highest reward</SelectItem>
               <SelectItem value="slots">Most slots</SelectItem>
             </SelectContent>
           </Select>
+          {sort === "random" && (
+            <Button variant="outline" className="w-full md:w-auto" onClick={() => setShuffleSeed((s) => s + 1)}>
+              Shuffle
+            </Button>
+          )}
         </div>
 
         {filtered.length === 0 ? (
