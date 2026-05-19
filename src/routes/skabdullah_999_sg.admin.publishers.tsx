@@ -103,6 +103,8 @@ function PublishersPage() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
     </AdminShell>
   );
 }
