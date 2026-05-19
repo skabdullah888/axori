@@ -100,7 +100,7 @@ function TaskDetailPage() {
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground uppercase">Reward</p>
-                <p className="text-3xl font-bold text-primary flex items-center gap-1"><Coins className="h-6 w-6" />${Number(task.reward).toFixed(2)}</p>
+                <p className="text-3xl font-bold text-primary flex items-center gap-1"><Coins className="h-6 w-6" />৳{Number(task.reward).toFixed(2)}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -165,7 +165,7 @@ function TaskDetailPage() {
                     placeholder="Add any notes or links for the publisher…" required={proofType === "text"} />
                 </div>
                 <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
-                  {!isActive ? "🔒 Activate account to submit" : busy ? "Submitting…" : `Submit and earn ${Number(task.reward).toFixed(2)}`}
+                  {!isActive ? "🔒 Activate account to submit" : busy ? "Submitting…" : `Submit and earn ৳${Number(task.reward).toFixed(2)}`}
                 </Button>
               </form>
             )}

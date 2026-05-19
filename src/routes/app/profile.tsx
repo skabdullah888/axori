@@ -141,7 +141,7 @@ function ProfilePage() {
 
                 {methods.length > 0 && (
                   <div className="mb-4 p-4 rounded-lg bg-accent/40 border border-border space-y-2 text-sm">
-                    <p className="font-semibold mb-1">💳 Send ${Number(settings?.activation_fee ?? settings?.activation_amount ?? 0).toFixed(2)} to:</p>
+                    <p className="font-semibold mb-1">💳 Send ৳{Number(settings?.activation_fee ?? settings?.activation_amount ?? 0).toFixed(2)} to:</p>
                     {methods.map((m) => (
                       <div key={m.id} className="flex justify-between border-t border-border/50 pt-2">
                         <span className="text-muted-foreground">{m.name}</span>

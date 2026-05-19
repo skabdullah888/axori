@@ -90,7 +90,7 @@ function DashboardPage() {
           <div className="text-right">
             <p className="text-xs text-muted-foreground uppercase tracking-wider">Available Balance</p>
             <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mt-1">
-              ${Number(profile?.balance ?? 0).toFixed(2)}
+              ৳{Number(profile?.balance ?? 0).toFixed(2)}
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ function DashboardPage() {
                 <p className="text-sm text-muted-foreground">
                   One-time activation fee:{" "}
                   <span className="font-bold text-warning">
-                    ${Number(activationAmount ?? 0).toFixed(2)}
+                    ৳{Number(activationAmount ?? 0).toFixed(2)}
                   </span>
                 </p>
               </div>
@@ -119,7 +119,7 @@ function DashboardPage() {
       )}
 
       <div className="relative">
-        {!isActive && !loading && <LockOverlay message={`Activate your account (${Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
+        {!isActive && !loading && <LockOverlay message={`Activate your account (৳${Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
           <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />

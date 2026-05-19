@@ -161,7 +161,7 @@ function PublishPage() {
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",
-      message: approve ? `You earned ${taskReward.toFixed(2)}` : "Your submission was rejected by the publisher.",
+      message: approve ? `You earned ৳${taskReward.toFixed(2)}` : "Your submission was rejected by the publisher.",
       type: approve ? "submission_approved" : "submission_rejected",
     });
     toast.success(approve ? "Approved & user paid" : "Rejected");
@@ -271,16 +271,16 @@ function PublishPage() {
 
 
                   <div className="rounded-xl bg-accent/40 border border-border p-4 space-y-1 text-sm">
-                    <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-                    <div className="flex justify-between"><span className="text-muted-foreground">Platform tax ({taxPct}%)</span><span>${tax.toFixed(2)}</span></div>
-                    <div className="flex justify-between font-bold border-t border-border pt-2 mt-1"><span>Total cost</span><span>${totalCost.toFixed(2)}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>৳{subtotal.toFixed(2)}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Platform tax ({taxPct}%)</span><span>৳{tax.toFixed(2)}</span></div>
+                    <div className="flex justify-between font-bold border-t border-border pt-2 mt-1"><span>Total cost</span><span>৳{totalCost.toFixed(2)}</span></div>
                     <div className="flex justify-between text-xs"><span className="text-muted-foreground">Your balance</span>
-                      <span className={insufficient ? "text-destructive" : "text-success"}>${balance.toFixed(2)}</span></div>
+                      <span className={insufficient ? "text-destructive" : "text-success"}>৳{balance.toFixed(2)}</span></div>
                   </div>
 
                   <Button type="submit" disabled={busy || insufficient || !form.reward || !form.total_slots}
                     className="w-full bg-gradient-to-r from-primary to-primary/80">
-                    {busy ? "Publishing…" : insufficient ? "Insufficient balance" : `Publish task (${totalCost.toFixed(2)})`}
+                    {busy ? "Publishing…" : insufficient ? "Insufficient balance" : `Publish task (৳${totalCost.toFixed(2)})`}
                   </Button>
                   {insufficient && (
                     <p className="text-xs text-center text-muted-foreground">
@@ -313,12 +313,12 @@ function PublishPage() {
                           }>{t.status}</Badge>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">
-                          ${Number(t.reward).toFixed(2)} · {t.completed_slots}/{t.total_slots} slots ·
+                          ৳{Number(t.reward).toFixed(2)} · {t.completed_slots}/{t.total_slots} slots ·
                           Created {new Date(t.created_at).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-bold">${(Number(t.reward) * t.completed_slots).toFixed(2)}</p>
+                        <p className="text-sm font-bold">৳{(Number(t.reward) * t.completed_slots).toFixed(2)}</p>
                         <p className="text-[10px] text-muted-foreground">paid out</p>
                       </div>
                     </CardContent>
@@ -386,7 +386,7 @@ function PublishPage() {
               </CardContent></Card>
               <Card className="md:col-span-2"><CardContent className="p-5">
                 <p className="text-xs text-muted-foreground">TOTAL SPENT ON WORKERS</p>
-                <p className="text-3xl font-bold mt-1 text-warning">${stats.spent.toFixed(2)}</p>
+                <p className="text-3xl font-bold mt-1 text-warning">৳{stats.spent.toFixed(2)}</p>
               </CardContent></Card>
             </div>
           </TabsContent>
