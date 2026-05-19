@@ -85,24 +85,57 @@ function PublishPage() {
     if (insufficient) { toast.error("Insufficient balance to publish this task"); return; }
     if ((profile as any).publisher_restricted) { toast.error("Publisher access is restricted"); return; }
     setBusy(true);
-    const { data: task, error } = await supabase.from("tasks").insert({
-      publisher_id: session.user.id,
-      title: form.title, description: form.description, instructions: form.instructions,
-      category: form.category, reward, total_slots: slots,
-      proof_type: form.proof_type, proof_count: Number(form.proof_count) || 1,
-      status: "active",
-    }).select().single();
-    if (error || !task) { toast.error(error?.message ?? "Failed"); setBusy(false); return; }
-    const newBalance = balance - totalCost;
-    await supabase.from("profiles").update({ balance: newBalance, is_publisher: true }).eq("user_id", session.user.id);
-    await supabase.from("payments").insert({
-      user_id: session.user.id, type: "task_publish_hold", amount: totalCost,
-      status: "approved", reference: task.id,
-    });
-    toast.success("Task published!");
-    setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1", proof_type: "image", proof_count: "1" });
-    setBusy(false);
+    try {
+      // Verify profile exists (backend validation)
+      const { data: prof } = await supabase.from("profiles").select("id").eq("user_id", session.user.id).maybeSingle();
+      if (!prof) { toast.error("Your profile is missing. Please re-login."); setBusy(false); return; }
+
+      // Validate proof fields
+      const cleanFields = proofFields.filter(f => f.label.trim().length > 0);
+      if (cleanFields.length === 0) { toast.error("Add at least one proof requirement"); setBusy(false); return; }
+
+      // Upload banner if present
+      let banner_url: string | null = null;
+      if (bannerFile) {
+        if (bannerFile.size > 5 * 1024 * 1024) { toast.error("Banner must be under 5MB"); setBusy(false); return; }
+        if (!bannerFile.type.startsWith("image/")) { toast.error("Banner must be an image"); setBusy(false); return; }
+        const path = `${session.user.id}/${Date.now()}-${bannerFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+        const { error: upErr } = await supabase.storage.from("task-banners").upload(path, bannerFile);
+        if (upErr) { toast.error(upErr.message); setBusy(false); return; }
+        banner_url = supabase.storage.from("task-banners").getPublicUrl(path).data.publicUrl;
+      }
+
+      const primaryProofType = cleanFields.find(f => f.type === "image")?.type ?? cleanFields[0].type;
+      const proofCount = cleanFields.filter(f => f.type === "image").length || 1;
+
+      const { data: task, error } = await supabase.from("tasks").insert({
+        publisher_id: session.user.id,
+        title: form.title, description: form.description, instructions: form.instructions,
+        category: form.category, reward, total_slots: slots,
+        proof_type: primaryProofType, proof_count: proofCount,
+        proof_fields: cleanFields as any,
+        banner_url,
+        status: "active",
+      }).select().single();
+      if (error || !task) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
+
+      const newBalance = balance - totalCost;
+      await supabase.from("profiles").update({ balance: newBalance, is_publisher: true }).eq("user_id", session.user.id);
+      await supabase.from("payments").insert({
+        user_id: session.user.id, type: "task_publish_hold", amount: totalCost,
+        status: "approved", reference: task.id,
+      });
+      toast.success("Task published!");
+      setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
+      setBannerFile(null); setBannerPreview(null);
+      setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
+    } catch (err: any) {
+      toast.error(err?.message ?? "Failed to publish");
+    } finally {
+      setBusy(false);
+    }
   };
+
 
   const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number) => {
     const { error } = await supabase.from("task_submissions").update({
