@@ -229,6 +229,8 @@ function PaymentsTable({ type }: { type: PayType }) {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
 
       <Dialog open={!!viewRow} onOpenChange={(o) => !o && setViewRow(null)}>
         <DialogContent className="max-w-lg">
