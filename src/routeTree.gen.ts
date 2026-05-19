@@ -23,9 +23,11 @@ import { Route as AppealsRouteImport } from './routes/appeals'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AppWalletRouteImport } from './routes/app/wallet'
 import { Route as AppTasksRouteImport } from './routes/app/tasks'
 import { Route as AppSubmissionsRouteImport } from './routes/app/submissions'
 import { Route as AppProfileRouteImport } from './routes/app/profile'
+import { Route as AppDepositRouteImport } from './routes/app/deposit'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAppealsRouteImport } from './routes/app/appeals'
 import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
@@ -100,6 +102,11 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppWalletRoute = AppWalletRouteImport.update({
+  id: '/app/wallet',
+  path: '/app/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppTasksRoute = AppTasksRouteImport.update({
   id: '/app/tasks',
   path: '/app/tasks',
@@ -113,6 +120,11 @@ const AppSubmissionsRoute = AppSubmissionsRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/app/profile',
   path: '/app/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppDepositRoute = AppDepositRouteImport.update({
+  id: '/app/deposit',
+  path: '/app/deposit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -146,9 +158,11 @@ export interface FileRoutesByFullPath {
   '/users': typeof UsersRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/deposit': typeof AppDepositRoute
   '/app/profile': typeof AppProfileRoute
   '/app/submissions': typeof AppSubmissionsRoute
   '/app/tasks': typeof AppTasksRouteWithChildren
+  '/app/wallet': typeof AppWalletRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
@@ -168,9 +182,11 @@ export interface FileRoutesByTo {
   '/users': typeof UsersRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/deposit': typeof AppDepositRoute
   '/app/profile': typeof AppProfileRoute
   '/app/submissions': typeof AppSubmissionsRoute
   '/app/tasks': typeof AppTasksRouteWithChildren
+  '/app/wallet': typeof AppWalletRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
@@ -191,9 +207,11 @@ export interface FileRoutesById {
   '/users': typeof UsersRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/deposit': typeof AppDepositRoute
   '/app/profile': typeof AppProfileRoute
   '/app/submissions': typeof AppSubmissionsRoute
   '/app/tasks': typeof AppTasksRouteWithChildren
+  '/app/wallet': typeof AppWalletRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
@@ -215,9 +233,11 @@ export interface FileRouteTypes {
     | '/users'
     | '/app/appeals'
     | '/app/dashboard'
+    | '/app/deposit'
     | '/app/profile'
     | '/app/submissions'
     | '/app/tasks'
+    | '/app/wallet'
     | '/auth/login'
     | '/auth/register'
     | '/app/tasks/$taskId'
@@ -237,9 +257,11 @@ export interface FileRouteTypes {
     | '/users'
     | '/app/appeals'
     | '/app/dashboard'
+    | '/app/deposit'
     | '/app/profile'
     | '/app/submissions'
     | '/app/tasks'
+    | '/app/wallet'
     | '/auth/login'
     | '/auth/register'
     | '/app/tasks/$taskId'
@@ -259,9 +281,11 @@ export interface FileRouteTypes {
     | '/users'
     | '/app/appeals'
     | '/app/dashboard'
+    | '/app/deposit'
     | '/app/profile'
     | '/app/submissions'
     | '/app/tasks'
+    | '/app/wallet'
     | '/auth/login'
     | '/auth/register'
     | '/app/tasks/$taskId'
@@ -282,9 +306,11 @@ export interface RootRouteChildren {
   UsersRoute: typeof UsersRoute
   AppAppealsRoute: typeof AppAppealsRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppDepositRoute: typeof AppDepositRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSubmissionsRoute: typeof AppSubmissionsRoute
   AppTasksRoute: typeof AppTasksRouteWithChildren
+  AppWalletRoute: typeof AppWalletRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
@@ -389,6 +415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/wallet': {
+      id: '/app/wallet'
+      path: '/app/wallet'
+      fullPath: '/app/wallet'
+      preLoaderRoute: typeof AppWalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/tasks': {
       id: '/app/tasks'
       path: '/app/tasks'
@@ -408,6 +441,13 @@ declare module '@tanstack/react-router' {
       path: '/app/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/deposit': {
+      id: '/app/deposit'
+      path: '/app/deposit'
+      fullPath: '/app/deposit'
+      preLoaderRoute: typeof AppDepositRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/dashboard': {
@@ -461,9 +501,11 @@ const rootRouteChildren: RootRouteChildren = {
   UsersRoute: UsersRoute,
   AppAppealsRoute: AppAppealsRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppDepositRoute: AppDepositRoute,
   AppProfileRoute: AppProfileRoute,
   AppSubmissionsRoute: AppSubmissionsRoute,
   AppTasksRoute: AppTasksRouteWithChildren,
+  AppWalletRoute: AppWalletRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
