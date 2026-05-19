@@ -23,6 +23,9 @@ function AppealsPage() {
   const [rows, setRows] = useState<Row[]>([]);
   const [open, setOpen] = useState<Row | null>(null);
   const [note, setNote] = useState("");
+  const [page, setPage] = useState(1);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const load = async () => {
     const { data } = await supabase
