@@ -5,7 +5,7 @@ export async function notify(userId: string | null, type: string, title: string,
   const { data: profile } = await supabase
     .from("profiles")
     .select("user_id")
-    .or(`user_id.eq.${userId},id.eq.${userId}`)
+    .or(`user_id.eq.৳{userId},id.eq.৳{userId}`)
     .maybeSingle();
   await supabase.from("notifications").insert({ user_id: profile?.user_id ?? userId, type, title, message });
 }
@@ -17,7 +17,7 @@ export function fmtDate(s?: string | null) {
 
 export function fmtMoney(n: number | string | null | undefined) {
   const v = Number(n ?? 0);
-  return `$${v.toFixed(2)}`;
+  return `$৳{v.toFixed(2)}`;
 }
 
 export function StatusPill({ status }: { status: string }) {
@@ -31,7 +31,7 @@ export function StatusPill({ status }: { status: string }) {
     completed: "bg-primary/15 text-primary",
   };
   const cls = map[status] ?? "bg-muted text-muted-foreground";
-  return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>{status}</span>;
+  return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ৳{cls}`}>{status}</span>;
 }
 
 export function EmptyState({ message }: { message: string }) {

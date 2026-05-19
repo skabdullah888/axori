@@ -85,9 +85,9 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   useEffect(() => {
     if (!session?.user) return;
     loadProfile(); loadUnread();
-    const ch = supabase.channel(`user-shell-${session.user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "profiles", filter: `user_id=eq.${session.user.id}` }, loadProfile)
-      .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${session.user.id}` }, loadUnread)
+    const ch = supabase.channel(`user-shell-৳{session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles", filter: `user_id=eq.৳{session.user.id}` }, loadProfile)
+      .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.৳{session.user.id}` }, loadUnread)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,7 +174,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card border border-border">
               <Wallet className="h-3.5 w-3.5 text-primary" />
-              <span className="text-sm font-semibold">${Number(profile?.balance ?? 0).toFixed(2)}</span>
+              <span className="text-sm font-semibold">৳{Number(profile?.balance ?? 0).toFixed(2)}</span>
             </div>
             <Badge variant={isActive ? "default" : "secondary"} className={cn(isActive ? "bg-success/20 text-success border-success/30" : "bg-warning/20 text-warning border-warning/30")}>
               {isActive ? "Active" : "Inactive"}

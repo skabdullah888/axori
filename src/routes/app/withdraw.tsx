@@ -35,8 +35,8 @@ function WithdrawPage() {
   useEffect(() => {
     reload();
     if (!session?.user) return;
-    const ch = supabase.channel(`withdraw-${session.user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.${session.user.id}` }, reload)
+    const ch = supabase.channel(`withdraw-৳{session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.৳{session.user.id}` }, reload)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +79,7 @@ function WithdrawPage() {
           <CardContent>
             <div className="rounded-lg bg-gradient-to-br from-primary/15 to-transparent border border-primary/30 p-4 mb-4">
               <p className="text-xs uppercase tracking-wider text-muted-foreground">Available balance</p>
-              <p className="text-3xl font-bold">${balance.toFixed(2)}</p>
+              <p className="text-3xl font-bold">৳{balance.toFixed(2)}</p>
             </div>
 
             <form onSubmit={submit} className="space-y-4">
@@ -95,8 +95,8 @@ function WithdrawPage() {
                 <Label>Amount (USD)</Label>
                 <Input type="number" step="0.01" min={minAmt} value={form.amount} onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))} required />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Min: ${minAmt.toFixed(2)} · Fee: {feePct}% (${feeAmt.toFixed(2)})</span>
-                  <span>You receive: <span className="font-semibold text-foreground">${willReceive.toFixed(2)}</span></span>
+                  <span>Min: ৳{minAmt.toFixed(2)} · Fee: {feePct}% (৳{feeAmt.toFixed(2)})</span>
+                  <span>You receive: <span className="font-semibold text-foreground">৳{willReceive.toFixed(2)}</span></span>
                 </div>
               </div>
 
@@ -125,7 +125,7 @@ function WithdrawPage() {
                 {history.map((p) => (
                   <div key={p.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-card/40">
                     <div className="min-w-0">
-                      <p className="font-semibold">${Number(p.amount).toFixed(2)}</p>
+                      <p className="font-semibold">৳{Number(p.amount).toFixed(2)}</p>
                       <p className="text-xs text-muted-foreground truncate">{p.method} → {p.receiver_number}</p>
                       <p className="text-[10px] text-muted-foreground">{new Date(p.created_at).toLocaleString()}</p>
                     </div>

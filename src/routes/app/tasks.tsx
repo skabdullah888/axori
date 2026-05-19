@@ -133,7 +133,7 @@ function TasksPage() {
                     <div className="flex items-start justify-between mb-2">
                       <Badge variant="outline" className="text-[10px] uppercase tracking-wider">{t.category ?? "general"}</Badge>
                       <div className="flex items-center gap-1 text-primary font-bold">
-                        <Coins className="h-4 w-4" />${Number(t.reward).toFixed(2)}
+                        <Coins className="h-4 w-4" />৳{Number(t.reward).toFixed(2)}
                       </div>
                     </div>
                     <h3 className="font-semibold line-clamp-1 mb-1">{t.title}</h3>
@@ -171,7 +171,7 @@ function TasksPage() {
               <div className="grid grid-cols-3 gap-3 text-sm">
                 <div className="p-3 rounded-lg bg-accent/30 border border-border">
                   <p className="text-[10px] uppercase text-muted-foreground">Reward</p>
-                  <p className="font-bold text-primary">${Number(selected.reward).toFixed(2)}</p>
+                  <p className="font-bold text-primary">৳{Number(selected.reward).toFixed(2)}</p>
                 </div>
                 <div className="p-3 rounded-lg bg-accent/30 border border-border">
                   <p className="text-[10px] uppercase text-muted-foreground">Slots left</p>
@@ -206,7 +206,7 @@ function TasksPage() {
                 </Button>
               ) : (
                 <Button className="w-full bg-gradient-to-r from-primary to-primary/80" onClick={openSubmit}>
-                  Submit & Earn ${Number(selected.reward).toFixed(2)}
+                  Submit & Earn ৳{Number(selected.reward).toFixed(2)}
                 </Button>
               )}
             </>
@@ -250,10 +250,10 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
     // Validate
     for (const f of proofFields) {
       if (!f.required) continue;
-      if (f.type === "image") { if (!files[f.id]) { toast.error(`Please upload "${f.label}"`); return; } }
-      else { if (!values[f.id] || String(values[f.id]).trim() === "") { toast.error(`Please fill "${f.label}"`); return; } }
+      if (f.type === "image") { if (!files[f.id]) { toast.error(`Please upload "৳{f.label}"`); return; } }
+      else { if (!values[f.id] || String(values[f.id]).trim() === "") { toast.error(`Please fill "৳{f.label}"`); return; } }
       if (f.type === "link" && values[f.id]) {
-        try { new URL(values[f.id]); } catch { toast.error(`"${f.label}" must be a valid URL`); return; }
+        try { new URL(values[f.id]); } catch { toast.error(`"৳{f.label}" must be a valid URL`); return; }
       }
     }
 
@@ -261,8 +261,8 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
     try {
       const fieldsText = proofFields
         .filter(f => f.type !== "image" && values[f.id])
-        .map(f => `${f.label}: ${values[f.id]}`).join("\n");
-      const noteText = note.trim() ? `Note: ${note.trim()}` : "";
+        .map(f => `৳{f.label}: ৳{values[f.id]}`).join("\n");
+      const noteText = note.trim() ? `Note: ৳{note.trim()}` : "";
       const proofText = [fieldsText, noteText].filter(Boolean).join("\n\n");
 
       const { data: sub, error: subErr } = await supabase.from("task_submissions").insert({
@@ -277,7 +277,7 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
         const file = files[f.id];
         if (file.size > 5 * 1024 * 1024) throw new Error("Each image must be under 5MB");
         if (!file.type.startsWith("image/")) throw new Error("Only image files allowed");
-        const path = `${session.user.id}/${sub.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+        const path = `৳{session.user.id}/৳{sub.id}/৳{Date.now()}-৳{file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
         const { error: upErr } = await supabase.storage.from("proofs").upload(path, file);
         if (upErr) throw upErr;
         const pub = supabase.storage.from("proofs").getPublicUrl(path).data.publicUrl;
@@ -289,7 +289,7 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
         await supabase.from("notifications").insert({
           user_id: task.publisher_id,
           title: "New submission",
-          message: `A user submitted proof for "${task.title}".`,
+          message: `A user submitted proof for "৳{task.title}".`,
           type: "submission_new",
         });
       }

@@ -55,8 +55,8 @@ function ProfilePage() {
   useEffect(() => {
     loadPendingActivation();
     if (!session?.user) return;
-    const ch = supabase.channel(`profile-payments-${session.user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.${session.user.id}` }, loadPendingActivation)
+    const ch = supabase.channel(`profile-payments-৳{session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.৳{session.user.id}` }, loadPendingActivation)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +73,7 @@ function ProfilePage() {
     e.preventDefault();
     if (!session?.user || !profile) return;
     if (cooldownHours > 0 && pendingActivation?.status === "rejected") {
-      toast.error(`Please wait ${cooldownHours.toFixed(1)}h before resubmitting.`);
+      toast.error(`Please wait ৳{cooldownHours.toFixed(1)}h before resubmitting.`);
       return;
     }
     setBusy(true);
@@ -105,7 +105,7 @@ function ProfilePage() {
               {profile?.username?.[0]?.toUpperCase() ?? "U"}
             </div>
             <h2 className="mt-4 text-xl font-bold">{profile?.username}</h2>
-            <Badge variant="outline" className={`mt-2 ${isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}`}>
+            <Badge variant="outline" className={`mt-2 ৳{isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}`}>
               {isActive ? "✓ Active" : "⚠ Inactive"}
             </Badge>
             <div className="mt-6 space-y-2 text-left text-sm">
@@ -141,7 +141,7 @@ function ProfilePage() {
 
                 {methods.length > 0 && (
                   <div className="mb-4 p-4 rounded-lg bg-accent/40 border border-border space-y-2 text-sm">
-                    <p className="font-semibold mb-1">💳 Send ${Number(settings?.activation_fee ?? settings?.activation_amount ?? 0).toFixed(2)} to:</p>
+                    <p className="font-semibold mb-1">💳 Send ৳{Number(settings?.activation_fee ?? settings?.activation_amount ?? 0).toFixed(2)} to:</p>
                     {methods.map((m) => (
                       <div key={m.id} className="flex justify-between border-t border-border/50 pt-2">
                         <span className="text-muted-foreground">{m.name}</span>

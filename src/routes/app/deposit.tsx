@@ -34,8 +34,8 @@ function DepositPage() {
   useEffect(() => {
     reload();
     if (!session?.user) return;
-    const ch = supabase.channel(`deposit-${session.user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.${session.user.id}` }, reload)
+    const ch = supabase.channel(`deposit-৳{session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.৳{session.user.id}` }, reload)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,7 +137,7 @@ function DepositPage() {
                 {history.map((p) => (
                   <div key={p.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-card/40">
                     <div className="min-w-0">
-                      <p className="font-semibold">${Number(p.amount).toFixed(2)}</p>
+                      <p className="font-semibold">৳{Number(p.amount).toFixed(2)}</p>
                       <p className="text-xs text-muted-foreground truncate">{p.method} · {new Date(p.created_at).toLocaleString()}</p>
                     </div>
                     <Badge variant="outline" className={

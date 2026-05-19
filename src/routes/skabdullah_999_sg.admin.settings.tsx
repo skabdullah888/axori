@@ -45,7 +45,7 @@ function SettingsPage() {
         <CardHeader><CardTitle>Platform fees & taxes</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label>Activation fee ($)</Label>
+            <Label>Activation fee (৳)</Label>
             <Input type="number" step="0.01" value={form.activation_fee}
               onChange={(e) => setForm(f => ({ ...f, activation_fee: Number(e.target.value) }))} />
             <p className="text-xs text-muted-foreground mt-1">Amount each user must pay to activate their account.</p>
@@ -57,7 +57,7 @@ function SettingsPage() {
             <p className="text-xs text-muted-foreground mt-1">Percentage deducted from each withdrawal request.</p>
           </div>
           <div>
-            <Label>Minimum withdrawal ($)</Label>
+            <Label>Minimum withdrawal (৳)</Label>
             <Input type="number" step="0.01" value={form.minimum_withdrawal}
               onChange={(e) => setForm(f => ({ ...f, minimum_withdrawal: Number(e.target.value) }))} />
           </div>
