@@ -17,6 +17,10 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/security-logs")({
 function SecurityLogsPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [suspiciousOnly, setSuspiciousOnly] = useState(false);
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [suspiciousOnly]);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const load = async () => {
     let q = supabase.from("security_logs").select("*").order("created_at", { ascending: false }).limit(300);
