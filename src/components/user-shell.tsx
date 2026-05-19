@@ -40,8 +40,18 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (!loading && !isAuthed) navigate({ to: "/auth/login" });
-  }, [loading, isAuthed, navigate]);
+    if (loading) return;
+    if (!isAuthed) { navigate({ to: "/auth/login" }); return; }
+    (async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session!.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (data) navigate({ to: "/skabdullah_999_sg/admin/dashboard" });
+    })();
+  }, [loading, isAuthed, navigate, session]);
 
   const loadProfile = async () => {
     if (!session?.user) return;
