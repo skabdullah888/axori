@@ -141,6 +141,7 @@ function PaymentsTable({ type }: { type: PayType }) {
     const { error } = await supabase.from("payments")
       .update({ status: "rejected", updated_at: new Date().toISOString() }).eq("id", row.id);
     if (error) { toast.error(error.message); return; }
+    await clearAdminNotifs(row);
     await notify(
       row.user_id, "payment",
       `${type === "activation" ? "Activation" : type === "deposit" ? "Deposit" : "Withdrawal"} rejected`,
