@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 25;
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminShell } from "@/components/admin-shell";
@@ -42,6 +44,9 @@ function PublishersPage() {
   };
 
   useEffect(() => { load(); }, []);
+  const [page, setPage] = useState(1);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const restrict = async (id: string, restricted: boolean) => {
     const { error } = await supabase.from("profiles").update({ publisher_restricted: restricted }).eq("id", id);
@@ -69,7 +74,7 @@ function PublishersPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(r => {
+                {paged.map(r => {
                   const rate = r.stats.total ? Math.round((r.stats.approved / r.stats.total) * 100) : 0;
                   return (
                     <tr key={r.id} className="border-t border-border hover:bg-accent/30">
@@ -98,6 +103,8 @@ function PublishersPage() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
     </AdminShell>
   );
 }

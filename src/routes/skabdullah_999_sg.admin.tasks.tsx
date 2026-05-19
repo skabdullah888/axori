@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 25;
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminShell } from "@/components/admin-shell";
@@ -32,6 +34,10 @@ function TasksPage() {
   const [approveRow, setApproveRow] = useState<any | null>(null);
   const [rejectRow, setRejectRow] = useState<any | null>(null);
   const [viewRow, setViewRow] = useState<any | null>(null);
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [filter]);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
 
   const load = async () => {
@@ -91,7 +97,7 @@ function TasksPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(r => (
+                {paged.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 font-medium">{r.title}</td>
                     <td className="px-4 py-3">{r.publisher?.username ?? "—"}</td>
@@ -117,6 +123,8 @@ function TasksPage() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
 
       <ConfirmDialog
         open={!!approveRow}

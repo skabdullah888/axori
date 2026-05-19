@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 15;
 import { Gavel, FileCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserShell } from "@/components/user-shell";
@@ -19,6 +21,8 @@ function SubmissionsPage() {
   const { session } = useAuth();
   const [rows, setRows] = useState<any[]>([]);
   const [tab, setTab] = useState("pending");
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [tab]);
 
   const load = async () => {
     if (!session?.user) return;
@@ -39,6 +43,8 @@ function SubmissionsPage() {
   }, [session?.user?.id]);
 
   const filtered = rows.filter((r) => tab === "all" || r.status === tab);
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+
 
   return (
     <UserShell title="My Submissions">
@@ -57,7 +63,7 @@ function SubmissionsPage() {
             </CardContent></Card>
           ) : (
             <div className="space-y-3">
-              {filtered.map((r) => (
+              {paged.map((r) => (
                 <Card key={r.id} className="overflow-hidden">
                   <CardContent className="p-5">
                     <div className="flex flex-wrap items-start justify-between gap-3">
@@ -102,6 +108,8 @@ function SubmissionsPage() {
               ))}
             </div>
           )}
+          <Paginator page={page} pageSize={PAGE_SIZE} total={filtered.length} onChange={setPage} />
+
         </TabsContent>
       </Tabs>
     </UserShell>

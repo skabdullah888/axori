@@ -15,6 +15,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Paginator } from "@/components/paginator";
+
+const PAGE_SIZE = 12;
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 export const Route = createFileRoute("/app/tasks")({
   head: () => ({ meta: [{ title: "Tasks — Axora" }] }),
@@ -30,7 +41,9 @@ function TasksPage() {
   const [mine, setMine] = useState<Set<string>>(new Set());
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
-  const [sort, setSort] = useState<string>("new");
+  const [sort, setSort] = useState<string>("random");
+  const [page, setPage] = useState(1);
+  const [shuffleSeed, setShuffleSeed] = useState(0);
   const [selected, setSelected] = useState<any>(null);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [activationOpen, setActivationOpen] = useState(false);
@@ -66,9 +79,15 @@ function TasksPage() {
     if (q) arr = arr.filter((t) => t.title.toLowerCase().includes(q.toLowerCase()));
     if (cat !== "all") arr = arr.filter((t) => t.category === cat);
     if (sort === "reward") arr = [...arr].sort((a, b) => Number(b.reward) - Number(a.reward));
-    if (sort === "slots") arr = [...arr].sort((a, b) => (b.total_slots - b.completed_slots) - (a.total_slots - a.completed_slots));
+    else if (sort === "slots") arr = [...arr].sort((a, b) => (b.total_slots - b.completed_slots) - (a.total_slots - a.completed_slots));
+    else if (sort === "new") arr = [...arr].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    else arr = shuffle(arr); // random
     return arr;
-  }, [tasks, q, cat, sort]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks, q, cat, sort, shuffleSeed]);
+
+  useEffect(() => { setPage(1); }, [q, cat, sort, shuffleSeed]);
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
 
   const openDetails = (t: any) => { setSelected(t); };
   const openSubmit = () => {
@@ -105,11 +124,17 @@ function TasksPage() {
           <Select value={sort} onValueChange={setSort}>
             <SelectTrigger className="w-full md:w-40"><SelectValue /></SelectTrigger>
             <SelectContent>
+              <SelectItem value="random">Random</SelectItem>
               <SelectItem value="new">Newest</SelectItem>
               <SelectItem value="reward">Highest reward</SelectItem>
               <SelectItem value="slots">Most slots</SelectItem>
             </SelectContent>
           </Select>
+          {sort === "random" && (
+            <Button variant="outline" className="w-full md:w-auto" onClick={() => setShuffleSeed((s) => s + 1)}>
+              Shuffle
+            </Button>
+          )}
         </div>
 
         {filtered.length === 0 ? (
@@ -118,8 +143,9 @@ function TasksPage() {
             No tasks available right now. Check back soon!
           </CardContent></Card>
         ) : (
+          <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filtered.map((t) => {
+            {paged.map((t) => {
               const submitted = mine.has(t.id);
               const remaining = t.total_slots - t.completed_slots;
               return (
@@ -151,6 +177,8 @@ function TasksPage() {
               );
             })}
           </div>
+          <Paginator page={page} pageSize={PAGE_SIZE} total={filtered.length} onChange={setPage} />
+          </>
         )}
       </div>
 

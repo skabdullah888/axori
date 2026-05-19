@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 25;
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminShell } from "@/components/admin-shell";
@@ -50,6 +52,10 @@ function AdminInbox() {
   const [rows, setRows] = useState<any[]>([]);
   const [filter, setFilter] = useState<string>("all");
   const [edit, setEdit] = useState<any | null>(null);
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [filter]);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const load = async () => {
     let q = supabase.from("notifications")
@@ -97,7 +103,7 @@ function AdminInbox() {
       <Card><CardContent className="p-0">
         {rows.length === 0 ? <EmptyState message="No admin notifications." /> : (
           <div className="divide-y divide-border">
-            {rows.map(r => (
+            {paged.map(r => (
               <div key={r.id} className={`p-4 flex items-start gap-4 ${r.read ? "" : "bg-primary/5"}`}>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
@@ -126,6 +132,8 @@ function AdminInbox() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
 
       <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
         <DialogContent>
@@ -226,6 +234,8 @@ function ComposePanel() {
 
 function HistoryPanel() {
   const [rows, setRows] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
 
   const load = async () => {
     const { data } = await supabase.from("notifications")
@@ -264,7 +274,7 @@ function HistoryPanel() {
               </tr>
             </thead>
             <tbody>
-              {rows.map(r => (
+              {paged.map(r => (
                 <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                   <td className="px-4 py-3">{r.user?.username ?? "—"}</td>
                   <td className="px-4 py-3 capitalize">{r.type}</td>
@@ -283,6 +293,10 @@ function HistoryPanel() {
           </table>
         </div>
       )}
-    </CardContent></Card>
+    </CardContent>
+    <div className="p-3">
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+    </div>
+    </Card>
   );
 }

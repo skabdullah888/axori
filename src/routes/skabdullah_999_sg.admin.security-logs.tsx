@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 25;
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminShell } from "@/components/admin-shell";
@@ -15,6 +17,10 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/security-logs")({
 function SecurityLogsPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [suspiciousOnly, setSuspiciousOnly] = useState(false);
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [suspiciousOnly]);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
   const load = async () => {
     let q = supabase.from("security_logs").select("*").order("created_at", { ascending: false }).limit(300);
@@ -47,7 +53,7 @@ function SecurityLogsPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(r => (
+                {paged.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 text-muted-foreground">{fmtDate(r.created_at)}</td>
                     <td className="px-4 py-3">{r.username ?? r.user_id ?? "—"}</td>
@@ -65,6 +71,8 @@ function SecurityLogsPage() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
     </AdminShell>
   );
 }

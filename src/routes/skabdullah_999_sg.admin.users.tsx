@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 25;
 import { createFileRoute } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminShell } from "@/components/admin-shell";
@@ -63,6 +65,10 @@ function UsersPage() {
     const q = search.toLowerCase();
     return r.username?.toLowerCase().includes(q) || r.id?.toLowerCase().includes(q);
   });
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [search, filter]);
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+
 
   return (
     <AdminShell title="Users Management">
@@ -97,7 +103,7 @@ function UsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(r => (
+                {paged.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 font-medium">{r.username}</td>
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.id.slice(0, 8)}…</td>
@@ -128,6 +134,8 @@ function UsersPage() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={filtered.length} onChange={setPage} />
+
 
       <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
         <DialogContent>
