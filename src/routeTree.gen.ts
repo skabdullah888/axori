@@ -31,6 +31,9 @@ import { Route as AppProfileRouteImport } from './routes/app/profile'
 import { Route as AppDepositRouteImport } from './routes/app/deposit'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAppealsRouteImport } from './routes/app/appeals'
+import { Route as AppWalletRouteImport } from './routes/app/wallet'
+import { Route as AppDepositRouteImport } from './routes/app/deposit'
+import { Route as AppWithdrawRouteImport } from './routes/app/withdraw'
 import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
 
 const UsersRoute = UsersRouteImport.update({
