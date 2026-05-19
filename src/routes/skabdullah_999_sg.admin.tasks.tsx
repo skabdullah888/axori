@@ -5,9 +5,11 @@ import { AdminShell } from "@/components/admin-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Check, X } from "lucide-react";
+import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({ component: TasksPage });
 
@@ -26,6 +28,8 @@ function TasksPage() {
   const [filter, setFilter] = useState<Filter>("pending");
   const [approveRow, setApproveRow] = useState<any | null>(null);
   const [rejectRow, setRejectRow] = useState<any | null>(null);
+  const [viewRow, setViewRow] = useState<any | null>(null);
+
 
   const load = async () => {
     let q = supabase.from("tasks")
@@ -93,12 +97,15 @@ function TasksPage() {
                     <td className="px-4 py-3"><StatusPill status={r.status} /></td>
                     <td className="px-4 py-3 text-muted-foreground">{fmtDate(r.created_at)}</td>
                     <td className="px-4 py-3 text-right">
-                      {r.status === "pending" ? (
-                        <div className="inline-flex gap-2">
-                          <Button size="sm" variant="destructive" onClick={() => setRejectRow(r)}><X className="h-4 w-4 mr-1" />Reject</Button>
-                          <Button size="sm" onClick={() => setApproveRow(r)}><Check className="h-4 w-4 mr-1" />Accept</Button>
-                        </div>
-                      ) : <span className="text-xs text-muted-foreground">—</span>}
+                      <div className="inline-flex gap-2">
+                        <Button size="sm" variant="outline" onClick={() => setViewRow(r)}><Eye className="h-4 w-4 mr-1" />View</Button>
+                        {r.status === "pending" && (
+                          <>
+                            <Button size="sm" variant="destructive" onClick={() => setRejectRow(r)}><X className="h-4 w-4 mr-1" />Reject</Button>
+                            <Button size="sm" onClick={() => setApproveRow(r)}><Check className="h-4 w-4 mr-1" />Accept</Button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -124,6 +131,81 @@ function TasksPage() {
         onCancel={() => setRejectRow(null)}
         onConfirm={(reason) => rejectRow && doReject(rejectRow, reason)}
       />
+
+      <Dialog open={!!viewRow} onOpenChange={(o) => !o && setViewRow(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {viewRow?.title}
+              {viewRow && <StatusPill status={viewRow.status} />}
+            </DialogTitle>
+          </DialogHeader>
+          {viewRow && (
+            <div className="space-y-4 text-sm">
+              {viewRow.banner_url && (
+                <img src={viewRow.banner_url} alt="Task banner" className="w-full rounded-lg border border-border max-h-64 object-cover" />
+              )}
+              <div className="grid grid-cols-2 gap-3">
+                <Info label="Publisher" value={viewRow.publisher?.username ?? "—"} />
+                <Info label="Publisher email" value={viewRow.publisher?.email ?? "—"} />
+                <Info label="Reward" value={fmtMoney(viewRow.reward)} />
+                <Info label="Slots" value={`${viewRow.completed_slots} / ${viewRow.total_slots}`} />
+                <Info label="Category" value={viewRow.category ?? "general"} />
+                <Info label="Created" value={fmtDate(viewRow.created_at)} />
+                {viewRow.deadline && <Info label="Deadline" value={fmtDate(viewRow.deadline)} />}
+                <Info label="Proof type" value={`${viewRow.proof_type ?? "—"} (×${viewRow.proof_count ?? 1})`} />
+              </div>
+              {viewRow.description && (
+                <Section title="Description"><p className="whitespace-pre-wrap text-muted-foreground">{viewRow.description}</p></Section>
+              )}
+              {viewRow.instructions && (
+                <Section title="Instructions"><p className="whitespace-pre-wrap text-muted-foreground">{viewRow.instructions}</p></Section>
+              )}
+              {Array.isArray(viewRow.proof_fields) && viewRow.proof_fields.length > 0 && (
+                <Section title="Required proof fields">
+                  <ul className="space-y-1">
+                    {viewRow.proof_fields.map((f: any, i: number) => (
+                      <li key={i} className="flex items-center gap-2">
+                        <Badge variant="outline">{f.type}</Badge>
+                        <span>{f.label}</span>
+                        {f.required && <span className="text-xs text-destructive">required</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </Section>
+              )}
+              {viewRow.status === "pending" && (
+                <div className="flex gap-2 pt-2 border-t border-border">
+                  <Button variant="destructive" className="flex-1" onClick={() => { setRejectRow(viewRow); setViewRow(null); }}>
+                    <X className="h-4 w-4 mr-1" />Reject
+                  </Button>
+                  <Button className="flex-1" onClick={() => { setApproveRow(viewRow); setViewRow(null); }}>
+                    <Check className="h-4 w-4 mr-1" />Accept
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </AdminShell>
+  );
+}
+
+function Info({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="rounded-md border border-border bg-muted/30 px-3 py-2">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className="font-medium mt-0.5 break-all">{value}</p>
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">{title}</p>
+      {children}
+    </div>
   );
 }

@@ -115,7 +115,7 @@ function PublishPage() {
         proof_type: primaryProofType, proof_count: proofCount,
         proof_fields: cleanFields as any,
         banner_url,
-        status: "active",
+        status: "pending",
       }).select().single();
       if (error || !task) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
 
@@ -125,7 +125,7 @@ function PublishPage() {
         user_id: session.user.id, type: "task_publish_hold", amount: totalCost,
         status: "approved", reference: task.id,
       });
-      toast.success("Task published!");
+      toast.success("Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
       setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
