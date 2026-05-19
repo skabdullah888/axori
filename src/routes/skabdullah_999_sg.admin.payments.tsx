@@ -72,10 +72,21 @@ function PaymentsTable({ type }: { type: PayType }) {
     // eslint-disable-next-line
   }, [filter, type]);
 
+  const clearAdminNotifs = async (row: any) => {
+    const uname = row.profile?.username;
+    if (!uname) return;
+    await supabase.from("notifications")
+      .delete()
+      .eq("admin_targeted", true)
+      .eq("type", `${type}_request`)
+      .ilike("message", `%${uname}%`);
+  };
+
   const doApprove = async (row: any) => {
     const { error } = await supabase.from("payments")
       .update({ status: "approved", updated_at: new Date().toISOString() }).eq("id", row.id);
     if (error) { toast.error(error.message); return; }
+    await clearAdminNotifs(row);
 
     if (type === "activation") {
       // Activate account
@@ -130,6 +141,7 @@ function PaymentsTable({ type }: { type: PayType }) {
     const { error } = await supabase.from("payments")
       .update({ status: "rejected", updated_at: new Date().toISOString() }).eq("id", row.id);
     if (error) { toast.error(error.message); return; }
+    await clearAdminNotifs(row);
     await notify(
       row.user_id, "payment",
       `${type === "activation" ? "Activation" : type === "deposit" ? "Deposit" : "Withdrawal"} rejected`,
