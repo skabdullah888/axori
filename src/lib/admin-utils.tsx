@@ -2,7 +2,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 export async function notify(userId: string | null, type: string, title: string, message: string) {
   if (!userId) return;
-  await supabase.from("notifications").insert({ user_id: userId, type, title, message });
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("user_id")
+    .or(`user_id.eq.${userId},id.eq.${userId}`)
+    .maybeSingle();
+  await supabase.from("notifications").insert({ user_id: profile?.user_id ?? userId, type, title, message });
 }
 
 export function fmtDate(s?: string | null) {
