@@ -40,6 +40,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const [profileChecked, setProfileChecked] = useState(false);
+  const [profileError, setProfileError] = useState("");
 
   useEffect(() => {
     if (loading) return;
@@ -48,13 +49,18 @@ export function UserShell({ title, children }: { title: string; children: ReactN
 
   const loadProfile = async () => {
     if (!session?.user) return;
-    const { data } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+    setProfileError("");
+    const { data, error } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+    if (error) {
+      setProfileError("We couldn't load your account profile. Please refresh the page.");
+      setProfileChecked(true);
+      return;
+    }
     if (data) {
       setProfile(data as Profile);
     } else {
-      // Authed session but no user profile (e.g., admin-only account). Block access to user UI.
-      await supabase.auth.signOut();
-      navigate({ to: "/auth/login" });
+      setProfileError("Your user profile is still being prepared. Please refresh in a moment.");
+      setProfileChecked(true);
       return;
     }
     setProfileChecked(true);
@@ -94,6 +100,10 @@ export function UserShell({ title, children }: { title: string; children: ReactN
 
   if (loading || !isAuthed || !profileChecked) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
+  }
+
+  if (profileError) {
+    return <div className="min-h-screen flex items-center justify-center px-4 text-center text-muted-foreground">{profileError}</div>;
   }
 
   const Sidebar = (
