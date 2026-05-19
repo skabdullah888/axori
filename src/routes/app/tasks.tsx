@@ -348,10 +348,16 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
               )}
             </div>
           ))}
+          <div className="space-y-2">
+            <Label>Message to publisher <span className="text-xs text-muted-foreground">(optional)</span></Label>
+            <Textarea rows={3} value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000}
+              placeholder="Add any notes, comments, or extra context for the publisher…" />
+          </div>
           <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
             {busy ? "Submitting…" : `Submit & earn $${Number(task.reward).toFixed(2)}`}
           </Button>
         </form>
+
       </DialogContent>
     </Dialog>
   );
