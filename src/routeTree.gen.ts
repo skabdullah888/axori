@@ -27,7 +27,11 @@ import { Route as AppWithdrawRouteImport } from './routes/app/withdraw'
 import { Route as AppWalletRouteImport } from './routes/app/wallet'
 import { Route as AppTasksRouteImport } from './routes/app/tasks'
 import { Route as AppSubmissionsRouteImport } from './routes/app/submissions'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
+import { Route as AppReferralsRouteImport } from './routes/app/referrals'
+import { Route as AppPublishRouteImport } from './routes/app/publish'
 import { Route as AppProfileRouteImport } from './routes/app/profile'
+import { Route as AppNotificationsRouteImport } from './routes/app/notifications'
 import { Route as AppDepositRouteImport } from './routes/app/deposit'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAppealsRouteImport } from './routes/app/appeals'
@@ -123,9 +127,29 @@ const AppSubmissionsRoute = AppSubmissionsRouteImport.update({
   path: '/app/submissions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/app/settings',
+  path: '/app/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppReferralsRoute = AppReferralsRouteImport.update({
+  id: '/app/referrals',
+  path: '/app/referrals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppPublishRoute = AppPublishRouteImport.update({
+  id: '/app/publish',
+  path: '/app/publish',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/app/profile',
   path: '/app/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/app/notifications',
+  path: '/app/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppDepositRoute = AppDepositRouteImport.update({
@@ -165,7 +189,11 @@ export interface FileRoutesByFullPath {
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/publish': typeof AppPublishRoute
+  '/app/referrals': typeof AppReferralsRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/submissions': typeof AppSubmissionsRoute
   '/app/tasks': typeof AppTasksRouteWithChildren
   '/app/wallet': typeof AppWalletRoute
@@ -190,7 +218,11 @@ export interface FileRoutesByTo {
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/publish': typeof AppPublishRoute
+  '/app/referrals': typeof AppReferralsRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/submissions': typeof AppSubmissionsRoute
   '/app/tasks': typeof AppTasksRouteWithChildren
   '/app/wallet': typeof AppWalletRoute
@@ -216,7 +248,11 @@ export interface FileRoutesById {
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
+  '/app/notifications': typeof AppNotificationsRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/publish': typeof AppPublishRoute
+  '/app/referrals': typeof AppReferralsRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/submissions': typeof AppSubmissionsRoute
   '/app/tasks': typeof AppTasksRouteWithChildren
   '/app/wallet': typeof AppWalletRoute
@@ -243,7 +279,11 @@ export interface FileRouteTypes {
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
+    | '/app/notifications'
     | '/app/profile'
+    | '/app/publish'
+    | '/app/referrals'
+    | '/app/settings'
     | '/app/submissions'
     | '/app/tasks'
     | '/app/wallet'
@@ -268,7 +308,11 @@ export interface FileRouteTypes {
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
+    | '/app/notifications'
     | '/app/profile'
+    | '/app/publish'
+    | '/app/referrals'
+    | '/app/settings'
     | '/app/submissions'
     | '/app/tasks'
     | '/app/wallet'
@@ -293,7 +337,11 @@ export interface FileRouteTypes {
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
+    | '/app/notifications'
     | '/app/profile'
+    | '/app/publish'
+    | '/app/referrals'
+    | '/app/settings'
     | '/app/submissions'
     | '/app/tasks'
     | '/app/wallet'
@@ -319,7 +367,11 @@ export interface RootRouteChildren {
   AppAppealsRoute: typeof AppAppealsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppDepositRoute: typeof AppDepositRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppPublishRoute: typeof AppPublishRoute
+  AppReferralsRoute: typeof AppReferralsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppSubmissionsRoute: typeof AppSubmissionsRoute
   AppTasksRoute: typeof AppTasksRouteWithChildren
   AppWalletRoute: typeof AppWalletRoute
@@ -456,11 +508,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSubmissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/app/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/referrals': {
+      id: '/app/referrals'
+      path: '/app/referrals'
+      fullPath: '/app/referrals'
+      preLoaderRoute: typeof AppReferralsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/publish': {
+      id: '/app/publish'
+      path: '/app/publish'
+      fullPath: '/app/publish'
+      preLoaderRoute: typeof AppPublishRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/profile': {
       id: '/app/profile'
       path: '/app/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/app/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/deposit': {
@@ -522,7 +602,11 @@ const rootRouteChildren: RootRouteChildren = {
   AppAppealsRoute: AppAppealsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDepositRoute: AppDepositRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
   AppProfileRoute: AppProfileRoute,
+  AppPublishRoute: AppPublishRoute,
+  AppReferralsRoute: AppReferralsRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppSubmissionsRoute: AppSubmissionsRoute,
   AppTasksRoute: AppTasksRouteWithChildren,
   AppWalletRoute: AppWalletRoute,
@@ -533,13 +617,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
