@@ -233,13 +233,15 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
   const { session } = useAuth();
   const [values, setValues] = useState<Record<string, any>>({});
   const [files, setFiles] = useState<Record<string, File>>({});
+  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
 
   const proofFields: ProofField[] = (task.proof_fields as ProofField[])?.length
     ? task.proof_fields
     : [{ id: "legacy", type: task.proof_type ?? "image", label: task.proof_type === "text" ? "Your proof" : "Screenshot", required: true }];
 
-  useEffect(() => { if (open) { setValues({}); setFiles({}); } }, [open]);
+  useEffect(() => { if (open) { setValues({}); setFiles({}); setNote(""); } }, [open]);
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
