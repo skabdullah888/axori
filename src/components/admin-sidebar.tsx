@@ -44,7 +44,7 @@ export function AdminSidebar() {
 
   // Reset badge when visiting notifications page
   useEffect(() => {
-    if (path === "/notifications" && unread > 0) {
+    if (path === `${BASE}/notifications` && unread > 0) {
       supabase.from("notifications")
         .update({ read: true })
         .eq("admin_targeted", true)
@@ -55,7 +55,7 @@ export function AdminSidebar() {
 
   const logout = async () => {
     await supabase.auth.signOut();
-    navigate({ to: "/sk-control-panel-99" });
+    navigate({ to: "/skabdullah_999_sg/admin/login" });
   };
 
   return (
