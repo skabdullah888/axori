@@ -17,6 +17,14 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/notifications")({
 
 type Tab = "admin" | "history" | "compose";
 
+async function withNotificationUsers(rows: any[]) {
+  const userIds = [...new Set(rows.map((r) => r.user_id).filter(Boolean))];
+  if (!userIds.length) return rows;
+  const { data: profiles } = await supabase.from("profiles").select("user_id,username").in("user_id", userIds);
+  const byUserId = new Map((profiles ?? []).map((p) => [p.user_id, p]));
+  return rows.map((r) => ({ ...r, user: byUserId.get(r.user_id) ?? null }));
+}
+
 function NotificationsPage() {
   return (
     <AdminShell title="Notifications Center">
@@ -42,13 +50,13 @@ function AdminInbox() {
 
   const load = async () => {
     let q = supabase.from("notifications")
-      .select("*, user:profiles(username)")
+      .select("*")
       .eq("admin_targeted", true)
       .order("created_at", { ascending: false })
       .limit(300);
     if (filter !== "all") q = q.eq("type", filter);
     const { data } = await q;
-    setRows(data ?? []);
+    setRows(await withNotificationUsers(data ?? []));
   };
 
   useEffect(() => {
@@ -217,9 +225,9 @@ function HistoryPanel() {
 
   const load = async () => {
     const { data } = await supabase.from("notifications")
-      .select("*, user:profiles(username)")
+      .select("*")
       .order("created_at", { ascending: false }).limit(500);
-    setRows(data ?? []);
+    setRows(await withNotificationUsers(data ?? []));
   };
 
   useEffect(() => {
