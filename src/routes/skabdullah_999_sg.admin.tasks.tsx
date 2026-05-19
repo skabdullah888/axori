@@ -191,3 +191,21 @@ function TasksPage() {
     </AdminShell>
   );
 }
+
+function Info({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="rounded-md border border-border bg-muted/30 px-3 py-2">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className="font-medium mt-0.5 break-all">{value}</p>
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">{title}</p>
+      {children}
+    </div>
+  );
+}
