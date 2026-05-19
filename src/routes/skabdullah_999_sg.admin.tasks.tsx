@@ -5,9 +5,11 @@ import { AdminShell } from "@/components/admin-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Check, X } from "lucide-react";
+import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({ component: TasksPage });
 
