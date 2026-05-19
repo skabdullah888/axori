@@ -55,6 +55,7 @@ function PublishPage() {
     title: "", description: "", instructions: "", category: "general",
     reward: "", total_slots: "1",
   });
+  const [rejectSub, setRejectSub] = useState<any | null>(null);
 
 
   const load = async () => {
