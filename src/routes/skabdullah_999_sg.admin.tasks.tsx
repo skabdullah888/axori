@@ -131,6 +131,63 @@ function TasksPage() {
         onCancel={() => setRejectRow(null)}
         onConfirm={(reason) => rejectRow && doReject(rejectRow, reason)}
       />
+
+      <Dialog open={!!viewRow} onOpenChange={(o) => !o && setViewRow(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {viewRow?.title}
+              {viewRow && <StatusPill status={viewRow.status} />}
+            </DialogTitle>
+          </DialogHeader>
+          {viewRow && (
+            <div className="space-y-4 text-sm">
+              {viewRow.banner_url && (
+                <img src={viewRow.banner_url} alt="Task banner" className="w-full rounded-lg border border-border max-h-64 object-cover" />
+              )}
+              <div className="grid grid-cols-2 gap-3">
+                <Info label="Publisher" value={viewRow.publisher?.username ?? "—"} />
+                <Info label="Publisher email" value={viewRow.publisher?.email ?? "—"} />
+                <Info label="Reward" value={fmtMoney(viewRow.reward)} />
+                <Info label="Slots" value={`${viewRow.completed_slots} / ${viewRow.total_slots}`} />
+                <Info label="Category" value={viewRow.category ?? "general"} />
+                <Info label="Created" value={fmtDate(viewRow.created_at)} />
+                {viewRow.deadline && <Info label="Deadline" value={fmtDate(viewRow.deadline)} />}
+                <Info label="Proof type" value={`${viewRow.proof_type ?? "—"} (×${viewRow.proof_count ?? 1})`} />
+              </div>
+              {viewRow.description && (
+                <Section title="Description"><p className="whitespace-pre-wrap text-muted-foreground">{viewRow.description}</p></Section>
+              )}
+              {viewRow.instructions && (
+                <Section title="Instructions"><p className="whitespace-pre-wrap text-muted-foreground">{viewRow.instructions}</p></Section>
+              )}
+              {Array.isArray(viewRow.proof_fields) && viewRow.proof_fields.length > 0 && (
+                <Section title="Required proof fields">
+                  <ul className="space-y-1">
+                    {viewRow.proof_fields.map((f: any, i: number) => (
+                      <li key={i} className="flex items-center gap-2">
+                        <Badge variant="outline">{f.type}</Badge>
+                        <span>{f.label}</span>
+                        {f.required && <span className="text-xs text-destructive">required</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </Section>
+              )}
+              {viewRow.status === "pending" && (
+                <div className="flex gap-2 pt-2 border-t border-border">
+                  <Button variant="destructive" className="flex-1" onClick={() => { setRejectRow(viewRow); setViewRow(null); }}>
+                    <X className="h-4 w-4 mr-1" />Reject
+                  </Button>
+                  <Button className="flex-1" onClick={() => { setApproveRow(viewRow); setViewRow(null); }}>
+                    <Check className="h-4 w-4 mr-1" />Accept
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </AdminShell>
   );
 }
