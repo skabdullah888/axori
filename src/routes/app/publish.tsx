@@ -69,7 +69,7 @@ function PublishPage() {
     e.preventDefault();
     if (!session?.user || !profile) return;
     if (insufficient) { toast.error("Insufficient balance to publish this task"); return; }
-    if (profile.publisher_restricted) { toast.error("Publisher access is restricted"); return; }
+    if ((profile as any).publisher_restricted) { toast.error("Publisher access is restricted"); return; }
     setBusy(true);
     const { data: task, error } = await supabase.from("tasks").insert({
       publisher_id: session.user.id,
