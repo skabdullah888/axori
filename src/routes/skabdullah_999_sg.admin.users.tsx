@@ -131,7 +131,7 @@ function UsersPage() {
           <DialogHeader><DialogTitle>Edit user — {edit?.username}</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Balance ($)</Label>
+              <Label>Balance (৳)</Label>
               <Input type="number" step="0.01" value={form.balance}
                 onChange={(e) => setForm(f => ({ ...f, balance: Number(e.target.value) }))} />
             </div>

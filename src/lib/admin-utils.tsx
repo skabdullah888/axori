@@ -17,7 +17,7 @@ export function fmtDate(s?: string | null) {
 
 export function fmtMoney(n: number | string | null | undefined) {
   const v = Number(n ?? 0);
-  return `$${v.toFixed(2)}`;
+  return `৳${v.toFixed(2)}`;
 }
 
 export function StatusPill({ status }: { status: string }) {

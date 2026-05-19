@@ -133,7 +133,7 @@ function TasksPage() {
                     <div className="flex items-start justify-between mb-2">
                       <Badge variant="outline" className="text-[10px] uppercase tracking-wider">{t.category ?? "general"}</Badge>
                       <div className="flex items-center gap-1 text-primary font-bold">
-                        <Coins className="h-4 w-4" />${Number(t.reward).toFixed(2)}
+                        <Coins className="h-4 w-4" />৳{Number(t.reward).toFixed(2)}
                       </div>
                     </div>
                     <h3 className="font-semibold line-clamp-1 mb-1">{t.title}</h3>
@@ -171,7 +171,7 @@ function TasksPage() {
               <div className="grid grid-cols-3 gap-3 text-sm">
                 <div className="p-3 rounded-lg bg-accent/30 border border-border">
                   <p className="text-[10px] uppercase text-muted-foreground">Reward</p>
-                  <p className="font-bold text-primary">${Number(selected.reward).toFixed(2)}</p>
+                  <p className="font-bold text-primary">৳{Number(selected.reward).toFixed(2)}</p>
                 </div>
                 <div className="p-3 rounded-lg bg-accent/30 border border-border">
                   <p className="text-[10px] uppercase text-muted-foreground">Slots left</p>
@@ -206,7 +206,7 @@ function TasksPage() {
                 </Button>
               ) : (
                 <Button className="w-full bg-gradient-to-r from-primary to-primary/80" onClick={openSubmit}>
-                  Submit & Earn ${Number(selected.reward).toFixed(2)}
+                  Submit & Earn ৳{Number(selected.reward).toFixed(2)}
                 </Button>
               )}
             </>
@@ -354,7 +354,7 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
               placeholder="Add any notes, comments, or extra context for the publisher…" />
           </div>
           <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
-            {busy ? "Submitting…" : `Submit & earn $${Number(task.reward).toFixed(2)}`}
+            {busy ? "Submitting…" : `Submit & earn ৳${Number(task.reward).toFixed(2)}`}
           </Button>
         </form>
 

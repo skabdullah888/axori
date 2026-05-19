@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 export const Route = createFileRoute("/app/wallet")({ component: WalletPage });
 
-const fmt = (n: number) => `$${Number(n ?? 0).toFixed(2)}`;
+const fmt = (n: number) => `৳${Number(n ?? 0).toFixed(2)}`;
 const statusVariant = (s: string) =>
   s === "approved" || s === "completed" ? "bg-success/20 text-success border-success/30"
   : s === "rejected" ? "bg-destructive/20 text-destructive border-destructive/30"
