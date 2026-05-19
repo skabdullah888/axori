@@ -233,13 +233,15 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
   const { session } = useAuth();
   const [values, setValues] = useState<Record<string, any>>({});
   const [files, setFiles] = useState<Record<string, File>>({});
+  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
 
   const proofFields: ProofField[] = (task.proof_fields as ProofField[])?.length
     ? task.proof_fields
     : [{ id: "legacy", type: task.proof_type ?? "image", label: task.proof_type === "text" ? "Your proof" : "Screenshot", required: true }];
 
-  useEffect(() => { if (open) { setValues({}); setFiles({}); } }, [open]);
+  useEffect(() => { if (open) { setValues({}); setFiles({}); setNote(""); } }, [open]);
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -257,14 +259,17 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
 
     setBusy(true);
     try {
-      const proofText = proofFields
+      const fieldsText = proofFields
         .filter(f => f.type !== "image" && values[f.id])
         .map(f => `${f.label}: ${values[f.id]}`).join("\n");
+      const noteText = note.trim() ? `Note: ${note.trim()}` : "";
+      const proofText = [fieldsText, noteText].filter(Boolean).join("\n\n");
 
       const { data: sub, error: subErr } = await supabase.from("task_submissions").insert({
         task_id: task.id, user_id: session.user.id, status: "pending",
         proof_text: proofText || null,
       }).select().single();
+
       if (subErr) throw subErr;
 
       for (const f of proofFields) {
@@ -343,10 +348,16 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
               )}
             </div>
           ))}
+          <div className="space-y-2">
+            <Label>Message to publisher <span className="text-xs text-muted-foreground">(optional)</span></Label>
+            <Textarea rows={3} value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000}
+              placeholder="Add any notes, comments, or extra context for the publisher…" />
+          </div>
           <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
             {busy ? "Submitting…" : `Submit & earn $${Number(task.reward).toFixed(2)}`}
           </Button>
         </form>
+
       </DialogContent>
     </Dialog>
   );
