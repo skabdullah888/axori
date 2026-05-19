@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — Axora" }] }),
@@ -21,17 +22,20 @@ function WithdrawPage() {
   const { session } = useAuth();
   const { profile, isActive } = useProfile();
   const [settings, setSettings] = useState<any>(null);
+  const [methods, setMethods] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [form, setForm] = useState({ method: "", receiver_number: "", amount: "" });
   const [busy, setBusy] = useState(false);
 
   const reload = async () => {
     if (!session?.user) return;
-    const [s, h] = await Promise.all([
+    const [s, m, h] = await Promise.all([
       supabase.from("settings").select("*").limit(1).maybeSingle(),
+      supabase.from("payment_methods").select("*").eq("active", true),
       supabase.from("payments").select("*").eq("user_id", session.user.id).eq("type", "withdrawal").order("created_at", { ascending: false }),
     ]);
     setSettings(s.data);
+    setMethods(m.data ?? []);
     setHistory(h.data ?? []);
   };
 
@@ -88,7 +92,16 @@ function WithdrawPage() {
             <form onSubmit={submit} className="space-y-4">
               <div className="space-y-2">
                 <Label>Payout method</Label>
-                <Input placeholder="e.g. bKash, USDT, PayPal…" value={form.method} onChange={(e) => setForm((f) => ({ ...f, method: e.target.value }))} required />
+                {methods.length > 0 ? (
+                  <Select value={form.method} onValueChange={(v) => setForm((f) => ({ ...f, method: v }))}>
+                    <SelectTrigger><SelectValue placeholder="Select method" /></SelectTrigger>
+                    <SelectContent>
+                      {methods.map((m) => (<SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input placeholder="e.g. bKash, USDT, PayPal…" value={form.method} onChange={(e) => setForm((f) => ({ ...f, method: e.target.value }))} required />
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Your receiving account / address</Label>
