@@ -163,6 +163,7 @@ function ComposePanel() {
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(target.trim());
         if (isUuid) {
           const { data } = await supabase.from("profiles").select("user_id").or(`user_id.eq.${target.trim()},id.eq.${target.trim()}`).maybeSingle();
+          if (data && !data.user_id) { toast.error("This profile has no login user ID"); return; }
           userId = data?.user_id ?? target.trim();
         }
         if (!userId) {
