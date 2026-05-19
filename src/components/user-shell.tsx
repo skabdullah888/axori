@@ -50,7 +50,15 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const loadProfile = async () => {
     if (!session?.user) return;
     setProfileError("");
-    const { data, error } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+    let data: Profile | null = null;
+    let error: unknown = null;
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const result = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+      data = result.data as Profile | null;
+      error = result.error;
+      if (data || error) break;
+      await new Promise((resolve) => window.setTimeout(resolve, 250));
+    }
     if (error) {
       setProfileError("We couldn't load your account profile. Please refresh the page.");
       setProfileChecked(true);
