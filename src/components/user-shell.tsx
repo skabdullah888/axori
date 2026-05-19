@@ -92,7 +92,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     navigate({ to: "/auth/login" });
   };
 
-  if (loading || !isAuthed) {
+  if (loading || !isAuthed || !profileChecked) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
   }
 
