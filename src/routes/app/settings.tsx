@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
-  head: () => ({ meta: [{ title: "Settings — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Settings — Axora" }] }),
   component: SettingsPage,
 });
 

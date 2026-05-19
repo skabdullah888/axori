@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/register")({
-  head: () => ({ meta: [{ title: "Register — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Register — Axora" }] }),
   component: RegisterPage,
   validateSearch: (s: Record<string, unknown>) => ({ ref: (s.ref as string) || "" }),
 });

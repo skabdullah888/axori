@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Home — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Home — Axora" }] }),
   component: Index,
 });
 

@@ -12,7 +12,7 @@ import { Ban, ShieldCheck, Pencil } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({
-  head: () => ({ meta: [{ title: "Admin Users — Earn Hub" }] }),
+  head: () => ({ meta: [{ title: "Admin Users — Axora" }] }),
   component: UsersPage,
 });
 
