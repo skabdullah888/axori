@@ -39,6 +39,8 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const [profileChecked, setProfileChecked] = useState(false);
+
   useEffect(() => {
     if (loading) return;
     if (!isAuthed) { navigate({ to: "/auth/login" }); return; }
@@ -47,7 +49,15 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const loadProfile = async () => {
     if (!session?.user) return;
     const { data } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
-    if (data) setProfile(data as Profile);
+    if (data) {
+      setProfile(data as Profile);
+    } else {
+      // Authed session but no user profile (e.g., admin-only account). Block access to user UI.
+      await supabase.auth.signOut();
+      navigate({ to: "/auth/login" });
+      return;
+    }
+    setProfileChecked(true);
   };
 
   const loadUnread = async () => {
