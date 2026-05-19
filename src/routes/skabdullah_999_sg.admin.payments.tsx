@@ -93,7 +93,7 @@ function PaymentsTable({ type }: { type: PayType }) {
       await supabase.from("profiles").update({
         status: "active",
         activated_at: new Date().toISOString(),
-      }).eq("id", row.user_id);
+      }).eq("user_id", row.user_id);
 
       // Credit referrer bonus if any
       if (row.profile?.referred_by) {
@@ -123,7 +123,7 @@ function PaymentsTable({ type }: { type: PayType }) {
       const amount = Number(row.amount);
       const delta = type === "deposit" ? amount : -amount;
       const newBalance = Number(row.profile.balance ?? 0) + delta;
-      await supabase.from("profiles").update({ balance: newBalance }).eq("id", row.user_id);
+      await supabase.from("profiles").update({ balance: newBalance }).eq("user_id", row.user_id);
     }
 
     const title = type === "activation" ? "Account activated"
