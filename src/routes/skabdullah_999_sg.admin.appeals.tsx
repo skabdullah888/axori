@@ -102,6 +102,8 @@ function AppealsPage() {
           </div>
         )}
       </CardContent></Card>
+      <Paginator page={page} pageSize={PAGE_SIZE} total={rows.length} onChange={setPage} />
+
 
       <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
         <DialogContent className="max-w-2xl">
