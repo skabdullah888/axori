@@ -68,7 +68,7 @@ export function AdminSidebar() {
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
-          const showBadge = it.to === "/notifications" && unread > 0;
+          const showBadge = it.to === `${BASE}/notifications` && unread > 0;
           return (
             <Link
               key={it.to}
