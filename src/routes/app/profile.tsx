@@ -31,7 +31,8 @@ function ProfilePage() {
     ]);
     setMethods(pm.data ?? []);
     setSettings(s.data);
-    if (s.data?.activation_amount) setForm((f) => ({ ...f, amount: f.amount || String(s.data!.activation_amount) }));
+    const actAmt = Number(s.data?.activation_fee ?? s.data?.activation_amount ?? 0);
+    if (actAmt) setForm((f) => ({ ...f, amount: f.amount || String(actAmt) }));
   };
 
   useEffect(() => {
