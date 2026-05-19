@@ -97,7 +97,7 @@ function TasksPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(r => (
+                {paged.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 font-medium">{r.title}</td>
                     <td className="px-4 py-3">{r.publisher?.username ?? "—"}</td>
