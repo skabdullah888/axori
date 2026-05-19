@@ -1,18 +1,11 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Home — Axora" }] }),
-  component: Index,
+  head: () => ({ meta: [{ title: "Axora" }] }),
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    throw redirect({ to: data.session ? "/app/dashboard" : "/auth/login" });
+  },
+  component: () => null,
 });
-
-function Index() {
-  const { isAuthed, loading } = useAuth();
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (loading) return;
-    navigate({ to: isAuthed ? "/app/dashboard" : "/auth/login" });
-  }, [isAuthed, loading, navigate]);
-  return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
-}
