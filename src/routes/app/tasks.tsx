@@ -143,8 +143,9 @@ function TasksPage() {
             No tasks available right now. Check back soon!
           </CardContent></Card>
         ) : (
+          <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filtered.map((t) => {
+            {paged.map((t) => {
               const submitted = mine.has(t.id);
               const remaining = t.total_slots - t.completed_slots;
               return (
