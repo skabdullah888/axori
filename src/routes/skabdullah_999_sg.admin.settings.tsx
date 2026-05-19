@@ -13,7 +13,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({ comp
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_fee: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0,
+    activation_fee: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0,
   });
   const [saving, setSaving] = useState(false);
 
@@ -26,6 +26,7 @@ function SettingsPage() {
           withdrawal_fee: Number(data.withdrawal_fee),
           minimum_withdrawal: Number(data.minimum_withdrawal),
           publisher_task_tax: Number(data.publisher_task_tax ?? 0),
+          referral_bonus: Number(data.referral_bonus ?? 0),
         });
       }
     });
@@ -67,6 +68,14 @@ function SettingsPage() {
               onChange={(e) => setForm(f => ({ ...f, publisher_task_tax: Number(e.target.value) }))} />
             <p className="text-xs text-muted-foreground mt-1">
               Percentage deducted from a publisher's balance whenever they publish a new task.
+            </p>
+          </div>
+          <div>
+            <Label>Referral bonus (৳)</Label>
+            <Input type="number" step="0.01" value={form.referral_bonus}
+              onChange={(e) => setForm(f => ({ ...f, referral_bonus: Number(e.target.value) }))} />
+            <p className="text-xs text-muted-foreground mt-1">
+              Amount credited to the referrer when their referred user activates their account.
             </p>
           </div>
           <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
