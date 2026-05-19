@@ -53,13 +53,6 @@ export type Database = {
             referencedRelation: "task_submissions"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "appeals_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       notifications: {
@@ -407,17 +400,11 @@ export type Database = {
             referencedRelation: "tasks"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "task_submissions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       tasks: {
         Row: {
+          banner_url: string | null
           category: string | null
           completed_slots: number
           created_at: string
@@ -427,6 +414,7 @@ export type Database = {
           instructions: string | null
           proof_count: number
           proof_examples: Json | null
+          proof_fields: Json
           proof_type: string | null
           publisher_id: string | null
           reward: number
@@ -435,6 +423,7 @@ export type Database = {
           total_slots: number
         }
         Insert: {
+          banner_url?: string | null
           category?: string | null
           completed_slots?: number
           created_at?: string
@@ -444,6 +433,7 @@ export type Database = {
           instructions?: string | null
           proof_count?: number
           proof_examples?: Json | null
+          proof_fields?: Json
           proof_type?: string | null
           publisher_id?: string | null
           reward?: number
@@ -452,6 +442,7 @@ export type Database = {
           total_slots?: number
         }
         Update: {
+          banner_url?: string | null
           category?: string | null
           completed_slots?: number
           created_at?: string
@@ -461,6 +452,7 @@ export type Database = {
           instructions?: string | null
           proof_count?: number
           proof_examples?: Json | null
+          proof_fields?: Json
           proof_type?: string | null
           publisher_id?: string | null
           reward?: number
@@ -468,15 +460,7 @@ export type Database = {
           title?: string
           total_slots?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "tasks_publisher_id_fkey"
-            columns: ["publisher_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_roles: {
         Row: {
