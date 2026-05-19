@@ -150,9 +150,10 @@ function PublishPage() {
   };
 
 
-  const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number) => {
+  const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number, reason?: string) => {
     const { error } = await supabase.from("task_submissions").update({
       status: approve ? "approved" : "rejected",
+      note: approve ? null : (reason ?? null),
       updated_at: new Date().toISOString(),
     }).eq("id", subId);
     if (error) { toast.error(error.message); return; }
@@ -174,10 +175,11 @@ function PublishPage() {
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",
-      message: approve ? `You earned ৳${taskReward.toFixed(2)}` : "Your submission was rejected by the publisher.",
+      message: approve ? `You earned ৳${taskReward.toFixed(2)}` : `Your submission was rejected by the publisher. Reason: ${reason ?? "No reason provided"}`,
       type: approve ? "submission_approved" : "submission_rejected",
     });
     toast.success(approve ? "Approved & user paid" : "Rejected");
+    setRejectSub(null);
   };
 
   const stats = {
