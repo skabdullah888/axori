@@ -7,16 +7,17 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
+const BASE = "/skabdullah_999_sg/admin";
 const items = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/appeals", label: "Appeals Center", icon: Gavel },
-  { to: "/payments", label: "Payments", icon: Wallet },
-  { to: "/users", label: "Users", icon: Users },
-  { to: "/publishers", label: "Publishers", icon: Building2 },
-  { to: "/tasks", label: "Tasks", icon: ListTodo },
-  { to: "/notifications", label: "Notifications", icon: Bell },
-  { to: "/settings", label: "Settings", icon: SettingsIcon },
-  { to: "/security-logs", label: "Security Logs", icon: ShieldAlert },
+  { to: `${BASE}/dashboard`, label: "Dashboard", icon: LayoutDashboard },
+  { to: `${BASE}/appeals`, label: "Appeals Center", icon: Gavel },
+  { to: `${BASE}/payments`, label: "Payments", icon: Wallet },
+  { to: `${BASE}/users`, label: "Users", icon: Users },
+  { to: `${BASE}/publishers`, label: "Publishers", icon: Building2 },
+  { to: `${BASE}/tasks`, label: "Tasks", icon: ListTodo },
+  { to: `${BASE}/notifications`, label: "Notifications", icon: Bell },
+  { to: `${BASE}/settings`, label: "Settings", icon: SettingsIcon },
+  { to: `${BASE}/security-logs`, label: "Security Logs", icon: ShieldAlert },
 ] as const;
 
 export function AdminSidebar() {
