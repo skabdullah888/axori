@@ -35,15 +35,15 @@ function ReferralsPage() {
   useEffect(() => {
     if (!session?.user) return;
     load();
-    const ch = supabase.channel(`refs-৳{session.user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "referral_earnings", filter: `referrer_id=eq.৳{session.user.id}` }, load)
+    const ch = supabase.channel(`refs-${session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "referral_earnings", filter: `referrer_id=eq.${session.user.id}` }, load)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id]);
 
   const refLink = typeof window !== "undefined" && profile?.referral_code
-    ? `৳{window.location.origin}/auth/register?ref=৳{profile.referral_code}` : "";
+    ? `${window.location.origin}/auth/register?ref=${profile.referral_code}` : "";
   const totalEarned = earnings.filter(e => e.status === "approved").reduce((s, e) => s + Number(e.amount), 0);
   const pending = earnings.filter(e => e.status === "pending").reduce((s, e) => s + Number(e.amount), 0);
 
@@ -62,11 +62,11 @@ function ReferralsPage() {
         </CardContent></Card>
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><DollarSign className="h-3.5 w-3.5" /> TOTAL EARNED</div>
-          <p className="text-3xl font-bold mt-1 text-success">৳{totalEarned.toFixed(2)}</p>
+          <p className="text-3xl font-bold mt-1 text-success">${totalEarned.toFixed(2)}</p>
         </CardContent></Card>
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><DollarSign className="h-3.5 w-3.5" /> PENDING</div>
-          <p className="text-3xl font-bold mt-1 text-warning">৳{pending.toFixed(2)}</p>
+          <p className="text-3xl font-bold mt-1 text-warning">${pending.toFixed(2)}</p>
         </CardContent></Card>
       </div>
 
@@ -74,7 +74,7 @@ function ReferralsPage() {
         <CardHeader><CardTitle>Your referral link</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Earn <span className="text-success font-bold">৳{settings?.referral_bonus ?? 1}</span> for each friend who activates their account.
+            Earn <span className="text-success font-bold">${settings?.referral_bonus ?? 1}</span> for each friend who activates their account.
           </p>
           {!isActive ? (
             <div className="rounded-xl border border-warning/30 bg-warning/10 p-6 text-center space-y-3">
@@ -159,7 +159,7 @@ function ReferralsPage() {
                 {earnings.map((e) => (
                   <div key={e.id} className="flex items-center justify-between p-3 rounded-lg bg-accent/40 border border-border">
                     <div>
-                      <p className="font-semibold text-sm">+৳{Number(e.amount).toFixed(2)}</p>
+                      <p className="font-semibold text-sm">+${Number(e.amount).toFixed(2)}</p>
                       <p className="text-xs text-muted-foreground">{new Date(e.created_at).toLocaleDateString()}</p>
                     </div>
                     <Badge variant={e.status === "approved" ? "default" : "secondary"}

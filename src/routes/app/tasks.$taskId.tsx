@@ -52,7 +52,7 @@ function TaskDetailPage() {
     if (!isActive) { setActivationOpen(true); return; }
     const need = task.proof_count ?? 1;
     if (task.proof_type !== "text" && files.length < need) {
-      toast.error(`Please upload ৳{need} proof image৳{need > 1 ? "s" : ""}.`);
+      toast.error(`Please upload ${need} proof image${need > 1 ? "s" : ""}.`);
       return;
     }
     setBusy(true);
@@ -63,7 +63,7 @@ function TaskDetailPage() {
       if (subErr) throw subErr;
 
       for (const f of files) {
-        const path = `৳{session.user.id}/৳{sub.id}/৳{Date.now()}-৳{f.name}`;
+        const path = `${session.user.id}/${sub.id}/${Date.now()}-${f.name}`;
         const { error: upErr } = await supabase.storage.from("proofs").upload(path, f);
         if (upErr) throw upErr;
         const { data: pub } = supabase.storage.from("proofs").getPublicUrl(path);
@@ -100,7 +100,7 @@ function TaskDetailPage() {
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground uppercase">Reward</p>
-                <p className="text-3xl font-bold text-primary flex items-center gap-1"><Coins className="h-6 w-6" />৳{Number(task.reward).toFixed(2)}</p>
+                <p className="text-3xl font-bold text-primary flex items-center gap-1"><Coins className="h-6 w-6" />${Number(task.reward).toFixed(2)}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -165,7 +165,7 @@ function TaskDetailPage() {
                     placeholder="Add any notes or links for the publisher…" required={proofType === "text"} />
                 </div>
                 <Button type="submit" disabled={busy} className="w-full bg-gradient-to-r from-primary to-primary/80">
-                  {!isActive ? "🔒 Activate account to submit" : busy ? "Submitting…" : `Submit and earn ৳{Number(task.reward).toFixed(2)}`}
+                  {!isActive ? "🔒 Activate account to submit" : busy ? "Submitting…" : `Submit and earn ${Number(task.reward).toFixed(2)}`}
                 </Button>
               </form>
             )}

@@ -37,7 +37,7 @@ function UsersPage() {
 
   const setStatus = async (id: string, status: "active" | "banned" | "inactive") => {
     const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
-    if (error) toast.error(error.message); else toast.success(`User ৳{status}`);
+    if (error) toast.error(error.message); else toast.success(`User ${status}`);
   };
 
   const openEdit = (r: any) => {

@@ -14,14 +14,14 @@ export const Route = createFileRoute("/app/dashboard")({ component: DashboardPag
 function StatCard({ icon: Icon, label, value, gradient, suffix = "" }: any) {
   return (
     <Card className="relative overflow-hidden border-border/60 bg-card/80 backdrop-blur transition-all hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5">
-      <div className={`absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-3xl ৳{gradient}`} />
+      <div className={`absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-3xl ${gradient}`} />
       <CardContent className="p-5 relative">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
             <p className="text-2xl font-bold mt-2">{suffix}{typeof value === "number" ? value.toLocaleString(undefined, { maximumFractionDigits: 2 }) : value}</p>
           </div>
-          <div className={`h-11 w-11 rounded-xl flex items-center justify-center ৳{gradient}`}>
+          <div className={`h-11 w-11 rounded-xl flex items-center justify-center ${gradient}`}>
             <Icon className="h-5 w-5 text-white" />
           </div>
         </div>
@@ -63,7 +63,7 @@ function DashboardPage() {
     supabase.from("settings").select("activation_fee, activation_amount").limit(1).maybeSingle()
       .then(({ data }) => setActivationAmount(Number(data?.activation_fee ?? data?.activation_amount ?? 0) || null));
     if (!session?.user) return;
-    const ch = supabase.channel(`dash-৳{session.user.id}`)
+    const ch = supabase.channel(`dash-${session.user.id}`)
       .on("postgres_changes", { event: "*", schema: "public" }, () => load())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -90,7 +90,7 @@ function DashboardPage() {
           <div className="text-right">
             <p className="text-xs text-muted-foreground uppercase tracking-wider">Available Balance</p>
             <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mt-1">
-              ৳{Number(profile?.balance ?? 0).toFixed(2)}
+              ${Number(profile?.balance ?? 0).toFixed(2)}
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ function DashboardPage() {
                 <p className="text-sm text-muted-foreground">
                   One-time activation fee:{" "}
                   <span className="font-bold text-warning">
-                    ৳{Number(activationAmount ?? 0).toFixed(2)}
+                    ${Number(activationAmount ?? 0).toFixed(2)}
                   </span>
                 </p>
               </div>
@@ -119,7 +119,7 @@ function DashboardPage() {
       )}
 
       <div className="relative">
-        {!isActive && !loading && <LockOverlay message={`Activate your account (৳{Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
+        {!isActive && !loading && <LockOverlay message={`Activate your account (${Number(activationAmount ?? 0).toFixed(2)}) to start earning from tasks.`} />}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
           <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
