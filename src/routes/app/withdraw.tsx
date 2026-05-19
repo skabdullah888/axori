@@ -22,17 +22,20 @@ function WithdrawPage() {
   const { session } = useAuth();
   const { profile, isActive } = useProfile();
   const [settings, setSettings] = useState<any>(null);
+  const [methods, setMethods] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [form, setForm] = useState({ method: "", receiver_number: "", amount: "" });
   const [busy, setBusy] = useState(false);
 
   const reload = async () => {
     if (!session?.user) return;
-    const [s, h] = await Promise.all([
+    const [s, m, h] = await Promise.all([
       supabase.from("settings").select("*").limit(1).maybeSingle(),
+      supabase.from("payment_methods").select("*").eq("active", true),
       supabase.from("payments").select("*").eq("user_id", session.user.id).eq("type", "withdrawal").order("created_at", { ascending: false }),
     ]);
     setSettings(s.data);
+    setMethods(m.data ?? []);
     setHistory(h.data ?? []);
   };
 
