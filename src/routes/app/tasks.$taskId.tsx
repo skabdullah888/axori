@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Upload, ArrowLeft, Coins, Users2, Clock, ImageIcon, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell, LockOverlay } from "@/components/user-shell";
+import { UserShell } from "@/components/user-shell";
+import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +25,7 @@ function TaskDetailPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [proofText, setProofText] = useState("");
   const [busy, setBusy] = useState(false);
+  const [activationOpen, setActivationOpen] = useState(false);
 
   const load = async () => {
     const { data: t } = await supabase.from("tasks")
@@ -47,6 +49,7 @@ function TaskDetailPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user || !task) return;
+    if (!isActive) { setActivationOpen(true); return; }
     const need = task.proof_count ?? 1;
     if (task.proof_type !== "text" && files.length < need) {
       toast.error(`Please upload ${need} proof image${need > 1 ? "s" : ""}.`);
@@ -81,8 +84,8 @@ function TaskDetailPage() {
 
   return (
     <UserShell title="Task Details">
+      <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative max-w-4xl mx-auto">
-        {!isActive && <LockOverlay message="Activate your account to submit task proofs." />}
         <Link to="/app/tasks" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
           <ArrowLeft className="h-4 w-4" /> Back to tasks
         </Link>
