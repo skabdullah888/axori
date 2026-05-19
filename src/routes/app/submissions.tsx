@@ -43,6 +43,8 @@ function SubmissionsPage() {
   }, [session?.user?.id]);
 
   const filtered = rows.filter((r) => tab === "all" || r.status === tab);
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+
 
   return (
     <UserShell title="My Submissions">
