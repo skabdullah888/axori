@@ -35,6 +35,7 @@ function DashboardPage() {
   const { profile, isActive, loading } = useProfile();
   const [stats, setStats] = useState({ totalEarn: 0, pending: 0, completed: 0, active: 0, refEarn: 0 });
   const [activity, setActivity] = useState<any[]>([]);
+  const [activationAmount, setActivationAmount] = useState<number | null>(null);
 
   const load = async () => {
     if (!session?.user) return;
