@@ -9,7 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/app/notifications")({ component: NotificationsPage });
+export const Route = createFileRoute("/app/notifications")({
+  head: () => ({ meta: [{ title: "Notifications — Earn Hub" }] }),
+  component: NotificationsPage,
+});
 
 type Notif = {
   id: string; title: string; message: string; type: string;

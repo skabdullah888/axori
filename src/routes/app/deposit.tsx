@@ -12,7 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const Route = createFileRoute("/app/deposit")({ component: DepositPage });
+export const Route = createFileRoute("/app/deposit")({
+  head: () => ({ meta: [{ title: "Deposit — Earn Hub" }] }),
+  component: DepositPage,
+});
 
 function DepositPage() {
   const { session } = useAuth();

@@ -13,7 +13,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const Route = createFileRoute("/app/profile")({ component: ProfilePage });
+export const Route = createFileRoute("/app/profile")({
+  head: () => ({ meta: [{ title: "Profile — Earn Hub" }] }),
+  component: ProfilePage,
+});
 
 function ProfilePage() {
   const { session } = useAuth();

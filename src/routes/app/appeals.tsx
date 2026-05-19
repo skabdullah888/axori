@@ -16,6 +16,7 @@ import { fmtDate } from "@/lib/admin-utils";
 
 type Search = { submissionId?: string };
 export const Route = createFileRoute("/app/appeals")({
+  head: () => ({ meta: [{ title: "Appeals — Earn Hub" }] }),
   component: AppealsPage,
   validateSearch: (s: Record<string, unknown>): Search => ({ submissionId: s.submissionId as string | undefined }),
 });

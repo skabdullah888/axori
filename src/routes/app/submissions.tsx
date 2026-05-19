@@ -10,7 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/app/submissions")({ component: SubmissionsPage });
+export const Route = createFileRoute("/app/submissions")({
+  head: () => ({ meta: [{ title: "My Submissions — Earn Hub" }] }),
+  component: SubmissionsPage,
+});
 
 function SubmissionsPage() {
   const { session } = useAuth();

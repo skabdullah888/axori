@@ -10,7 +10,10 @@ import { toast } from "sonner";
 import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/skabdullah_999_sg/admin/appeals")({ component: AppealsPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/appeals")({
+  head: () => ({ meta: [{ title: "Admin Appeals — Earn Hub" }] }),
+  component: AppealsPage,
+});
 
 type Row = any;
 
