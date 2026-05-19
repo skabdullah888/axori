@@ -65,6 +65,10 @@ function UsersPage() {
     const q = search.toLowerCase();
     return r.username?.toLowerCase().includes(q) || r.id?.toLowerCase().includes(q);
   });
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [search, filter]);
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+
 
   return (
     <AdminShell title="Users Management">
