@@ -74,7 +74,7 @@ function PublishersPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(r => {
+                {paged.map(r => {
                   const rate = r.stats.total ? Math.round((r.stats.approved / r.stats.total) * 100) : 0;
                   return (
                     <tr key={r.id} className="border-t border-border hover:bg-accent/30">
