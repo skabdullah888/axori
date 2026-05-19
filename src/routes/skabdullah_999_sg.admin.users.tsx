@@ -103,7 +103,7 @@ function UsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(r => (
+                {paged.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 font-medium">{r.username}</td>
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.id.slice(0, 8)}…</td>
