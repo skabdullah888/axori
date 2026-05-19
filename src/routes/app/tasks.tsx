@@ -41,7 +41,9 @@ function TasksPage() {
   const [mine, setMine] = useState<Set<string>>(new Set());
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
-  const [sort, setSort] = useState<string>("new");
+  const [sort, setSort] = useState<string>("random");
+  const [page, setPage] = useState(1);
+  const [shuffleSeed, setShuffleSeed] = useState(0);
   const [selected, setSelected] = useState<any>(null);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [activationOpen, setActivationOpen] = useState(false);
