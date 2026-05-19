@@ -259,14 +259,17 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
 
     setBusy(true);
     try {
-      const proofText = proofFields
+      const fieldsText = proofFields
         .filter(f => f.type !== "image" && values[f.id])
         .map(f => `${f.label}: ${values[f.id]}`).join("\n");
+      const noteText = note.trim() ? `Note: ${note.trim()}` : "";
+      const proofText = [fieldsText, noteText].filter(Boolean).join("\n\n");
 
       const { data: sub, error: subErr } = await supabase.from("task_submissions").insert({
         task_id: task.id, user_id: session.user.id, status: "pending",
         proof_text: proofText || null,
       }).select().single();
+
       if (subErr) throw subErr;
 
       for (const f of proofFields) {
