@@ -53,7 +53,7 @@ function SecurityLogsPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(r => (
+                {paged.map(r => (
                   <tr key={r.id} className="border-t border-border hover:bg-accent/30">
                     <td className="px-4 py-3 text-muted-foreground">{fmtDate(r.created_at)}</td>
                     <td className="px-4 py-3">{r.username ?? r.user_id ?? "—"}</td>
