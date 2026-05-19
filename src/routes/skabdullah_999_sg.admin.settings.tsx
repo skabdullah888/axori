@@ -48,11 +48,13 @@ function SettingsPage() {
             <Label>Activation fee ($)</Label>
             <Input type="number" step="0.01" value={form.activation_fee}
               onChange={(e) => setForm(f => ({ ...f, activation_fee: Number(e.target.value) }))} />
+            <p className="text-xs text-muted-foreground mt-1">Amount each user must pay to activate their account.</p>
           </div>
           <div>
-            <Label>Withdrawal fee ($)</Label>
+            <Label>Withdrawal fee (%)</Label>
             <Input type="number" step="0.01" value={form.withdrawal_fee}
               onChange={(e) => setForm(f => ({ ...f, withdrawal_fee: Number(e.target.value) }))} />
+            <p className="text-xs text-muted-foreground mt-1">Percentage deducted from each withdrawal request.</p>
           </div>
           <div>
             <Label>Minimum withdrawal ($)</Label>
