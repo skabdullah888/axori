@@ -95,7 +95,7 @@ function WithdrawPage() {
                 <Label>Amount (USD)</Label>
                 <Input type="number" step="0.01" min={minAmt} value={form.amount} onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))} required />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Min: ${minAmt.toFixed(2)} · Fee: ${fee.toFixed(2)}</span>
+                  <span>Min: ${minAmt.toFixed(2)} · Fee: {feePct}% (${feeAmt.toFixed(2)})</span>
                   <span>You receive: <span className="font-semibold text-foreground">${willReceive.toFixed(2)}</span></span>
                 </div>
               </div>
