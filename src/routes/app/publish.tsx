@@ -14,6 +14,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { RejectDialog } from "@/components/reject-dialog";
+
+const PUBLISHER_REJECT_PRESETS = [
+  "Proof is invalid or fake",
+  "Task instructions not followed",
+  "Incomplete proof",
+  "Duplicate submission",
+  "Low quality submission",
+];
 
 export const Route = createFileRoute("/app/publish")({
   head: () => ({ meta: [{ title: "Publish Task — Earn Hub" }] }),
