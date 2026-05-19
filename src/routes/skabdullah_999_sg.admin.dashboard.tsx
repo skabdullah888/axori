@@ -5,7 +5,7 @@ import { AdminShell } from "@/components/admin-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, ListTodo, FileCheck, Gavel, Wallet, Activity } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard")({ component: DashboardPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/dashboard")({ component: DashboardPage });
 
 type Stats = {
   users: number; tasks: number; pendingSubs: number;

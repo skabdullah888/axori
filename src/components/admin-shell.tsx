@@ -1,17 +1,39 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 import { AdminSidebar } from "./admin-sidebar";
 
 export function AdminShell({ title, children }: { title: string; children: ReactNode }) {
-  const { isAuthed, loading } = useAuth();
+  const { isAuthed, loading, session } = useAuth();
   const navigate = useNavigate();
+  const [checked, setChecked] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (!loading && !isAuthed) navigate({ to: "/sk-control-panel-99" });
-  }, [loading, isAuthed, navigate]);
+    if (loading) return;
+    if (!isAuthed) {
+      navigate({ to: "/skabdullah_999_sg/admin/login" });
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session!.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (!data) {
+        await supabase.auth.signOut();
+        navigate({ to: "/skabdullah_999_sg/admin/login" });
+        return;
+      }
+      setIsAdmin(true);
+      setChecked(true);
+    })();
+  }, [loading, isAuthed, navigate, session]);
 
-  if (loading || !isAuthed) {
+  if (loading || !checked || !isAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center text-muted-foreground">
         Loading…

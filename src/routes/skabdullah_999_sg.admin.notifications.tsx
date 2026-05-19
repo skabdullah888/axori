@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Check, Trash2, Pencil, Send, Bell } from "lucide-react";
 import { fmtDate, EmptyState } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/notifications")({ component: NotificationsPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/notifications")({ component: NotificationsPage });
 
 type Tab = "admin" | "history" | "compose";
 

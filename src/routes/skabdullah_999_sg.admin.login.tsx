@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
-export const Route = createFileRoute("/sk-control-panel-99")({ component: LoginPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/login")({ component: LoginPage });
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ function LoginPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && isAuthed) navigate({ to: "/dashboard" });
+    if (!loading && isAuthed) navigate({ to: "/skabdullah_999_sg/admin/dashboard" });
   }, [isAuthed, loading, navigate]);
 
   const submit = async (e: React.FormEvent) => {
@@ -45,7 +45,7 @@ function LoginPage() {
       await supabase.from("security_logs").insert({
         username, action: "login_success", suspicious: false,
       });
-      navigate({ to: "/dashboard" });
+      navigate({ to: "/skabdullah_999_sg/admin/dashboard" });
     } catch (err: any) {
       setError(err?.message ?? "Login failed");
     } finally {

@@ -10,7 +10,7 @@ import { Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 import { RejectDialog, ConfirmDialog } from "@/components/reject-dialog";
 
-export const Route = createFileRoute("/payments")({ component: PaymentsPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/payments")({ component: PaymentsPage });
 
 type Filter = "all" | "pending" | "approved" | "rejected";
 

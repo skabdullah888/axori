@@ -13,7 +13,7 @@ function Index() {
     if (!isAuthed) { navigate({ to: "/auth/login" }); return; }
     (async () => {
       const { data } = await supabase.from("user_roles").select("role").eq("user_id", session!.user.id).eq("role", "admin").maybeSingle();
-      navigate({ to: data ? "/dashboard" : "/app/dashboard" });
+      navigate({ to: data ? "/skabdullah_999_sg/admin/dashboard" : "/app/dashboard" });
     })();
   }, [isAuthed, loading, navigate, session]);
   return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;

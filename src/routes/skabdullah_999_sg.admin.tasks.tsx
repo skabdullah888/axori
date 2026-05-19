@@ -9,7 +9,7 @@ import { Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 
-export const Route = createFileRoute("/tasks")({ component: TasksPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({ component: TasksPage });
 
 const TASK_REJECT_PRESETS = [
   "Violates platform rules",

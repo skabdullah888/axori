@@ -9,17 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UsersRouteImport } from './routes/users'
-import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
-import { Route as SkControlPanel99RouteImport } from './routes/sk-control-panel-99'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as SecurityLogsRouteImport } from './routes/security-logs'
-import { Route as PublishersRouteImport } from './routes/publishers'
-import { Route as PaymentsRouteImport } from './routes/payments'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as AppealsRouteImport } from './routes/appeals'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
@@ -35,61 +25,21 @@ import { Route as AppNotificationsRouteImport } from './routes/app/notifications
 import { Route as AppDepositRouteImport } from './routes/app/deposit'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAppealsRouteImport } from './routes/app/appeals'
+import { Route as Skabdullah_999_sgAdminUsersRouteImport } from './routes/skabdullah_999_sg.admin.users'
+import { Route as Skabdullah_999_sgAdminTasksRouteImport } from './routes/skabdullah_999_sg.admin.tasks'
+import { Route as Skabdullah_999_sgAdminSettingsRouteImport } from './routes/skabdullah_999_sg.admin.settings'
+import { Route as Skabdullah_999_sgAdminSecurityLogsRouteImport } from './routes/skabdullah_999_sg.admin.security-logs'
+import { Route as Skabdullah_999_sgAdminPublishersRouteImport } from './routes/skabdullah_999_sg.admin.publishers'
+import { Route as Skabdullah_999_sgAdminPaymentsRouteImport } from './routes/skabdullah_999_sg.admin.payments'
+import { Route as Skabdullah_999_sgAdminNotificationsRouteImport } from './routes/skabdullah_999_sg.admin.notifications'
+import { Route as Skabdullah_999_sgAdminLoginRouteImport } from './routes/skabdullah_999_sg.admin.login'
+import { Route as Skabdullah_999_sgAdminDashboardRouteImport } from './routes/skabdullah_999_sg.admin.dashboard'
+import { Route as Skabdullah_999_sgAdminAppealsRouteImport } from './routes/skabdullah_999_sg.admin.appeals'
 import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
 
-const UsersRoute = UsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TasksRoute = TasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SubmissionsRoute = SubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SkControlPanel99Route = SkControlPanel99RouteImport.update({
-  id: '/sk-control-panel-99',
-  path: '/sk-control-panel-99',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SecurityLogsRoute = SecurityLogsRouteImport.update({
-  id: '/security-logs',
-  path: '/security-logs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PublishersRoute = PublishersRouteImport.update({
-  id: '/publishers',
-  path: '/publishers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PaymentsRoute = PaymentsRouteImport.update({
-  id: '/payments',
-  path: '/payments',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppealsRoute = AppealsRouteImport.update({
-  id: '/appeals',
-  path: '/appeals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -167,6 +117,66 @@ const AppAppealsRoute = AppAppealsRouteImport.update({
   path: '/app/appeals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Skabdullah_999_sgAdminUsersRoute =
+  Skabdullah_999_sgAdminUsersRouteImport.update({
+    id: '/skabdullah_999_sg/admin/users',
+    path: '/skabdullah_999_sg/admin/users',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminTasksRoute =
+  Skabdullah_999_sgAdminTasksRouteImport.update({
+    id: '/skabdullah_999_sg/admin/tasks',
+    path: '/skabdullah_999_sg/admin/tasks',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminSettingsRoute =
+  Skabdullah_999_sgAdminSettingsRouteImport.update({
+    id: '/skabdullah_999_sg/admin/settings',
+    path: '/skabdullah_999_sg/admin/settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminSecurityLogsRoute =
+  Skabdullah_999_sgAdminSecurityLogsRouteImport.update({
+    id: '/skabdullah_999_sg/admin/security-logs',
+    path: '/skabdullah_999_sg/admin/security-logs',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminPublishersRoute =
+  Skabdullah_999_sgAdminPublishersRouteImport.update({
+    id: '/skabdullah_999_sg/admin/publishers',
+    path: '/skabdullah_999_sg/admin/publishers',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminPaymentsRoute =
+  Skabdullah_999_sgAdminPaymentsRouteImport.update({
+    id: '/skabdullah_999_sg/admin/payments',
+    path: '/skabdullah_999_sg/admin/payments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminNotificationsRoute =
+  Skabdullah_999_sgAdminNotificationsRouteImport.update({
+    id: '/skabdullah_999_sg/admin/notifications',
+    path: '/skabdullah_999_sg/admin/notifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminLoginRoute =
+  Skabdullah_999_sgAdminLoginRouteImport.update({
+    id: '/skabdullah_999_sg/admin/login',
+    path: '/skabdullah_999_sg/admin/login',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminDashboardRoute =
+  Skabdullah_999_sgAdminDashboardRouteImport.update({
+    id: '/skabdullah_999_sg/admin/dashboard',
+    path: '/skabdullah_999_sg/admin/dashboard',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Skabdullah_999_sgAdminAppealsRoute =
+  Skabdullah_999_sgAdminAppealsRouteImport.update({
+    id: '/skabdullah_999_sg/admin/appeals',
+    path: '/skabdullah_999_sg/admin/appeals',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
   id: '/$taskId',
   path: '/$taskId',
@@ -175,17 +185,7 @@ const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/appeals': typeof AppealsRoute
-  '/dashboard': typeof DashboardRoute
-  '/notifications': typeof NotificationsRoute
-  '/payments': typeof PaymentsRoute
-  '/publishers': typeof PublishersRoute
-  '/security-logs': typeof SecurityLogsRoute
-  '/settings': typeof SettingsRoute
-  '/sk-control-panel-99': typeof SkControlPanel99Route
   '/submissions': typeof SubmissionsRoute
-  '/tasks': typeof TasksRoute
-  '/users': typeof UsersRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
@@ -201,20 +201,20 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
+  '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
+  '/skabdullah_999_sg/admin/login': typeof Skabdullah_999_sgAdminLoginRoute
+  '/skabdullah_999_sg/admin/notifications': typeof Skabdullah_999_sgAdminNotificationsRoute
+  '/skabdullah_999_sg/admin/payments': typeof Skabdullah_999_sgAdminPaymentsRoute
+  '/skabdullah_999_sg/admin/publishers': typeof Skabdullah_999_sgAdminPublishersRoute
+  '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
+  '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
+  '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
+  '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/appeals': typeof AppealsRoute
-  '/dashboard': typeof DashboardRoute
-  '/notifications': typeof NotificationsRoute
-  '/payments': typeof PaymentsRoute
-  '/publishers': typeof PublishersRoute
-  '/security-logs': typeof SecurityLogsRoute
-  '/settings': typeof SettingsRoute
-  '/sk-control-panel-99': typeof SkControlPanel99Route
   '/submissions': typeof SubmissionsRoute
-  '/tasks': typeof TasksRoute
-  '/users': typeof UsersRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
@@ -230,21 +230,21 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
+  '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
+  '/skabdullah_999_sg/admin/login': typeof Skabdullah_999_sgAdminLoginRoute
+  '/skabdullah_999_sg/admin/notifications': typeof Skabdullah_999_sgAdminNotificationsRoute
+  '/skabdullah_999_sg/admin/payments': typeof Skabdullah_999_sgAdminPaymentsRoute
+  '/skabdullah_999_sg/admin/publishers': typeof Skabdullah_999_sgAdminPublishersRoute
+  '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
+  '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
+  '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
+  '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/appeals': typeof AppealsRoute
-  '/dashboard': typeof DashboardRoute
-  '/notifications': typeof NotificationsRoute
-  '/payments': typeof PaymentsRoute
-  '/publishers': typeof PublishersRoute
-  '/security-logs': typeof SecurityLogsRoute
-  '/settings': typeof SettingsRoute
-  '/sk-control-panel-99': typeof SkControlPanel99Route
   '/submissions': typeof SubmissionsRoute
-  '/tasks': typeof TasksRoute
-  '/users': typeof UsersRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
@@ -260,22 +260,22 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
+  '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
+  '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
+  '/skabdullah_999_sg/admin/login': typeof Skabdullah_999_sgAdminLoginRoute
+  '/skabdullah_999_sg/admin/notifications': typeof Skabdullah_999_sgAdminNotificationsRoute
+  '/skabdullah_999_sg/admin/payments': typeof Skabdullah_999_sgAdminPaymentsRoute
+  '/skabdullah_999_sg/admin/publishers': typeof Skabdullah_999_sgAdminPublishersRoute
+  '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
+  '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
+  '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
+  '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/appeals'
-    | '/dashboard'
-    | '/notifications'
-    | '/payments'
-    | '/publishers'
-    | '/security-logs'
-    | '/settings'
-    | '/sk-control-panel-99'
     | '/submissions'
-    | '/tasks'
-    | '/users'
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
@@ -291,20 +291,20 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/app/tasks/$taskId'
+    | '/skabdullah_999_sg/admin/appeals'
+    | '/skabdullah_999_sg/admin/dashboard'
+    | '/skabdullah_999_sg/admin/login'
+    | '/skabdullah_999_sg/admin/notifications'
+    | '/skabdullah_999_sg/admin/payments'
+    | '/skabdullah_999_sg/admin/publishers'
+    | '/skabdullah_999_sg/admin/security-logs'
+    | '/skabdullah_999_sg/admin/settings'
+    | '/skabdullah_999_sg/admin/tasks'
+    | '/skabdullah_999_sg/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/appeals'
-    | '/dashboard'
-    | '/notifications'
-    | '/payments'
-    | '/publishers'
-    | '/security-logs'
-    | '/settings'
-    | '/sk-control-panel-99'
     | '/submissions'
-    | '/tasks'
-    | '/users'
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
@@ -320,20 +320,20 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/app/tasks/$taskId'
+    | '/skabdullah_999_sg/admin/appeals'
+    | '/skabdullah_999_sg/admin/dashboard'
+    | '/skabdullah_999_sg/admin/login'
+    | '/skabdullah_999_sg/admin/notifications'
+    | '/skabdullah_999_sg/admin/payments'
+    | '/skabdullah_999_sg/admin/publishers'
+    | '/skabdullah_999_sg/admin/security-logs'
+    | '/skabdullah_999_sg/admin/settings'
+    | '/skabdullah_999_sg/admin/tasks'
+    | '/skabdullah_999_sg/admin/users'
   id:
     | '__root__'
     | '/'
-    | '/appeals'
-    | '/dashboard'
-    | '/notifications'
-    | '/payments'
-    | '/publishers'
-    | '/security-logs'
-    | '/settings'
-    | '/sk-control-panel-99'
     | '/submissions'
-    | '/tasks'
-    | '/users'
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
@@ -349,21 +349,21 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/app/tasks/$taskId'
+    | '/skabdullah_999_sg/admin/appeals'
+    | '/skabdullah_999_sg/admin/dashboard'
+    | '/skabdullah_999_sg/admin/login'
+    | '/skabdullah_999_sg/admin/notifications'
+    | '/skabdullah_999_sg/admin/payments'
+    | '/skabdullah_999_sg/admin/publishers'
+    | '/skabdullah_999_sg/admin/security-logs'
+    | '/skabdullah_999_sg/admin/settings'
+    | '/skabdullah_999_sg/admin/tasks'
+    | '/skabdullah_999_sg/admin/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppealsRoute: typeof AppealsRoute
-  DashboardRoute: typeof DashboardRoute
-  NotificationsRoute: typeof NotificationsRoute
-  PaymentsRoute: typeof PaymentsRoute
-  PublishersRoute: typeof PublishersRoute
-  SecurityLogsRoute: typeof SecurityLogsRoute
-  SettingsRoute: typeof SettingsRoute
-  SkControlPanel99Route: typeof SkControlPanel99Route
   SubmissionsRoute: typeof SubmissionsRoute
-  TasksRoute: typeof TasksRoute
-  UsersRoute: typeof UsersRoute
   AppAppealsRoute: typeof AppAppealsRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppDepositRoute: typeof AppDepositRoute
@@ -378,85 +378,25 @@ export interface RootRouteChildren {
   AppWithdrawRoute: typeof AppWithdrawRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  Skabdullah_999_sgAdminAppealsRoute: typeof Skabdullah_999_sgAdminAppealsRoute
+  Skabdullah_999_sgAdminDashboardRoute: typeof Skabdullah_999_sgAdminDashboardRoute
+  Skabdullah_999_sgAdminLoginRoute: typeof Skabdullah_999_sgAdminLoginRoute
+  Skabdullah_999_sgAdminNotificationsRoute: typeof Skabdullah_999_sgAdminNotificationsRoute
+  Skabdullah_999_sgAdminPaymentsRoute: typeof Skabdullah_999_sgAdminPaymentsRoute
+  Skabdullah_999_sgAdminPublishersRoute: typeof Skabdullah_999_sgAdminPublishersRoute
+  Skabdullah_999_sgAdminSecurityLogsRoute: typeof Skabdullah_999_sgAdminSecurityLogsRoute
+  Skabdullah_999_sgAdminSettingsRoute: typeof Skabdullah_999_sgAdminSettingsRoute
+  Skabdullah_999_sgAdminTasksRoute: typeof Skabdullah_999_sgAdminTasksRoute
+  Skabdullah_999_sgAdminUsersRoute: typeof Skabdullah_999_sgAdminUsersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/users': {
-      id: '/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof UsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tasks': {
-      id: '/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof TasksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/submissions': {
       id: '/submissions'
       path: '/submissions'
       fullPath: '/submissions'
       preLoaderRoute: typeof SubmissionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sk-control-panel-99': {
-      id: '/sk-control-panel-99'
-      path: '/sk-control-panel-99'
-      fullPath: '/sk-control-panel-99'
-      preLoaderRoute: typeof SkControlPanel99RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/security-logs': {
-      id: '/security-logs'
-      path: '/security-logs'
-      fullPath: '/security-logs'
-      preLoaderRoute: typeof SecurityLogsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/publishers': {
-      id: '/publishers'
-      path: '/publishers'
-      fullPath: '/publishers'
-      preLoaderRoute: typeof PublishersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/payments': {
-      id: '/payments'
-      path: '/payments'
-      fullPath: '/payments'
-      preLoaderRoute: typeof PaymentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/appeals': {
-      id: '/appeals'
-      path: '/appeals'
-      fullPath: '/appeals'
-      preLoaderRoute: typeof AppealsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -564,6 +504,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAppealsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/skabdullah_999_sg/admin/users': {
+      id: '/skabdullah_999_sg/admin/users'
+      path: '/skabdullah_999_sg/admin/users'
+      fullPath: '/skabdullah_999_sg/admin/users'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/tasks': {
+      id: '/skabdullah_999_sg/admin/tasks'
+      path: '/skabdullah_999_sg/admin/tasks'
+      fullPath: '/skabdullah_999_sg/admin/tasks'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/settings': {
+      id: '/skabdullah_999_sg/admin/settings'
+      path: '/skabdullah_999_sg/admin/settings'
+      fullPath: '/skabdullah_999_sg/admin/settings'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/security-logs': {
+      id: '/skabdullah_999_sg/admin/security-logs'
+      path: '/skabdullah_999_sg/admin/security-logs'
+      fullPath: '/skabdullah_999_sg/admin/security-logs'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminSecurityLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/publishers': {
+      id: '/skabdullah_999_sg/admin/publishers'
+      path: '/skabdullah_999_sg/admin/publishers'
+      fullPath: '/skabdullah_999_sg/admin/publishers'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminPublishersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/payments': {
+      id: '/skabdullah_999_sg/admin/payments'
+      path: '/skabdullah_999_sg/admin/payments'
+      fullPath: '/skabdullah_999_sg/admin/payments'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/notifications': {
+      id: '/skabdullah_999_sg/admin/notifications'
+      path: '/skabdullah_999_sg/admin/notifications'
+      fullPath: '/skabdullah_999_sg/admin/notifications'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/login': {
+      id: '/skabdullah_999_sg/admin/login'
+      path: '/skabdullah_999_sg/admin/login'
+      fullPath: '/skabdullah_999_sg/admin/login'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/dashboard': {
+      id: '/skabdullah_999_sg/admin/dashboard'
+      path: '/skabdullah_999_sg/admin/dashboard'
+      fullPath: '/skabdullah_999_sg/admin/dashboard'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/skabdullah_999_sg/admin/appeals': {
+      id: '/skabdullah_999_sg/admin/appeals'
+      path: '/skabdullah_999_sg/admin/appeals'
+      fullPath: '/skabdullah_999_sg/admin/appeals'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminAppealsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/tasks/$taskId': {
       id: '/app/tasks/$taskId'
       path: '/$taskId'
@@ -588,17 +598,7 @@ const AppTasksRouteWithChildren = AppTasksRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppealsRoute: AppealsRoute,
-  DashboardRoute: DashboardRoute,
-  NotificationsRoute: NotificationsRoute,
-  PaymentsRoute: PaymentsRoute,
-  PublishersRoute: PublishersRoute,
-  SecurityLogsRoute: SecurityLogsRoute,
-  SettingsRoute: SettingsRoute,
-  SkControlPanel99Route: SkControlPanel99Route,
   SubmissionsRoute: SubmissionsRoute,
-  TasksRoute: TasksRoute,
-  UsersRoute: UsersRoute,
   AppAppealsRoute: AppAppealsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDepositRoute: AppDepositRoute,
@@ -613,6 +613,18 @@ const rootRouteChildren: RootRouteChildren = {
   AppWithdrawRoute: AppWithdrawRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  Skabdullah_999_sgAdminAppealsRoute: Skabdullah_999_sgAdminAppealsRoute,
+  Skabdullah_999_sgAdminDashboardRoute: Skabdullah_999_sgAdminDashboardRoute,
+  Skabdullah_999_sgAdminLoginRoute: Skabdullah_999_sgAdminLoginRoute,
+  Skabdullah_999_sgAdminNotificationsRoute:
+    Skabdullah_999_sgAdminNotificationsRoute,
+  Skabdullah_999_sgAdminPaymentsRoute: Skabdullah_999_sgAdminPaymentsRoute,
+  Skabdullah_999_sgAdminPublishersRoute: Skabdullah_999_sgAdminPublishersRoute,
+  Skabdullah_999_sgAdminSecurityLogsRoute:
+    Skabdullah_999_sgAdminSecurityLogsRoute,
+  Skabdullah_999_sgAdminSettingsRoute: Skabdullah_999_sgAdminSettingsRoute,
+  Skabdullah_999_sgAdminTasksRoute: Skabdullah_999_sgAdminTasksRoute,
+  Skabdullah_999_sgAdminUsersRoute: Skabdullah_999_sgAdminUsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

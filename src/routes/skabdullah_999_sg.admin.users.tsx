@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { Ban, ShieldCheck, Pencil } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/users")({ component: UsersPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({ component: UsersPage });
 
 type StatusFilter = "all" | "active" | "inactive" | "banned";
 
