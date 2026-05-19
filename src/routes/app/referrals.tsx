@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Copy, Users2, DollarSign, Share2 } from "lucide-react";
+import { Copy, Users2, DollarSign, Share2, Lock, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/app/referrals")({ component: ReferralsPag
 
 function ReferralsPage() {
   const { session } = useAuth();
-  const { profile } = useProfile();
+  const { profile, isActive } = useProfile();
   const [earnings, setEarnings] = useState<any[]>([]);
   const [referred, setReferred] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>(null);
@@ -76,21 +76,52 @@ function ReferralsPage() {
           <p className="text-sm text-muted-foreground">
             Earn <span className="text-success font-bold">${settings?.referral_bonus ?? 1}</span> for each friend who activates their account.
           </p>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Referral code</p>
-            <div className="flex gap-2">
-              <Input value={profile?.referral_code ?? ""} readOnly className="font-mono font-bold text-lg" />
-              <Button variant="outline" onClick={() => copy(profile?.referral_code ?? "")}><Copy className="h-4 w-4" /></Button>
+          {!isActive ? (
+            <div className="rounded-xl border border-warning/30 bg-warning/10 p-6 text-center space-y-3">
+              <div className="mx-auto h-12 w-12 rounded-full bg-warning/20 flex items-center justify-center">
+                <Lock className="h-6 w-6 text-warning" />
+              </div>
+              <div>
+                <p className="font-semibold">Your referral code is locked</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Activate your account to unlock your referral code and start earning rewards.
+                </p>
+              </div>
+              <div className="space-y-2 max-w-sm mx-auto pt-2">
+                <div className="flex gap-2">
+                  <Input value="••••••••" readOnly disabled className="font-mono font-bold text-lg text-center" />
+                  <Button variant="outline" disabled><Lock className="h-4 w-4" /></Button>
+                </div>
+                <div className="flex gap-2">
+                  <Input value="https://•••••••••••••••••••••••••" readOnly disabled />
+                  <Button variant="outline" disabled><Lock className="h-4 w-4" /></Button>
+                </div>
+              </div>
+              <Link to="/app/profile">
+                <Button className="bg-gradient-to-r from-primary to-primary/80">
+                  <Sparkles className="h-4 w-4" /> Activate to unlock
+                </Button>
+              </Link>
             </div>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Share link</p>
-            <div className="flex gap-2">
-              <Input value={refLink} readOnly />
-              <Button variant="outline" onClick={() => copy(refLink)}><Copy className="h-4 w-4" /></Button>
-              <Button onClick={share}><Share2 className="h-4 w-4" /> Share</Button>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Referral code</p>
+                <div className="flex gap-2">
+                  <Input value={profile?.referral_code ?? ""} readOnly className="font-mono font-bold text-lg" />
+                  <Button variant="outline" onClick={() => copy(profile?.referral_code ?? "")}><Copy className="h-4 w-4" /></Button>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Share link</p>
+                <div className="flex gap-2">
+                  <Input value={refLink} readOnly />
+                  <Button variant="outline" onClick={() => copy(refLink)}><Copy className="h-4 w-4" /></Button>
+                  <Button onClick={share}><Share2 className="h-4 w-4" /> Share</Button>
+                </div>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
