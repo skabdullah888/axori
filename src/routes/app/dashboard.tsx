@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Wallet, TrendingUp, Clock, CheckCircle2, ListTodo, Users2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell, LockOverlay } from "@/components/user-shell";
+import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
