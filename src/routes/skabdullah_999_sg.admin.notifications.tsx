@@ -234,6 +234,8 @@ function ComposePanel() {
 
 function HistoryPanel() {
   const [rows, setRows] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
 
   const load = async () => {
     const { data } = await supabase.from("notifications")
