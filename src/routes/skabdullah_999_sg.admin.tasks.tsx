@@ -34,6 +34,10 @@ function TasksPage() {
   const [approveRow, setApproveRow] = useState<any | null>(null);
   const [rejectRow, setRejectRow] = useState<any | null>(null);
   const [viewRow, setViewRow] = useState<any | null>(null);
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [filter]);
+  const paged = useMemo(() => rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [rows, page]);
+
 
 
   const load = async () => {
