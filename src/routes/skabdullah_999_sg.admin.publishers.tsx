@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Ban, ShieldCheck, AlertTriangle } from "lucide-react";
 import { EmptyState } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/publishers")({ component: PublishersPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/publishers")({ component: PublishersPage });
 
 function PublishersPage() {
   const [rows, setRows] = useState<any[]>([]);

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/settings")({ component: SettingsPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({ component: SettingsPage });
 
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
