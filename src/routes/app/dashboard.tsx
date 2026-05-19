@@ -85,7 +85,7 @@ function DashboardPage() {
               <Badge variant="outline" className={isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}>
                 {isActive ? "✓ Account Active" : "⚠ Account Inactive"}
               </Badge>
-              {profile?.referral_code && (
+              {profile?.referral_code && isActive && (
                 <Badge variant="outline" className="border-primary/40 text-primary">Ref: {profile.referral_code}</Badge>
               )}
             </div>
