@@ -21,6 +21,8 @@ function SubmissionsPage() {
   const { session } = useAuth();
   const [rows, setRows] = useState<any[]>([]);
   const [tab, setTab] = useState("pending");
+  const [page, setPage] = useState(1);
+  useEffect(() => { setPage(1); }, [tab]);
 
   const load = async () => {
     if (!session?.user) return;
