@@ -369,7 +369,7 @@ function PublishPage() {
                             <CheckCircle2 className="h-4 w-4" /> Approve & Pay
                           </Button>
                           <Button size="sm" variant="destructive"
-                            onClick={() => reviewSub(s.id, false, s.task_id, s.user_id, Number(task?.reward ?? 0))}>
+                            onClick={() => setRejectSub({ ...s, _reward: Number(task?.reward ?? 0) })}>
                             <XCircle className="h-4 w-4" /> Reject
                           </Button>
                         </div>
