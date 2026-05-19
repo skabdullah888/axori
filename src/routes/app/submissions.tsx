@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Paginator } from "@/components/paginator";
+const PAGE_SIZE = 15;
 import { Gavel, FileCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserShell } from "@/components/user-shell";
