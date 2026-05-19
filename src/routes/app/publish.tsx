@@ -201,6 +201,26 @@ function PublishPage() {
                     <Textarea value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} rows={2} /></div>
                   <div className="space-y-2"><Label>Detailed instructions</Label>
                     <Textarea value={form.instructions} onChange={(e) => setForm(f => ({ ...f, instructions: e.target.value }))} rows={4} required /></div>
+                  {/* Banner upload */}
+                  <div className="space-y-2">
+                    <Label>Task banner (optional, max 5MB)</Label>
+                    <div className="border-2 border-dashed border-border rounded-xl p-4 hover:border-primary/40 transition-colors">
+                      {bannerPreview ? (
+                        <div className="relative">
+                          <img src={bannerPreview} alt="banner preview" className="w-full max-h-48 object-cover rounded-lg" />
+                          <Button type="button" size="sm" variant="destructive" className="absolute top-2 right-2"
+                            onClick={() => { setBannerFile(null); setBannerPreview(null); }}>Remove</Button>
+                        </div>
+                      ) : (
+                        <input type="file" accept="image/*" onChange={(e) => {
+                          const f = e.target.files?.[0]; if (!f) return;
+                          if (f.size > 5 * 1024 * 1024) { toast.error("Banner must be under 5MB"); return; }
+                          setBannerFile(f); setBannerPreview(URL.createObjectURL(f));
+                        }} className="block w-full text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-primary file:text-primary-foreground file:cursor-pointer" />
+                      )}
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2"><Label>Category</Label>
                       <Select value={form.category} onValueChange={(v) => setForm(f => ({ ...f, category: v }))}>
@@ -208,27 +228,47 @@ function PublishPage() {
                         <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                       </Select>
                     </div>
-                    <div className="space-y-2"><Label>Proof type</Label>
-                      <Select value={form.proof_type} onValueChange={(v) => setForm(f => ({ ...f, proof_type: v }))}>
-                        <SelectTrigger><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="image">Image</SelectItem>
-                          <SelectItem value="text">Text</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
                     <div className="space-y-2"><Label>Reward / slot ($)</Label>
                       <Input type="number" step="0.01" min="0.01" value={form.reward}
                         onChange={(e) => setForm(f => ({ ...f, reward: e.target.value }))} required /></div>
-                    <div className="space-y-2"><Label>Total slots</Label>
-                      <Input type="number" min="1" value={form.total_slots}
-                        onChange={(e) => setForm(f => ({ ...f, total_slots: e.target.value }))} required /></div>
-                    <div className="space-y-2"><Label>Proof count</Label>
-                      <Input type="number" min="1" max="10" value={form.proof_count}
-                        onChange={(e) => setForm(f => ({ ...f, proof_count: e.target.value }))} required /></div>
                   </div>
+                  <div className="space-y-2"><Label>Total slots</Label>
+                    <Input type="number" min="1" value={form.total_slots}
+                      onChange={(e) => setForm(f => ({ ...f, total_slots: e.target.value }))} required /></div>
+
+                  {/* Dynamic proof fields */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Proof requirements</Label>
+                      <Button type="button" size="sm" variant="outline" onClick={() =>
+                        setProofFields(p => [...p, { id: crypto.randomUUID(), type: "text", label: "", required: true }])
+                      }><Plus className="h-3 w-3" /> Add field</Button>
+                    </div>
+                    <div className="space-y-2">
+                      {proofFields.map((field, idx) => (
+                        <div key={field.id} className="flex gap-2 items-start p-3 rounded-lg bg-accent/30 border border-border">
+                          <div className="flex-1 grid grid-cols-2 gap-2">
+                            <Input placeholder="Field label (e.g. Your TikTok URL)" value={field.label}
+                              onChange={(e) => setProofFields(p => p.map(f => f.id === field.id ? { ...f, label: e.target.value } : f))} />
+                            <Select value={field.type} onValueChange={(v) =>
+                              setProofFields(p => p.map(f => f.id === field.id ? { ...f, type: v } : f))}>
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                {PROOF_FIELD_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          {proofFields.length > 1 && (
+                            <Button type="button" size="icon" variant="ghost"
+                              onClick={() => setProofFields(p => p.filter(f => f.id !== field.id))}>
+                              <XCircle className="h-4 w-4 text-destructive" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
 
                   <div className="rounded-xl bg-accent/40 border border-border p-4 space-y-1 text-sm">
                     <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
