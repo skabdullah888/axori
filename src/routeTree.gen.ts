@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AppWithdrawRouteImport } from './routes/app/withdraw'
 import { Route as AppWalletRouteImport } from './routes/app/wallet'
 import { Route as AppTasksRouteImport } from './routes/app/tasks'
@@ -47,6 +49,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/auth/reset-password',
+  path: '/auth/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/auth/register',
   path: '/auth/register',
@@ -55,6 +62,11 @@ const AuthRegisterRoute = AuthRegisterRouteImport.update({
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/auth/forgot-password',
+  path: '/auth/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppWithdrawRoute = AppWithdrawRouteImport.update({
@@ -198,8 +210,10 @@ export interface FileRoutesByFullPath {
   '/app/tasks': typeof AppTasksRouteWithChildren
   '/app/wallet': typeof AppWalletRoute
   '/app/withdraw': typeof AppWithdrawRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
   '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
   '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
@@ -227,8 +241,10 @@ export interface FileRoutesByTo {
   '/app/tasks': typeof AppTasksRouteWithChildren
   '/app/wallet': typeof AppWalletRoute
   '/app/withdraw': typeof AppWithdrawRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
   '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
   '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
@@ -257,8 +273,10 @@ export interface FileRoutesById {
   '/app/tasks': typeof AppTasksRouteWithChildren
   '/app/wallet': typeof AppWalletRoute
   '/app/withdraw': typeof AppWithdrawRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
   '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
   '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
@@ -288,8 +306,10 @@ export interface FileRouteTypes {
     | '/app/tasks'
     | '/app/wallet'
     | '/app/withdraw'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
     | '/app/tasks/$taskId'
     | '/skabdullah_999_sg/admin/appeals'
     | '/skabdullah_999_sg/admin/dashboard'
@@ -317,8 +337,10 @@ export interface FileRouteTypes {
     | '/app/tasks'
     | '/app/wallet'
     | '/app/withdraw'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
     | '/app/tasks/$taskId'
     | '/skabdullah_999_sg/admin/appeals'
     | '/skabdullah_999_sg/admin/dashboard'
@@ -346,8 +368,10 @@ export interface FileRouteTypes {
     | '/app/tasks'
     | '/app/wallet'
     | '/app/withdraw'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
     | '/app/tasks/$taskId'
     | '/skabdullah_999_sg/admin/appeals'
     | '/skabdullah_999_sg/admin/dashboard'
@@ -376,8 +400,10 @@ export interface RootRouteChildren {
   AppTasksRoute: typeof AppTasksRouteWithChildren
   AppWalletRoute: typeof AppWalletRoute
   AppWithdrawRoute: typeof AppWithdrawRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   Skabdullah_999_sgAdminAppealsRoute: typeof Skabdullah_999_sgAdminAppealsRoute
   Skabdullah_999_sgAdminDashboardRoute: typeof Skabdullah_999_sgAdminDashboardRoute
   Skabdullah_999_sgAdminLoginRoute: typeof Skabdullah_999_sgAdminLoginRoute
@@ -406,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/register': {
       id: '/auth/register'
       path: '/auth/register'
@@ -418,6 +451,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/withdraw': {
@@ -611,8 +651,10 @@ const rootRouteChildren: RootRouteChildren = {
   AppTasksRoute: AppTasksRouteWithChildren,
   AppWalletRoute: AppWalletRoute,
   AppWithdrawRoute: AppWithdrawRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
   Skabdullah_999_sgAdminAppealsRoute: Skabdullah_999_sgAdminAppealsRoute,
   Skabdullah_999_sgAdminDashboardRoute: Skabdullah_999_sgAdminDashboardRoute,
   Skabdullah_999_sgAdminLoginRoute: Skabdullah_999_sgAdminLoginRoute,
@@ -629,3 +671,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
