@@ -28,6 +28,8 @@ function TasksPage() {
   const [filter, setFilter] = useState<Filter>("pending");
   const [approveRow, setApproveRow] = useState<any | null>(null);
   const [rejectRow, setRejectRow] = useState<any | null>(null);
+  const [viewRow, setViewRow] = useState<any | null>(null);
+
 
   const load = async () => {
     let q = supabase.from("tasks")
