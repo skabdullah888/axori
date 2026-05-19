@@ -11,7 +11,10 @@ import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({ component: TasksPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({
+  head: () => ({ meta: [{ title: "Admin Tasks — Earn Hub" }] }),
+  component: TasksPage,
+});
 
 const TASK_REJECT_PRESETS = [
   "Violates platform rules",

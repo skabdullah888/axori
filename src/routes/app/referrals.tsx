@@ -11,7 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/app/referrals")({ component: ReferralsPage });
+export const Route = createFileRoute("/app/referrals")({
+  head: () => ({ meta: [{ title: "Referrals — Earn Hub" }] }),
+  component: ReferralsPage,
+});
 
 function ReferralsPage() {
   const { session } = useAuth();

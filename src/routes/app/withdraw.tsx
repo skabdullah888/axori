@@ -12,7 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/app/withdraw")({ component: WithdrawPage });
+export const Route = createFileRoute("/app/withdraw")({
+  head: () => ({ meta: [{ title: "Withdraw — Earn Hub" }] }),
+  component: WithdrawPage,
+});
 
 function WithdrawPage() {
   const { session } = useAuth();

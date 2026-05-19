@@ -11,7 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export const Route = createFileRoute("/app/wallet")({ component: WalletPage });
+export const Route = createFileRoute("/app/wallet")({
+  head: () => ({ meta: [{ title: "Wallet — Earn Hub" }] }),
+  component: WalletPage,
+});
 
 const fmt = (n: number) => `৳${Number(n ?? 0).toFixed(2)}`;
 const statusVariant = (s: string) =>

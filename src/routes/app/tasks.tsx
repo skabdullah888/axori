@@ -16,7 +16,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/app/tasks")({ component: TasksPage });
+export const Route = createFileRoute("/app/tasks")({
+  head: () => ({ meta: [{ title: "Tasks — Earn Hub" }] }),
+  component: TasksPage,
+});
 
 type ProofField = { id: string; type: string; label: string; required: boolean };
 

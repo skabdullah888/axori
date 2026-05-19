@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle } from "lucide-react";
 import { fmtDate, EmptyState } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/skabdullah_999_sg/admin/security-logs")({ component: SecurityLogsPage });
+export const Route = createFileRoute("/skabdullah_999_sg/admin/security-logs")({
+  head: () => ({ meta: [{ title: "Admin Security Logs — Earn Hub" }] }),
+  component: SecurityLogsPage,
+});
 
 function SecurityLogsPage() {
   const [rows, setRows] = useState<any[]>([]);

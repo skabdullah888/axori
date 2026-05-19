@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const Route = createFileRoute("/auth/forgot-password")({ component: ForgotPage });
+export const Route = createFileRoute("/auth/forgot-password")({
+  head: () => ({ meta: [{ title: "Forgot Password — Earn Hub" }] }),
+  component: ForgotPage,
+});
 
 function ForgotPage() {
   const [email, setEmail] = useState("");

@@ -7,7 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
-export const Route = createFileRoute("/auth/login")({ component: LoginPage });
+export const Route = createFileRoute("/auth/login")({
+  head: () => ({ meta: [{ title: "Login — Earn Hub" }] }),
+  component: LoginPage,
+});
 
 function LoginPage() {
   const navigate = useNavigate();

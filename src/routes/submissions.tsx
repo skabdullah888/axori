@@ -9,7 +9,10 @@ import { toast } from "sonner";
 import { Eye, Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, notify, fmtMoney } from "@/lib/admin-utils";
 
-export const Route = createFileRoute("/submissions")({ component: SubmissionsPage });
+export const Route = createFileRoute("/submissions")({
+  head: () => ({ meta: [{ title: "Submissions — Earn Hub" }] }),
+  component: SubmissionsPage,
+});
 
 function SubmissionsPage() {
   const [rows, setRows] = useState<any[]>([]);

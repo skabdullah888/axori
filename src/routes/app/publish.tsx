@@ -15,7 +15,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/app/publish")({ component: PublishPage });
+export const Route = createFileRoute("/app/publish")({
+  head: () => ({ meta: [{ title: "Publish Task — Earn Hub" }] }),
+  component: PublishPage,
+});
 
 const CATEGORIES = ["social", "video", "signup", "review", "survey", "general"];
 const PROOF_FIELD_TYPES = [

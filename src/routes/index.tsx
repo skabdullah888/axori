@@ -2,7 +2,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
-export const Route = createFileRoute("/")({ component: Index });
+export const Route = createFileRoute("/")({
+  head: () => ({ meta: [{ title: "Home — Earn Hub" }] }),
+  component: Index,
+});
 
 function Index() {
   const { isAuthed, loading } = useAuth();
