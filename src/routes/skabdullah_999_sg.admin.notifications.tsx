@@ -17,6 +17,14 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/notifications")({
 
 type Tab = "admin" | "history" | "compose";
 
+async function withNotificationUsers(rows: any[]) {
+  const userIds = [...new Set(rows.map((r) => r.user_id).filter(Boolean))];
+  if (!userIds.length) return rows;
+  const { data: profiles } = await supabase.from("profiles").select("user_id,username").in("user_id", userIds);
+  const byUserId = new Map((profiles ?? []).map((p) => [p.user_id, p]));
+  return rows.map((r) => ({ ...r, user: byUserId.get(r.user_id) ?? null }));
+}
+
 function NotificationsPage() {
   return (
     <AdminShell title="Notifications Center">
@@ -42,13 +50,13 @@ function AdminInbox() {
 
   const load = async () => {
     let q = supabase.from("notifications")
-      .select("*, user:profiles(username)")
+      .select("*")
       .eq("admin_targeted", true)
       .order("created_at", { ascending: false })
       .limit(300);
     if (filter !== "all") q = q.eq("type", filter);
     const { data } = await q;
-    setRows(data ?? []);
+    setRows(await withNotificationUsers(data ?? []));
   };
 
   useEffect(() => {
@@ -150,16 +158,17 @@ function ComposePanel() {
     try {
       if (mode === "user") {
         if (!target.trim()) { toast.error("Enter a username or user ID"); return; }
-        // Resolve target: try id first, then username
+        // Resolve target: accept auth user ID, profile ID, or username
         let userId: string | null = null;
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(target.trim());
         if (isUuid) {
-          const { data } = await supabase.from("profiles").select("id").eq("id", target.trim()).maybeSingle();
-          userId = data?.id ?? null;
+          const { data } = await supabase.from("profiles").select("user_id").or(`user_id.eq.${target.trim()},id.eq.${target.trim()}`).maybeSingle();
+          if (data && !data.user_id) { toast.error("This profile has no login user ID"); return; }
+          userId = data?.user_id ?? target.trim();
         }
         if (!userId) {
-          const { data } = await supabase.from("profiles").select("id").eq("username", target.trim()).maybeSingle();
-          userId = data?.id ?? null;
+          const { data } = await supabase.from("profiles").select("user_id").eq("username", target.trim()).maybeSingle();
+          userId = data?.user_id ?? null;
         }
         if (!userId) { toast.error("User not found"); return; }
         const { error } = await supabase.from("notifications").insert({ user_id: userId, type, title, message });
@@ -167,9 +176,9 @@ function ComposePanel() {
         toast.success("Notification sent");
       } else {
         // Global: insert one row per active user
-        const { data: users } = await supabase.from("profiles").select("id").eq("status", "active");
+        const { data: users } = await supabase.from("profiles").select("user_id").eq("status", "active").not("user_id", "is", null);
         if (!users?.length) { toast.error("No active users"); return; }
-        const rows = users.map(u => ({ user_id: u.id, type, title, message }));
+        const rows = users.map(u => ({ user_id: u.user_id, type, title, message }));
         const { error } = await supabase.from("notifications").insert(rows);
         if (error) throw error;
         toast.success(`Sent to ${users.length} users`);
@@ -217,9 +226,9 @@ function HistoryPanel() {
 
   const load = async () => {
     const { data } = await supabase.from("notifications")
-      .select("*, user:profiles(username)")
+      .select("*")
       .order("created_at", { ascending: false }).limit(500);
-    setRows(data ?? []);
+    setRows(await withNotificationUsers(data ?? []));
   };
 
   useEffect(() => {
