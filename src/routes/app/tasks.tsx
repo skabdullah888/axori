@@ -79,9 +79,15 @@ function TasksPage() {
     if (q) arr = arr.filter((t) => t.title.toLowerCase().includes(q.toLowerCase()));
     if (cat !== "all") arr = arr.filter((t) => t.category === cat);
     if (sort === "reward") arr = [...arr].sort((a, b) => Number(b.reward) - Number(a.reward));
-    if (sort === "slots") arr = [...arr].sort((a, b) => (b.total_slots - b.completed_slots) - (a.total_slots - a.completed_slots));
+    else if (sort === "slots") arr = [...arr].sort((a, b) => (b.total_slots - b.completed_slots) - (a.total_slots - a.completed_slots));
+    else if (sort === "new") arr = [...arr].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    else arr = shuffle(arr); // random
     return arr;
-  }, [tasks, q, cat, sort]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tasks, q, cat, sort, shuffleSeed]);
+
+  useEffect(() => { setPage(1); }, [q, cat, sort, shuffleSeed]);
+  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
 
   const openDetails = (t: any) => { setSelected(t); };
   const openSubmit = () => {
