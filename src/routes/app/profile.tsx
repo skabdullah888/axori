@@ -24,26 +24,41 @@ function ProfilePage() {
   const [form, setForm] = useState({ sender_number: "", method: "", trnx_id: "", amount: "" });
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const [pm, s] = await Promise.all([
-        supabase.from("payment_methods").select("*").eq("active", true),
-        supabase.from("settings").select("*").limit(1).maybeSingle(),
-      ]);
-      setMethods(pm.data ?? []);
-      setSettings(s.data);
-      if (s.data?.activation_amount) setForm((f) => ({ ...f, amount: String(s.data!.activation_amount) }));
-    })();
-  }, []);
+  const loadConfig = async () => {
+    const [pm, s] = await Promise.all([
+      supabase.from("payment_methods").select("*").eq("active", true),
+      supabase.from("settings").select("*").limit(1).maybeSingle(),
+    ]);
+    setMethods(pm.data ?? []);
+    setSettings(s.data);
+    if (s.data?.activation_amount) setForm((f) => ({ ...f, amount: f.amount || String(s.data!.activation_amount) }));
+  };
 
   useEffect(() => {
+    loadConfig();
+    const ch = supabase.channel("profile-config-rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "settings" }, loadConfig)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payment_methods" }, loadConfig)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, []);
+
+  const loadPendingActivation = async () => {
     if (!session?.user) return;
-    (async () => {
-      const { data } = await supabase.from("payments")
-        .select("*").eq("user_id", session.user.id).eq("type", "activation")
-        .order("created_at", { ascending: false }).limit(1).maybeSingle();
-      setPendingActivation(data);
-    })();
+    const { data } = await supabase.from("payments")
+      .select("*").eq("user_id", session.user.id).eq("type", "activation")
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    setPendingActivation(data);
+  };
+
+  useEffect(() => {
+    loadPendingActivation();
+    if (!session?.user) return;
+    const ch = supabase.channel(`profile-payments-${session.user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `user_id=eq.${session.user.id}` }, loadPendingActivation)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id, profile?.last_activation_request_at]);
 
   const cooldownHours = (() => {

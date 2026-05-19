@@ -1,0 +1,12 @@
+ALTER TABLE public.settings REPLICA IDENTITY FULL;
+ALTER TABLE public.payment_methods REPLICA IDENTITY FULL;
+ALTER TABLE public.referral_earnings REPLICA IDENTITY FULL;
+ALTER TABLE public.profiles REPLICA IDENTITY FULL;
+ALTER TABLE public.payments REPLICA IDENTITY FULL;
+ALTER TABLE public.tasks REPLICA IDENTITY FULL;
+ALTER TABLE public.task_submissions REPLICA IDENTITY FULL;
+ALTER TABLE public.appeals REPLICA IDENTITY FULL;
+ALTER TABLE public.notifications REPLICA IDENTITY FULL;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.settings;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.payment_methods;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.referral_earnings;
