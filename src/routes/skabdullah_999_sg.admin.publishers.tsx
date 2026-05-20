@@ -64,7 +64,7 @@ function PublishersPage() {
     const publisherIds = Array.from(new Set((tasksData ?? []).map(t => t.publisher_id).filter((x): x is string => !!x)));
     if (publisherIds.length === 0) { setPublishers([]); return; }
 
-    const { data: profiles } = await supabase.from("profiles").select("*").in("user_id", publisherIds);
+    const { data: profiles } = await supabase.from("profiles").select("*").in("id", publisherIds);
     const { data: subs } = await supabase.from("task_submissions").select("status, task:tasks(publisher_id)");
 
     const stats: Record<string, { total: number; rejected: number; approved: number }> = {};
@@ -93,11 +93,11 @@ function PublishersPage() {
       avatar_url: p.avatar_url,
       status: p.status,
       publisher_restricted: p.publisher_restricted,
-      taskCount: counts[p.user_id]?.total ?? 0,
-      activeCount: counts[p.user_id]?.active ?? 0,
-      approved: stats[p.user_id]?.approved ?? 0,
-      rejected: stats[p.user_id]?.rejected ?? 0,
-      totalSubs: stats[p.user_id]?.total ?? 0,
+      taskCount: counts[p.id]?.total ?? 0,
+      activeCount: counts[p.id]?.active ?? 0,
+      approved: stats[p.id]?.approved ?? 0,
+      rejected: stats[p.id]?.rejected ?? 0,
+      totalSubs: stats[p.id]?.total ?? 0,
     })).sort((a, b) => b.taskCount - a.taskCount);
 
     setPublishers(rows);
@@ -107,10 +107,10 @@ function PublishersPage() {
     }
   };
 
-  const loadTasks = async (publisherUserId: string) => {
+  const loadTasks = async (publisherId: string) => {
     const { data } = await supabase.from("tasks")
       .select("*")
-      .eq("publisher_id", publisherUserId)
+      .eq("publisher_id", publisherId)
       .order("created_at", { ascending: false });
     setTasks(data ?? []);
     if (selectedTask) {
@@ -121,7 +121,7 @@ function PublishersPage() {
 
   useEffect(() => { loadPublishers(); }, []);
   useEffect(() => {
-    if (selectedPub) loadTasks(selectedPub.user_id!);
+    if (selectedPub) loadTasks(selectedPub.id);
     else { setTasks([]); setSelectedTask(null); }
   }, [selectedPub?.id]);
 
@@ -129,7 +129,7 @@ function PublishersPage() {
     const ch = supabase.channel("admin-pub-tasks-rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => {
         loadPublishers();
-        if (selectedPub) loadTasks(selectedPub.user_id!);
+        if (selectedPub) loadTasks(selectedPub.id);
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -448,7 +448,7 @@ function PublishersPage() {
       </div>
 
       {/* Edit dialog */}
-      <EditTaskDialog task={editTask} onClose={() => setEditTask(null)} onSaved={() => { setEditTask(null); if (selectedPub) loadTasks(selectedPub.user_id!); }} />
+      <EditTaskDialog task={editTask} onClose={() => setEditTask(null)} onSaved={() => { setEditTask(null); if (selectedPub) loadTasks(selectedPub.id); }} />
 
       {/* Submissions dialog */}
       <SubmissionsDialog task={submissionsDialog} onClose={() => setSubmissionsDialog(null)} />
