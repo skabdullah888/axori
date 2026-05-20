@@ -64,7 +64,7 @@ function PublishersPage() {
     const publisherIds = Array.from(new Set((tasksData ?? []).map(t => t.publisher_id).filter((x): x is string => !!x)));
     if (publisherIds.length === 0) { setPublishers([]); return; }
 
-    const { data: profiles } = await supabase.from("profiles").select("*").in("id", publisherIds);
+    const { data: profiles } = await supabase.from("profiles").select("*").in("user_id", publisherIds);
     const { data: subs } = await supabase.from("task_submissions").select("status, task:tasks(publisher_id)");
 
     const stats: Record<string, { total: number; rejected: number; approved: number }> = {};
@@ -85,20 +85,23 @@ function PublishersPage() {
       if (t.status === "active") counts[t.publisher_id].active++;
     });
 
-    const rows: Publisher[] = (profiles ?? []).map((p: any) => ({
-      id: p.id,
-      user_id: p.user_id,
-      username: p.username,
-      email: p.email,
-      avatar_url: p.avatar_url,
-      status: p.status,
-      publisher_restricted: p.publisher_restricted,
-      taskCount: counts[p.id]?.total ?? 0,
-      activeCount: counts[p.id]?.active ?? 0,
-      approved: stats[p.id]?.approved ?? 0,
-      rejected: stats[p.id]?.rejected ?? 0,
-      totalSubs: stats[p.id]?.total ?? 0,
-    })).sort((a, b) => b.taskCount - a.taskCount);
+    const rows: Publisher[] = (profiles ?? []).map((p: any) => {
+      const key = p.user_id;
+      return {
+        id: p.id,
+        user_id: p.user_id,
+        username: p.username,
+        email: p.email,
+        avatar_url: p.avatar_url,
+        status: p.status,
+        publisher_restricted: p.publisher_restricted,
+        taskCount: counts[key]?.total ?? 0,
+        activeCount: counts[key]?.active ?? 0,
+        approved: stats[key]?.approved ?? 0,
+        rejected: stats[key]?.rejected ?? 0,
+        totalSubs: stats[key]?.total ?? 0,
+      };
+    }).sort((a, b) => b.taskCount - a.taskCount);
 
     setPublishers(rows);
     if (selectedPub) {
@@ -107,10 +110,10 @@ function PublishersPage() {
     }
   };
 
-  const loadTasks = async (publisherId: string) => {
+  const loadTasks = async (publisherUserId: string) => {
     const { data } = await supabase.from("tasks")
       .select("*")
-      .eq("publisher_id", publisherId)
+      .eq("publisher_id", publisherUserId)
       .order("created_at", { ascending: false });
     setTasks(data ?? []);
     if (selectedTask) {
@@ -121,19 +124,19 @@ function PublishersPage() {
 
   useEffect(() => { loadPublishers(); }, []);
   useEffect(() => {
-    if (selectedPub) loadTasks(selectedPub.id);
+    if (selectedPub?.user_id) loadTasks(selectedPub.user_id);
     else { setTasks([]); setSelectedTask(null); }
-  }, [selectedPub?.id]);
+  }, [selectedPub?.user_id]);
 
   useEffect(() => {
     const ch = supabase.channel("admin-pub-tasks-rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => {
         loadPublishers();
-        if (selectedPub) loadTasks(selectedPub.id);
+        if (selectedPub?.user_id) loadTasks(selectedPub.user_id);
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [selectedPub?.id]);
+  }, [selectedPub?.user_id]);
 
   const filteredPubs = useMemo(() => {
     const q = search.trim().toLowerCase();
