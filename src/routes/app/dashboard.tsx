@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Wallet, TrendingUp, Clock, CheckCircle2, ListTodo, Users2, Sparkles } from "lucide-react";
+import { Wallet, TrendingUp, Clock, CheckCircle2, ListTodo, Users2 } from "lucide-react";
+
 import { supabase } from "@/integrations/supabase/client";
 import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
