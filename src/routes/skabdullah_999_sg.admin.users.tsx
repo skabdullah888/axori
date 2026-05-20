@@ -12,9 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Ban, ShieldCheck, Pencil, Trash2 } from "lucide-react";
+import { Ban, ShieldCheck, Pencil, Trash2, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
 import { deleteUserAccount } from "@/lib/admin-users.functions";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({
   head: () => ({ meta: [{ title: "Admin Users — Axora" }] }),
