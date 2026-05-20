@@ -87,7 +87,7 @@ function TaskDetailPage() {
   const proofCount = task.proof_count ?? 1;
 
   return (
-    <UserShell title="Task Details">
+    <>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative max-w-4xl mx-auto">
         <Link to="/app/tasks" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
