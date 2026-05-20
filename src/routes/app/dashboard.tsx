@@ -75,7 +75,7 @@ function DashboardPage() {
   }, [session?.user?.id]);
 
   return (
-    <UserShell title="Dashboard">
+    <>
       <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.02]" />
         <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
