@@ -104,10 +104,15 @@ function ProfilePage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1">
           <CardContent className="p-6 text-center">
-            <div className="h-24 w-24 mx-auto rounded-full bg-gradient-to-br from-primary to-primary/40 flex items-center justify-center text-3xl font-bold text-primary-foreground shadow-xl shadow-primary/30">
-              {profile?.username?.[0]?.toUpperCase() ?? "U"}
+            <div className="h-24 w-24 mx-auto rounded-full overflow-hidden bg-gradient-to-br from-primary to-primary/40 flex items-center justify-center text-3xl font-bold text-primary-foreground shadow-xl shadow-primary/30">
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+              ) : (
+                ((profile as any)?.full_name?.[0] ?? profile?.username?.[0])?.toUpperCase() ?? "U"
+              )}
             </div>
-            <h2 className="mt-4 text-xl font-bold">{profile?.username}</h2>
+            <h2 className="mt-4 text-xl font-bold">{(profile as any)?.full_name || profile?.username}</h2>
+            {((profile as any)?.full_name) && <p className="text-xs text-muted-foreground">@{profile?.username}</p>}
             <Badge variant="outline" className={`mt-2 ${isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}`}>
               {isActive ? "✓ Active" : "⚠ Inactive"}
             </Badge>
