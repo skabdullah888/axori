@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export const Route = createFileRoute("/app/deposit")({
   head: () => ({ meta: [{ title: "Deposit — Axora" }] }),
+  staticData: { title: "Deposit" },
   component: DepositPage,
 });
 
@@ -74,7 +75,7 @@ function DepositPage() {
   };
 
   return (
-    <UserShell title="Deposit">
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
@@ -155,6 +156,6 @@ function DepositPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

@@ -26,6 +26,7 @@ const PUBLISHER_REJECT_PRESETS = [
 
 export const Route = createFileRoute("/app/publish")({
   head: () => ({ meta: [{ title: "Publish Task — Axora" }] }),
+  staticData: { title: "Publish Task" },
   component: PublishPage,
 });
 
@@ -192,7 +193,7 @@ function PublishPage() {
   };
 
   return (
-    <UserShell title="Publish Task">
+    <>
       <div className="relative">
         <Tabs defaultValue="create">
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mb-6">
@@ -414,6 +415,6 @@ function PublishPage() {
         onCancel={() => setRejectSub(null)}
         onConfirm={(reason) => rejectSub && reviewSub(rejectSub.id, false, rejectSub.task_id, rejectSub.user_id, rejectSub._reward, reason)}
       />
-    </UserShell>
+    </>
   );
 }

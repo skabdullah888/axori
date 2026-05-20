@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/referrals")({
   head: () => ({ meta: [{ title: "Referrals — Axora" }] }),
+  staticData: { title: "Referrals" },
   component: ReferralsPage,
 });
 
@@ -57,7 +58,7 @@ function ReferralsPage() {
   };
 
   return (
-    <UserShell title="Referrals">
+    <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Users2 className="h-3.5 w-3.5" /> TOTAL REFERRED</div>
@@ -177,6 +178,6 @@ function ReferralsPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

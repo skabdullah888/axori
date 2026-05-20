@@ -11,6 +11,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/notifications")({
   head: () => ({ meta: [{ title: "Notifications — Axora" }] }),
+  staticData: { title: "Notifications" },
   component: NotificationsPage,
 });
 
@@ -62,7 +63,7 @@ function NotificationsPage() {
   };
 
   return (
-    <UserShell title="Notifications">
+    <>
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-muted-foreground">{items.length} total · {items.filter(i => !i.read).length} unread</p>
         <Button variant="outline" size="sm" onClick={markAll}><CheckCheck className="h-4 w-4" /> Mark all read</Button>
@@ -98,6 +99,6 @@ function NotificationsPage() {
           ))}
         </div>
       )}
-    </UserShell>
+    </>
   );
 }

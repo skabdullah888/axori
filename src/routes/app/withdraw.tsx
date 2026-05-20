@@ -17,6 +17,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — Axora" }] }),
+  staticData: { title: "Withdraw" },
   component: WithdrawPage,
 });
 
@@ -117,7 +118,7 @@ function WithdrawPage() {
 
 
   return (
-    <UserShell title="Withdraw">
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="relative overflow-hidden">
           <CardHeader>
@@ -244,6 +245,6 @@ function WithdrawPage() {
           })()}
         </DialogContent>
       </Dialog>
-    </UserShell>
+    </>
   );
 }

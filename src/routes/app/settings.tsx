@@ -16,6 +16,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
   head: () => ({ meta: [{ title: "Settings — Axora" }] }),
+  staticData: { title: "Settings" },
   component: SettingsPage,
 });
 
@@ -125,7 +126,7 @@ function SettingsPage() {
   };
 
   return (
-    <UserShell title="Settings">
+    <>
       <div className="max-w-2xl space-y-6">
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2"><UserIcon className="h-4 w-4" /> Profile Settings</CardTitle></CardHeader>
@@ -238,6 +239,6 @@ function SettingsPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

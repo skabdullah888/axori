@@ -29,6 +29,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export const Route = createFileRoute("/app/tasks")({
   head: () => ({ meta: [{ title: "Tasks — Axora" }] }),
+  staticData: { title: "Browse Tasks" },
   component: TasksPage,
 });
 
@@ -97,7 +98,7 @@ function TasksPage() {
   };
 
   return (
-    <UserShell title="Browse Tasks">
+    <>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative">
         {!isActive && (
@@ -254,7 +255,7 @@ function TasksPage() {
           onSuccess={() => { setSubmitOpen(false); setSelected(null); load(); }}
         />
       )}
-    </UserShell>
+    </>
   );
 }
 

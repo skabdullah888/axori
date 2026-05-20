@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export const Route = createFileRoute("/app/profile")({
   head: () => ({ meta: [{ title: "Profile — Axora" }] }),
+  staticData: { title: "Profile" },
   component: ProfilePage,
 });
 
@@ -100,7 +101,7 @@ function ProfilePage() {
   };
 
   return (
-    <UserShell title="Profile">
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1">
           <CardContent className="p-6 text-center">
@@ -196,6 +197,6 @@ function ProfilePage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

@@ -14,6 +14,7 @@ import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/app/submissions")({
   head: () => ({ meta: [{ title: "My Submissions — Axora" }] }),
+  staticData: { title: "My Submissions" },
   component: SubmissionsPage,
 });
 
@@ -47,7 +48,7 @@ function SubmissionsPage() {
 
 
   return (
-    <UserShell title="My Submissions">
+    <>
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="mb-4">
           <TabsTrigger value="pending">Pending ({rows.filter((r) => r.status === "pending").length})</TabsTrigger>
@@ -112,6 +113,6 @@ function SubmissionsPage() {
 
         </TabsContent>
       </Tabs>
-    </UserShell>
+    </>
   );
 }
