@@ -182,9 +182,13 @@ export type Database = {
           balance: number
           created_at: string
           email: string | null
+          full_name: string | null
           id: string
           is_publisher: boolean
           last_activation_request_at: string | null
+          notify_appeals: boolean
+          notify_payments: boolean
+          notify_tasks: boolean
           phone: string | null
           publisher_restricted: boolean
           referral_code: string | null
@@ -194,6 +198,8 @@ export type Database = {
           updated_at: string
           user_id: string | null
           username: string
+          withdrawal_account: string | null
+          withdrawal_method: string | null
         }
         Insert: {
           activated_at?: string | null
@@ -201,9 +207,13 @@ export type Database = {
           balance?: number
           created_at?: string
           email?: string | null
+          full_name?: string | null
           id?: string
           is_publisher?: boolean
           last_activation_request_at?: string | null
+          notify_appeals?: boolean
+          notify_payments?: boolean
+          notify_tasks?: boolean
           phone?: string | null
           publisher_restricted?: boolean
           referral_code?: string | null
@@ -213,6 +223,8 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           username: string
+          withdrawal_account?: string | null
+          withdrawal_method?: string | null
         }
         Update: {
           activated_at?: string | null
@@ -220,9 +232,13 @@ export type Database = {
           balance?: number
           created_at?: string
           email?: string | null
+          full_name?: string | null
           id?: string
           is_publisher?: boolean
           last_activation_request_at?: string | null
+          notify_appeals?: boolean
+          notify_payments?: boolean
+          notify_tasks?: boolean
           phone?: string | null
           publisher_restricted?: boolean
           referral_code?: string | null
@@ -232,6 +248,8 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
           username?: string
+          withdrawal_account?: string | null
+          withdrawal_method?: string | null
         }
         Relationships: []
       }
