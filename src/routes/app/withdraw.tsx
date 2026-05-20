@@ -49,6 +49,16 @@ function WithdrawPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id]);
 
+  useEffect(() => {
+    const savedMethod = (profile as any)?.withdrawal_method;
+    const savedAccount = (profile as any)?.withdrawal_account;
+    setForm((f) => ({
+      ...f,
+      method: f.method || savedMethod || "",
+      receiver_number: f.receiver_number || savedAccount || "",
+    }));
+  }, [profile?.id]);
+
   const minAmt = Number(settings?.minimum_withdrawal ?? 10);
   const feePct = Number(settings?.withdrawal_fee ?? 0);
   const balance = Number(profile?.balance ?? 0);

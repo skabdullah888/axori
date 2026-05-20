@@ -28,6 +28,7 @@ const items = [
 type Profile = {
   id: string; user_id: string; username: string; email: string | null;
   status: string; balance: number; avatar_url: string | null;
+  full_name?: string | null;
 };
 
 export function UserShell({ title, children }: { title: string; children: ReactNode }) {
@@ -181,16 +182,20 @@ export function UserShell({ title, children }: { title: string; children: ReactN
             </Badge>
             <div className="relative">
               <button onClick={() => setMenuOpen((o) => !o)} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-accent">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center text-xs font-bold text-primary-foreground">
-                  {profile?.username?.[0]?.toUpperCase() ?? "U"}
+                <div className="h-8 w-8 rounded-full overflow-hidden bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center text-xs font-bold text-primary-foreground">
+                  {profile?.avatar_url ? (
+                    <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+                  ) : (
+                    (profile?.full_name?.[0] ?? profile?.username?.[0])?.toUpperCase() ?? "U"
+                  )}
                 </div>
-                <span className="hidden md:inline text-sm font-medium max-w-[120px] truncate">{profile?.username}</span>
+                <span className="hidden md:inline text-sm font-medium max-w-[120px] truncate">{profile?.full_name || profile?.username}</span>
                 <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
               </button>
               {menuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-56 bg-popover border border-border rounded-xl shadow-2xl py-1 z-50 animate-in fade-in zoom-in-95 duration-150">
                   <div className="px-3 py-2 border-b border-border">
-                    <p className="text-sm font-medium truncate">{profile?.username}</p>
+                    <p className="text-sm font-medium truncate">{profile?.full_name || profile?.username}</p>
                     <p className="text-xs text-muted-foreground truncate">{profile?.email}</p>
                   </div>
                   <Link to="/app/profile" onClick={() => setMenuOpen(false)}
