@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
@@ -44,6 +45,11 @@ const SubmissionsRoute = SubmissionsRouteImport.update({
   path: '/submissions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -70,64 +76,64 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppWithdrawRoute = AppWithdrawRouteImport.update({
-  id: '/app/withdraw',
-  path: '/app/withdraw',
-  getParentRoute: () => rootRouteImport,
+  id: '/withdraw',
+  path: '/withdraw',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppWalletRoute = AppWalletRouteImport.update({
-  id: '/app/wallet',
-  path: '/app/wallet',
-  getParentRoute: () => rootRouteImport,
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppTasksRoute = AppTasksRouteImport.update({
-  id: '/app/tasks',
-  path: '/app/tasks',
-  getParentRoute: () => rootRouteImport,
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppSubmissionsRoute = AppSubmissionsRouteImport.update({
-  id: '/app/submissions',
-  path: '/app/submissions',
-  getParentRoute: () => rootRouteImport,
+  id: '/submissions',
+  path: '/submissions',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/app/settings',
-  path: '/app/settings',
-  getParentRoute: () => rootRouteImport,
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppReferralsRoute = AppReferralsRouteImport.update({
-  id: '/app/referrals',
-  path: '/app/referrals',
-  getParentRoute: () => rootRouteImport,
+  id: '/referrals',
+  path: '/referrals',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppPublishRoute = AppPublishRouteImport.update({
-  id: '/app/publish',
-  path: '/app/publish',
-  getParentRoute: () => rootRouteImport,
+  id: '/publish',
+  path: '/publish',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppProfileRoute = AppProfileRouteImport.update({
-  id: '/app/profile',
-  path: '/app/profile',
-  getParentRoute: () => rootRouteImport,
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
-  id: '/app/notifications',
-  path: '/app/notifications',
-  getParentRoute: () => rootRouteImport,
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppDepositRoute = AppDepositRouteImport.update({
-  id: '/app/deposit',
-  path: '/app/deposit',
-  getParentRoute: () => rootRouteImport,
+  id: '/deposit',
+  path: '/deposit',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/app/dashboard',
-  path: '/app/dashboard',
-  getParentRoute: () => rootRouteImport,
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppAppealsRoute = AppAppealsRouteImport.update({
-  id: '/app/appeals',
-  path: '/app/appeals',
-  getParentRoute: () => rootRouteImport,
+  id: '/appeals',
+  path: '/appeals',
+  getParentRoute: () => AppRoute,
 } as any)
 const Skabdullah_999_sgAdminUsersRoute =
   Skabdullah_999_sgAdminUsersRouteImport.update({
@@ -197,6 +203,7 @@ const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/submissions': typeof SubmissionsRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -228,6 +235,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/submissions': typeof SubmissionsRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -260,6 +268,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
   '/submissions': typeof SubmissionsRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -293,6 +302,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/submissions'
     | '/app/appeals'
     | '/app/dashboard'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/submissions'
     | '/app/appeals'
     | '/app/dashboard'
@@ -355,6 +366,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/submissions'
     | '/app/appeals'
     | '/app/dashboard'
@@ -387,19 +399,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   SubmissionsRoute: typeof SubmissionsRoute
-  AppAppealsRoute: typeof AppAppealsRoute
-  AppDashboardRoute: typeof AppDashboardRoute
-  AppDepositRoute: typeof AppDepositRoute
-  AppNotificationsRoute: typeof AppNotificationsRoute
-  AppProfileRoute: typeof AppProfileRoute
-  AppPublishRoute: typeof AppPublishRoute
-  AppReferralsRoute: typeof AppReferralsRoute
-  AppSettingsRoute: typeof AppSettingsRoute
-  AppSubmissionsRoute: typeof AppSubmissionsRoute
-  AppTasksRoute: typeof AppTasksRouteWithChildren
-  AppWalletRoute: typeof AppWalletRoute
-  AppWithdrawRoute: typeof AppWithdrawRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
@@ -423,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/submissions'
       fullPath: '/submissions'
       preLoaderRoute: typeof SubmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -462,87 +470,87 @@ declare module '@tanstack/react-router' {
     }
     '/app/withdraw': {
       id: '/app/withdraw'
-      path: '/app/withdraw'
+      path: '/withdraw'
       fullPath: '/app/withdraw'
       preLoaderRoute: typeof AppWithdrawRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/wallet': {
       id: '/app/wallet'
-      path: '/app/wallet'
+      path: '/wallet'
       fullPath: '/app/wallet'
       preLoaderRoute: typeof AppWalletRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/tasks': {
       id: '/app/tasks'
-      path: '/app/tasks'
+      path: '/tasks'
       fullPath: '/app/tasks'
       preLoaderRoute: typeof AppTasksRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/submissions': {
       id: '/app/submissions'
-      path: '/app/submissions'
+      path: '/submissions'
       fullPath: '/app/submissions'
       preLoaderRoute: typeof AppSubmissionsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/settings': {
       id: '/app/settings'
-      path: '/app/settings'
+      path: '/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/referrals': {
       id: '/app/referrals'
-      path: '/app/referrals'
+      path: '/referrals'
       fullPath: '/app/referrals'
       preLoaderRoute: typeof AppReferralsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/publish': {
       id: '/app/publish'
-      path: '/app/publish'
+      path: '/publish'
       fullPath: '/app/publish'
       preLoaderRoute: typeof AppPublishRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/profile': {
       id: '/app/profile'
-      path: '/app/profile'
+      path: '/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof AppProfileRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/notifications': {
       id: '/app/notifications'
-      path: '/app/notifications'
+      path: '/notifications'
       fullPath: '/app/notifications'
       preLoaderRoute: typeof AppNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/deposit': {
       id: '/app/deposit'
-      path: '/app/deposit'
+      path: '/deposit'
       fullPath: '/app/deposit'
       preLoaderRoute: typeof AppDepositRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/dashboard': {
       id: '/app/dashboard'
-      path: '/app/dashboard'
+      path: '/dashboard'
       fullPath: '/app/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/appeals': {
       id: '/app/appeals'
-      path: '/app/appeals'
+      path: '/appeals'
       fullPath: '/app/appeals'
       preLoaderRoute: typeof AppAppealsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AppRoute
     }
     '/skabdullah_999_sg/admin/users': {
       id: '/skabdullah_999_sg/admin/users'
@@ -636,9 +644,22 @@ const AppTasksRouteWithChildren = AppTasksRoute._addFileChildren(
   AppTasksRouteChildren,
 )
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SubmissionsRoute: SubmissionsRoute,
+interface AppRouteChildren {
+  AppAppealsRoute: typeof AppAppealsRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDepositRoute: typeof AppDepositRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppProfileRoute: typeof AppProfileRoute
+  AppPublishRoute: typeof AppPublishRoute
+  AppReferralsRoute: typeof AppReferralsRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppSubmissionsRoute: typeof AppSubmissionsRoute
+  AppTasksRoute: typeof AppTasksRouteWithChildren
+  AppWalletRoute: typeof AppWalletRoute
+  AppWithdrawRoute: typeof AppWithdrawRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
   AppAppealsRoute: AppAppealsRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDepositRoute: AppDepositRoute,
@@ -651,6 +672,14 @@ const rootRouteChildren: RootRouteChildren = {
   AppTasksRoute: AppTasksRouteWithChildren,
   AppWalletRoute: AppWalletRoute,
   AppWithdrawRoute: AppWithdrawRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  SubmissionsRoute: SubmissionsRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
@@ -671,13 +700,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

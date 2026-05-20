@@ -7,9 +7,10 @@ export const Route = createFileRoute("/app")({
 
 function AppLayout() {
   const matches = useMatches();
-  const title =
-    [...matches].reverse().find((m) => (m.staticData as any)?.title)?.staticData
-      ?.title as string | undefined;
+  const title = [...matches]
+    .reverse()
+    .map((m) => (m.staticData as { title?: string } | undefined)?.title)
+    .find((t) => !!t);
   return (
     <UserShell title={title ?? ""}>
       <Outlet />
