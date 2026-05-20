@@ -39,8 +39,6 @@ function SubmissionsPage() {
     if (error) { toast.error(error.message); return; }
     if (decision === "approved") {
       const reward = Number(row.task?.reward ?? 0);
-      const newBalance = Number(row.user?.balance ?? 0) + reward;
-      await supabase.from("profiles").update({ balance: newBalance }).eq("id", row.user_id);
       await notify(row.user_id, "submission", "Submission approved", `Admin approved your submission. ${fmtMoney(reward)} credited.`);
     } else {
       await notify(row.user_id, "submission", "Submission rejected", "Admin rejected your submission for suspicious activity.");
