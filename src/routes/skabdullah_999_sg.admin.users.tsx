@@ -179,6 +179,43 @@ function UsersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!deleteRow} onOpenChange={(o) => !o && !deleting && setDeleteRow(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete user @{deleteRow?.username}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this user and ALL of their data — profile, balance ({fmtMoney(deleteRow?.balance)}),
+              payments, submissions, published tasks, appeals, referrals and notifications.
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={async (e) => {
+                e.preventDefault();
+                if (!deleteRow?.user_id) { toast.error("Missing user id"); return; }
+                setDeleting(true);
+                try {
+                  await callDelete({ data: { userId: deleteRow.user_id } });
+                  toast.success("User deleted");
+                  setDeleteRow(null);
+                  load();
+                } catch (err: any) {
+                  toast.error(err?.message ?? "Failed to delete user");
+                } finally {
+                  setDeleting(false);
+                }
+              }}
+            >
+              {deleting ? "Deleting…" : "Delete permanently"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminShell>
   );
 }
