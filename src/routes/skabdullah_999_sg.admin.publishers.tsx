@@ -132,11 +132,11 @@ function PublishersPage() {
     const ch = supabase.channel("admin-pub-tasks-rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => {
         loadPublishers();
-        if (selectedPub) loadTasks(selectedPub.id);
+        if (selectedPub?.user_id) loadTasks(selectedPub.user_id);
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [selectedPub?.id]);
+  }, [selectedPub?.user_id]);
 
   const filteredPubs = useMemo(() => {
     const q = search.trim().toLowerCase();
