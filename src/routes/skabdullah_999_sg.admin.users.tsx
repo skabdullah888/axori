@@ -12,9 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Ban, ShieldCheck, Pencil, Trash2 } from "lucide-react";
+import { Ban, ShieldCheck, Pencil, Trash2, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
 import { deleteUserAccount } from "@/lib/admin-users.functions";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({
   head: () => ({ meta: [{ title: "Admin Users — Axora" }] }),
@@ -28,10 +29,40 @@ function UsersPage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<StatusFilter>("all");
   const [edit, setEdit] = useState<any | null>(null);
+  const [details, setDetails] = useState<any | null>(null);
+  const [detailsStats, setDetailsStats] = useState<any | null>(null);
   const [deleteRow, setDeleteRow] = useState<any | null>(null);
   const [deleting, setDeleting] = useState(false);
   const callDelete = useServerFn(deleteUserAccount);
   const [form, setForm] = useState({ balance: 0, trust_score: 100 });
+
+  const openDetails = async (r: any) => {
+    setDetails(r);
+    setDetailsStats(null);
+    const [subs, pays, tks, refs, appeals] = await Promise.all([
+      supabase.from("task_submissions").select("status", { count: "exact" }).eq("user_id", r.user_id),
+      supabase.from("payments").select("type,status,amount").eq("user_id", r.user_id),
+      supabase.from("tasks").select("id", { count: "exact", head: true }).eq("publisher_id", r.id),
+      supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", r.user_id),
+      supabase.from("appeals").select("id", { count: "exact", head: true }).eq("user_id", r.user_id),
+    ]);
+    const subRows = subs.data ?? [];
+    const payRows = pays.data ?? [];
+    const sum = (t: string, s: string) =>
+      payRows.filter((p: any) => p.type === t && p.status === s).reduce((a: number, p: any) => a + Number(p.amount || 0), 0);
+    setDetailsStats({
+      submissionsTotal: subRows.length,
+      submissionsApproved: subRows.filter((s: any) => s.status === "approved").length,
+      submissionsRejected: subRows.filter((s: any) => s.status === "rejected").length,
+      submissionsPending: subRows.filter((s: any) => s.status === "pending").length,
+      tasksPublished: tks.count ?? 0,
+      referralsCount: refs.count ?? 0,
+      appealsCount: appeals.count ?? 0,
+      depositApproved: sum("deposit", "approved"),
+      withdrawApproved: sum("withdrawal", "approved"),
+      withdrawPending: sum("withdrawal", "pending"),
+    });
+  };
 
   const load = async () => {
     const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
@@ -99,7 +130,7 @@ function UsersPage() {
             <table className="w-full text-sm">
               <thead className="bg-muted/30 text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="text-left px-4 py-3">Username</th>
+                  <th className="text-left px-4 py-3">User</th>
                   <th className="text-left px-4 py-3">User ID</th>
                   <th className="text-left px-4 py-3">Balance</th>
                   <th className="text-left px-4 py-3">Trust</th>
@@ -110,15 +141,30 @@ function UsersPage() {
               </thead>
               <tbody>
                 {paged.map(r => (
-                  <tr key={r.id} className="border-t border-border hover:bg-accent/30">
-                    <td className="px-4 py-3 font-medium">{r.username}</td>
+                  <tr
+                    key={r.id}
+                    onClick={() => openDetails(r)}
+                    className="border-t border-border hover:bg-accent/30 cursor-pointer"
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={r.avatar_url ?? undefined} alt={r.username} />
+                          <AvatarFallback className="text-xs">{r.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{r.username}</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.id.slice(0, 8)}…</td>
                     <td className="px-4 py-3">{fmtMoney(r.balance)}</td>
                     <td className="px-4 py-3">{r.trust_score}</td>
                     <td className="px-4 py-3"><StatusPill status={r.status} /></td>
                     <td className="px-4 py-3 text-muted-foreground">{fmtDate(r.created_at)}</td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="inline-flex gap-2">
+                        <Button size="sm" variant="secondary" onClick={() => openDetails(r)}>
+                          <Eye className="h-4 w-4 mr-1" />View
+                        </Button>
                         <Button size="sm" variant="secondary" onClick={() => openEdit(r)}>
                           <Pencil className="h-4 w-4 mr-1" />Edit
                         </Button>
@@ -216,6 +262,84 @@ function UsersPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={!!details} onOpenChange={(o) => !o && (setDetails(null), setDetailsStats(null))}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>User details</DialogTitle>
+          </DialogHeader>
+          {details && (
+            <div className="space-y-5">
+              <div className="flex items-center gap-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage src={details.avatar_url ?? undefined} alt={details.username} />
+                  <AvatarFallback className="text-lg">{details.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="text-xl font-semibold">@{details.username}</div>
+                  {details.full_name && <div className="text-sm text-muted-foreground">{details.full_name}</div>}
+                  <div className="mt-1"><StatusPill status={details.status} /></div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                <Field label="Email" value={details.email} />
+                <Field label="Phone" value={details.phone} />
+                <Field label="Balance" value={fmtMoney(details.balance)} />
+                <Field label="Trust score" value={details.trust_score} />
+                <Field label="Referral code" value={details.referral_code} mono />
+                <Field label="Referred by" value={details.referred_by ? String(details.referred_by).slice(0, 8) + "…" : "—"} mono />
+                <Field label="Publisher" value={details.is_publisher ? "Yes" : "No"} />
+                <Field label="Publisher restricted" value={details.publisher_restricted ? "Yes" : "No"} />
+                <Field label="Withdrawal method" value={details.withdrawal_method} />
+                <Field label="Withdrawal account" value={details.withdrawal_account} mono />
+                <Field label="Joined" value={fmtDate(details.created_at)} />
+                <Field label="Activated at" value={details.activated_at ? fmtDate(details.activated_at) : "—"} />
+                <Field label="User ID" value={details.user_id} mono />
+                <Field label="Profile ID" value={details.id} mono />
+              </div>
+
+              <div>
+                <div className="text-sm font-semibold mb-2">Activity</div>
+                {!detailsStats ? (
+                  <div className="text-sm text-muted-foreground">Loading…</div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <Stat label="Submissions" value={detailsStats.submissionsTotal} />
+                    <Stat label="Approved" value={detailsStats.submissionsApproved} />
+                    <Stat label="Rejected" value={detailsStats.submissionsRejected} />
+                    <Stat label="Pending" value={detailsStats.submissionsPending} />
+                    <Stat label="Tasks published" value={detailsStats.tasksPublished} />
+                    <Stat label="Referrals" value={detailsStats.referralsCount} />
+                    <Stat label="Appeals" value={detailsStats.appealsCount} />
+                    <Stat label="Deposits (approved)" value={fmtMoney(detailsStats.depositApproved)} />
+                    <Stat label="Withdrawn" value={fmtMoney(detailsStats.withdrawApproved)} />
+                    <Stat label="Withdraw pending" value={fmtMoney(detailsStats.withdrawPending)} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </AdminShell>
+  );
+}
+
+function Field({ label, value, mono }: { label: string; value: any; mono?: boolean }) {
+  return (
+    <div>
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className={"truncate " + (mono ? "font-mono text-xs" : "")}>{value ?? "—"}</div>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: any }) {
+  return (
+    <div className="rounded-md border border-border bg-card px-3 py-2">
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="text-base font-semibold">{value}</div>
+    </div>
   );
 }
