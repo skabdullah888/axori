@@ -80,7 +80,7 @@ function TaskDetailPage() {
     } finally { setBusy(false); }
   };
 
-  if (!task) return <UserShell title="Task"><p className="text-muted-foreground">Loading…</p></UserShell>;
+  if (!task) return <p className="text-muted-foreground">Loading…</p>;
 
   const remaining = task.total_slots - task.completed_slots;
   const proofType = task.proof_type ?? "image";
