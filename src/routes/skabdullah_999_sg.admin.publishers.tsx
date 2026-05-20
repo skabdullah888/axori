@@ -508,7 +508,7 @@ function DetailBox({ label, value }: { label: string; value: React.ReactNode }) 
   );
 }
 
-function DetailSection({ title, children }: { title: string; children: React.ReactNode }) {
+function DetailSection({ title, children }: { title: React.ReactNode; children: React.ReactNode }) {
   return (
     <div>
       <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 font-semibold">{title}</p>
