@@ -535,6 +535,10 @@ export type Database = {
         Args: { p_message: string; p_title: string; p_type: string }
         Returns: undefined
       }
+      publisher_review_submission: {
+        Args: { p_approve: boolean; p_reason?: string; p_submission_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user"
