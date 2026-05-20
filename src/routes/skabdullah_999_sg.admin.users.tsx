@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Paginator } from "@/components/paginator";
 const PAGE_SIZE = 25;
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminShell } from "@/components/admin-shell";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,9 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Ban, ShieldCheck, Pencil } from "lucide-react";
+import { Ban, ShieldCheck, Pencil, Trash2 } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
+import { deleteUserAccount } from "@/lib/admin-users.functions";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({
   head: () => ({ meta: [{ title: "Admin Users — Axora" }] }),
@@ -25,6 +28,9 @@ function UsersPage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<StatusFilter>("all");
   const [edit, setEdit] = useState<any | null>(null);
+  const [deleteRow, setDeleteRow] = useState<any | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const callDelete = useServerFn(deleteUserAccount);
   const [form, setForm] = useState({ balance: 0, trust_score: 100 });
 
   const load = async () => {
@@ -125,6 +131,9 @@ function UsersPage() {
                             <Ban className="h-4 w-4 mr-1" />Ban
                           </Button>
                         )}
+                        <Button size="sm" variant="destructive" onClick={() => setDeleteRow(r)}>
+                          <Trash2 className="h-4 w-4 mr-1" />Delete
+                        </Button>
                       </div>
                     </td>
                   </tr>
