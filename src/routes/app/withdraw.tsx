@@ -28,6 +28,8 @@ function WithdrawPage() {
   const [history, setHistory] = useState<any[]>([]);
   const [form, setForm] = useState({ method: "", receiver_number: "", amount: "" });
   const [busy, setBusy] = useState(false);
+  const [check, setCheck] = useState<null | { refs: number; minRefs: number; tasks: number; minTasks: number }>(null);
+
 
   const reload = async () => {
     if (!session?.user) return;
