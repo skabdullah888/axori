@@ -197,6 +197,53 @@ function WithdrawPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={!!check} onOpenChange={(o) => !o && setCheck(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Withdrawal eligibility</DialogTitle>
+            <DialogDescription>
+              Your account must meet the following requirements before you can withdraw.
+            </DialogDescription>
+          </DialogHeader>
+          {check && (() => {
+            const items: Array<{ label: string; have: number; need: number }> = [];
+            if (check.minRefs > 0) items.push({ label: "Referrals", have: check.refs, need: check.minRefs });
+            if (check.minTasks > 0) items.push({ label: "Tasks published", have: check.tasks, need: check.minTasks });
+            const metCount = items.filter(i => i.have >= i.need).length;
+            const allMet = items.every(i => i.have >= i.need);
+            return (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Requirements met: <span className="font-semibold text-foreground">{metCount}/{items.length || 0}</span>
+                </p>
+                {items.length === 0 ? (
+                  <p className="text-sm text-success">No extra requirements — you're good to go.</p>
+                ) : items.map((it) => {
+                  const ok = it.have >= it.need;
+                  return (
+                    <div key={it.label} className={`flex items-center justify-between rounded-lg border p-3 ${ok ? "border-success/30 bg-success/10" : "border-destructive/30 bg-destructive/10"}`}>
+                      <div className="flex items-center gap-2">
+                        {ok ? <CheckCircle2 className="h-4 w-4 text-success" /> : <XCircle className="h-4 w-4 text-destructive" />}
+                        <span className="text-sm font-medium">{it.label}</span>
+                      </div>
+                      <span className={`text-sm font-semibold ${ok ? "text-success" : "text-destructive"}`}>
+                        {it.have}/{it.need}
+                      </span>
+                    </div>
+                  );
+                })}
+                <DialogFooter className="gap-2 sm:gap-2">
+                  <Button variant="ghost" onClick={() => setCheck(null)}>Cancel</Button>
+                  <Button onClick={confirmSubmit} disabled={!allMet || busy}>
+                    {busy ? "Submitting…" : allMet ? "Confirm withdrawal" : "Requirements not met"}
+                  </Button>
+                </DialogFooter>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </UserShell>
   );
 }
