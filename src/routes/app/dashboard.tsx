@@ -36,10 +36,10 @@ function StatCard({ icon: Icon, label, value, gradient, suffix = "" }: any) {
 
 function DashboardPage() {
   const { session } = useAuth();
-  const { profile, isActive, loading } = useProfile();
+  const { profile, loading } = useProfile();
   const [stats, setStats] = useState({ totalEarn: 0, pending: 0, completed: 0, active: 0, refEarn: 0 });
   const [activity, setActivity] = useState<any[]>([]);
-  const [activationAmount, setActivationAmount] = useState<number | null>(null);
+
 
   const load = async () => {
     if (!session?.user) return;
