@@ -29,10 +29,40 @@ function UsersPage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<StatusFilter>("all");
   const [edit, setEdit] = useState<any | null>(null);
+  const [details, setDetails] = useState<any | null>(null);
+  const [detailsStats, setDetailsStats] = useState<any | null>(null);
   const [deleteRow, setDeleteRow] = useState<any | null>(null);
   const [deleting, setDeleting] = useState(false);
   const callDelete = useServerFn(deleteUserAccount);
   const [form, setForm] = useState({ balance: 0, trust_score: 100 });
+
+  const openDetails = async (r: any) => {
+    setDetails(r);
+    setDetailsStats(null);
+    const [subs, pays, tks, refs, appeals] = await Promise.all([
+      supabase.from("task_submissions").select("status", { count: "exact" }).eq("user_id", r.user_id),
+      supabase.from("payments").select("type,status,amount").eq("user_id", r.user_id),
+      supabase.from("tasks").select("id", { count: "exact", head: true }).eq("publisher_id", r.id),
+      supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", r.user_id),
+      supabase.from("appeals").select("id", { count: "exact", head: true }).eq("user_id", r.user_id),
+    ]);
+    const subRows = subs.data ?? [];
+    const payRows = pays.data ?? [];
+    const sum = (t: string, s: string) =>
+      payRows.filter((p: any) => p.type === t && p.status === s).reduce((a: number, p: any) => a + Number(p.amount || 0), 0);
+    setDetailsStats({
+      submissionsTotal: subRows.length,
+      submissionsApproved: subRows.filter((s: any) => s.status === "approved").length,
+      submissionsRejected: subRows.filter((s: any) => s.status === "rejected").length,
+      submissionsPending: subRows.filter((s: any) => s.status === "pending").length,
+      tasksPublished: tks.count ?? 0,
+      referralsCount: refs.count ?? 0,
+      appealsCount: appeals.count ?? 0,
+      depositApproved: sum("deposit", "approved"),
+      withdrawApproved: sum("withdrawal", "approved"),
+      withdrawPending: sum("withdrawal", "pending"),
+    });
+  };
 
   const load = async () => {
     const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
