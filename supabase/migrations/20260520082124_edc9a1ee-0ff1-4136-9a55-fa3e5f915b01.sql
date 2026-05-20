@@ -1,0 +1,1 @@
+CREATE POLICY "users_select_their_referrals" ON public.profiles FOR SELECT TO authenticated USING (referred_by = auth.uid());

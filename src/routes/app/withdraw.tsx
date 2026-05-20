@@ -61,6 +61,17 @@ function WithdrawPage() {
     if (!session?.user) return;
     if (amt < minAmt) { toast.error(`Minimum withdrawal is ৳${minAmt.toFixed(2)}`); return; }
     if (amt > balance) { toast.error("Insufficient balance"); return; }
+    const minRefs = Number((settings as any)?.minimum_referrals_for_withdrawal ?? 0);
+    if (minRefs > 0) {
+      const { count } = await supabase
+        .from("profiles")
+        .select("id", { count: "exact", head: true })
+        .eq("referred_by", session.user.id);
+      if ((count ?? 0) < minRefs) {
+        toast.error(`You need at least ${minRefs} referral${minRefs > 1 ? "s" : ""} to withdraw.`);
+        return;
+      }
+    }
     setBusy(true);
     const { error } = await supabase.from("payments").insert({
       user_id: session.user.id,
