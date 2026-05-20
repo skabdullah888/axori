@@ -52,32 +52,7 @@ function AppealsPage() {
 
     if (decision === "approved" && row.submission) {
       const reward = Number(row.submission.task?.reward ?? 0);
-      const wasApproved = row.submission.status === "approved";
       await supabase.from("task_submissions").update({ status: "approved" }).eq("id", row.submission.id);
-
-      // Only credit balance / bump task / insert payment if it wasn't already approved
-      if (!wasApproved) {
-        const newBalance = Number(row.profile?.balance ?? 0) + reward;
-        await supabase.from("profiles").update({ balance: newBalance }).eq("user_id", row.user_id);
-
-        if (row.submission.task?.id) {
-          const taskId = row.submission.task.id;
-          const completed = Number(row.submission.task.completed_slots ?? 0) + 1;
-          const total = Number(row.submission.task.total_slots ?? 0);
-          await supabase.from("tasks").update({
-            completed_slots: completed,
-            status: completed >= total ? "completed" : "active",
-          }).eq("id", taskId);
-
-          await supabase.from("payments").insert({
-            user_id: row.user_id,
-            type: "task_earning",
-            amount: reward,
-            status: "approved",
-            reference: taskId,
-          });
-        }
-      }
 
       await notify(row.user_id, "appeal", "Appeal approved", `Your appeal was approved. ${fmtMoney(reward)} credited.`);
       if (row.submission.task?.publisher_id)
