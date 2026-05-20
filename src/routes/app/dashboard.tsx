@@ -64,8 +64,7 @@ function DashboardPage() {
 
   useEffect(() => {
     load();
-    supabase.from("settings").select("activation_fee, activation_amount").limit(1).maybeSingle()
-      .then(({ data }) => setActivationAmount(Number(data?.activation_fee ?? data?.activation_amount ?? 0) || null));
+
     if (!session?.user) return;
     const ch = supabase.channel(`dash-${session.user.id}`)
       .on("postgres_changes", { event: "*", schema: "public" }, () => load())
