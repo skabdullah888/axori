@@ -36,7 +36,15 @@ export function useProfile() {
     reload();
     if (!session?.user) return;
     const ch = supabase.channel(`profile-${session.user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "profiles", filter: `user_id=eq.${session.user.id}` }, reload)
+      .on("postgres_changes", { event: "*", schema: "public", table: "profiles", filter: `user_id=eq.${session.user.id}` }, (payload) => {
+        if (payload.eventType === "DELETE") {
+          supabase.auth.signOut().then(() => {
+            if (typeof window !== "undefined") window.location.href = "/auth/login";
+          });
+          return;
+        }
+        reload();
+      })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps

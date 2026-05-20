@@ -10,7 +10,20 @@ export function useAuth() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
     });
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) {
+        // Verify the user still exists on the server (admin may have deleted them)
+        const { error } = await supabase.auth.getUser();
+        if (error) {
+          await supabase.auth.signOut();
+          setSession(null);
+          setLoading(false);
+          if (typeof window !== "undefined" && !window.location.pathname.startsWith("/auth")) {
+            window.location.href = "/auth/login";
+          }
+          return;
+        }
+      }
       setSession(data.session);
       setLoading(false);
     });
