@@ -115,7 +115,7 @@ function ProfilePage() {
               <div className="flex items-center gap-2 text-muted-foreground"><Mail className="h-4 w-4" /> {profile?.email ?? "—"}</div>
               <div className="flex items-center gap-2 text-muted-foreground"><Phone className="h-4 w-4" /> {profile?.phone ?? "—"}</div>
               <div className="flex items-center gap-2 text-muted-foreground"><ShieldCheck className="h-4 w-4" /> Trust: {profile?.trust_score ?? 100}</div>
-              <div className="flex items-center gap-2 text-muted-foreground"><Sparkles className="h-4 w-4" /> Ref: {profile?.referral_code ?? "—"}</div>
+              {isActive && <div className="flex items-center gap-2 text-muted-foreground"><Sparkles className="h-4 w-4" /> Ref: {profile?.referral_code ?? "—"}</div>}
             </div>
           </CardContent>
         </Card>
