@@ -145,6 +145,12 @@ function SettingsPage() {
                 value={form.referral_bonus}
                 onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
               />
+              <Field
+                label="Minimum referrals to withdraw"
+                hint="User must have referred at least this many people before they can request a withdrawal. Set to 0 to disable."
+                value={form.minimum_referrals_for_withdrawal}
+                onChange={(v) => setForm(f => ({ ...f, minimum_referrals_for_withdrawal: v }))}
+              />
             </div>
             <Separator className="my-5" />
             <div className="flex justify-end">
