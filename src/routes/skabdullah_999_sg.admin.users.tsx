@@ -262,6 +262,66 @@ function UsersPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={!!details} onOpenChange={(o) => !o && (setDetails(null), setDetailsStats(null))}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>User details</DialogTitle>
+          </DialogHeader>
+          {details && (
+            <div className="space-y-5">
+              <div className="flex items-center gap-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage src={details.avatar_url ?? undefined} alt={details.username} />
+                  <AvatarFallback className="text-lg">{details.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="text-xl font-semibold">@{details.username}</div>
+                  {details.full_name && <div className="text-sm text-muted-foreground">{details.full_name}</div>}
+                  <div className="mt-1"><StatusPill status={details.status} /></div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                <Field label="Email" value={details.email} />
+                <Field label="Phone" value={details.phone} />
+                <Field label="Balance" value={fmtMoney(details.balance)} />
+                <Field label="Trust score" value={details.trust_score} />
+                <Field label="Referral code" value={details.referral_code} mono />
+                <Field label="Referred by" value={details.referred_by ? String(details.referred_by).slice(0, 8) + "…" : "—"} mono />
+                <Field label="Publisher" value={details.is_publisher ? "Yes" : "No"} />
+                <Field label="Publisher restricted" value={details.publisher_restricted ? "Yes" : "No"} />
+                <Field label="Withdrawal method" value={details.withdrawal_method} />
+                <Field label="Withdrawal account" value={details.withdrawal_account} mono />
+                <Field label="Joined" value={fmtDate(details.created_at)} />
+                <Field label="Activated at" value={details.activated_at ? fmtDate(details.activated_at) : "—"} />
+                <Field label="User ID" value={details.user_id} mono />
+                <Field label="Profile ID" value={details.id} mono />
+              </div>
+
+              <div>
+                <div className="text-sm font-semibold mb-2">Activity</div>
+                {!detailsStats ? (
+                  <div className="text-sm text-muted-foreground">Loading…</div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <Stat label="Submissions" value={detailsStats.submissionsTotal} />
+                    <Stat label="Approved" value={detailsStats.submissionsApproved} />
+                    <Stat label="Rejected" value={detailsStats.submissionsRejected} />
+                    <Stat label="Pending" value={detailsStats.submissionsPending} />
+                    <Stat label="Tasks published" value={detailsStats.tasksPublished} />
+                    <Stat label="Referrals" value={detailsStats.referralsCount} />
+                    <Stat label="Appeals" value={detailsStats.appealsCount} />
+                    <Stat label="Deposits (approved)" value={fmtMoney(detailsStats.depositApproved)} />
+                    <Stat label="Withdrawn" value={fmtMoney(detailsStats.withdrawApproved)} />
+                    <Stat label="Withdraw pending" value={fmtMoney(detailsStats.withdrawPending)} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </AdminShell>
   );
 }
