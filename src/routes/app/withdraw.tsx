@@ -12,6 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — Axora" }] }),
@@ -26,6 +28,8 @@ function WithdrawPage() {
   const [history, setHistory] = useState<any[]>([]);
   const [form, setForm] = useState({ method: "", receiver_number: "", amount: "" });
   const [busy, setBusy] = useState(false);
+  const [check, setCheck] = useState<null | { refs: number; minRefs: number; tasks: number; minTasks: number }>(null);
+
 
   const reload = async () => {
     if (!session?.user) return;
@@ -71,17 +75,30 @@ function WithdrawPage() {
     if (!session?.user) return;
     if (amt < minAmt) { toast.error(`Minimum withdrawal is ৳${minAmt.toFixed(2)}`); return; }
     if (amt > balance) { toast.error("Insufficient balance"); return; }
+
     const minRefs = Number((settings as any)?.minimum_referrals_for_withdrawal ?? 0);
-    if (minRefs > 0) {
-      const { count } = await supabase
-        .from("profiles")
-        .select("id", { count: "exact", head: true })
-        .eq("referred_by", session.user.id);
-      if ((count ?? 0) < minRefs) {
-        toast.error(`You need at least ${minRefs} referral${minRefs > 1 ? "s" : ""} to withdraw.`);
-        return;
-      }
-    }
+    const minTasks = Number((settings as any)?.minimum_tasks_for_withdrawal ?? 0);
+
+    const [refsRes, tasksRes] = await Promise.all([
+      minRefs > 0
+        ? supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", session.user.id)
+        : Promise.resolve({ count: 0 }) as any,
+      minTasks > 0
+        ? supabase.from("tasks").select("id", { count: "exact", head: true }).eq("publisher_id", session.user.id)
+        : Promise.resolve({ count: 0 }) as any,
+    ]);
+
+    setCheck({
+      refs: refsRes.count ?? 0,
+      minRefs,
+      tasks: tasksRes.count ?? 0,
+      minTasks,
+    });
+  };
+
+  const confirmSubmit = async () => {
+    if (!session?.user || !check) return;
+    if (check.refs < check.minRefs || check.tasks < check.minTasks) return;
     setBusy(true);
     const { error } = await supabase.from("payments").insert({
       user_id: session.user.id,
@@ -95,7 +112,9 @@ function WithdrawPage() {
     if (error) { toast.error(error.message); return; }
     toast.success("Withdrawal request submitted.");
     setForm({ method: "", receiver_number: "", amount: "" });
+    setCheck(null);
   };
+
 
   return (
     <UserShell title="Withdraw">
@@ -178,6 +197,53 @@ function WithdrawPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Dialog open={!!check} onOpenChange={(o) => !o && setCheck(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Withdrawal eligibility</DialogTitle>
+            <DialogDescription>
+              Your account must meet the following requirements before you can withdraw.
+            </DialogDescription>
+          </DialogHeader>
+          {check && (() => {
+            const items: Array<{ label: string; have: number; need: number }> = [];
+            if (check.minRefs > 0) items.push({ label: "Referrals", have: check.refs, need: check.minRefs });
+            if (check.minTasks > 0) items.push({ label: "Tasks published", have: check.tasks, need: check.minTasks });
+            const metCount = items.filter(i => i.have >= i.need).length;
+            const allMet = items.every(i => i.have >= i.need);
+            return (
+              <div className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Requirements met: <span className="font-semibold text-foreground">{metCount}/{items.length || 0}</span>
+                </p>
+                {items.length === 0 ? (
+                  <p className="text-sm text-success">No extra requirements — you're good to go.</p>
+                ) : items.map((it) => {
+                  const ok = it.have >= it.need;
+                  return (
+                    <div key={it.label} className={`flex items-center justify-between rounded-lg border p-3 ${ok ? "border-success/30 bg-success/10" : "border-destructive/30 bg-destructive/10"}`}>
+                      <div className="flex items-center gap-2">
+                        {ok ? <CheckCircle2 className="h-4 w-4 text-success" /> : <XCircle className="h-4 w-4 text-destructive" />}
+                        <span className="text-sm font-medium">{it.label}</span>
+                      </div>
+                      <span className={`text-sm font-semibold ${ok ? "text-success" : "text-destructive"}`}>
+                        {it.have}/{it.need}
+                      </span>
+                    </div>
+                  );
+                })}
+                <DialogFooter className="gap-2 sm:gap-2">
+                  <Button variant="ghost" onClick={() => setCheck(null)}>Cancel</Button>
+                  <Button onClick={confirmSubmit} disabled={!allMet || busy}>
+                    {busy ? "Submitting…" : allMet ? "Confirm withdrawal" : "Requirements not met"}
+                  </Button>
+                </DialogFooter>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </UserShell>
   );
 }
