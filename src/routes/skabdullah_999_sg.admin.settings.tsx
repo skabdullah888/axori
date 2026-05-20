@@ -153,6 +153,12 @@ function SettingsPage() {
                 value={form.minimum_referrals_for_withdrawal}
                 onChange={(v) => setForm(f => ({ ...f, minimum_referrals_for_withdrawal: v }))}
               />
+              <Field
+                label="Minimum tasks published to withdraw"
+                hint="User must have published at least this many tasks before they can request a withdrawal. Set to 0 to disable."
+                value={form.minimum_tasks_for_withdrawal}
+                onChange={(v) => setForm(f => ({ ...f, minimum_tasks_for_withdrawal: v }))}
+              />
             </div>
             <Separator className="my-5" />
             <div className="flex justify-end">
