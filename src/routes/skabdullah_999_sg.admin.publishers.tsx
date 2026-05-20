@@ -534,7 +534,7 @@ function SubmissionStats({ taskId }: { taskId: string }) {
   }, [taskId]);
   if (!stats) return null;
   return (
-    <DetailSection title={<span className="flex items-center gap-1"><BarChart3 className="h-3 w-3" /> Submission stats</span> as any}>
+    <DetailSection title={<span className="flex items-center gap-1"><BarChart3 className="h-3 w-3" /> Submission stats</span>}>
       <div className="grid grid-cols-4 gap-2">
         <Stat label="Total" value={stats.total} />
         <Stat label="Pending" value={stats.pending} />
