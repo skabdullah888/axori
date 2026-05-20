@@ -150,28 +150,13 @@ function PublishPage() {
   };
 
 
-  const reviewSub = async (subId: string, approve: boolean, taskId: string, userId: string, taskReward: number, reason?: string) => {
-    const { error } = await supabase.from("task_submissions").update({
-      status: approve ? "approved" : "rejected",
-      note: approve ? null : (reason ?? null),
-      updated_at: new Date().toISOString(),
-    }).eq("id", subId);
+  const reviewSub = async (subId: string, approve: boolean, _taskId: string, userId: string, taskReward: number, reason?: string) => {
+    const { error } = await supabase.rpc("publisher_review_submission" as any, {
+      p_submission_id: subId,
+      p_approve: approve,
+      p_reason: reason ?? null,
+    });
     if (error) { toast.error(error.message); return; }
-    if (approve) {
-      const { data: u } = await supabase.from("profiles").select("balance").eq("user_id", userId).maybeSingle();
-      if (u) await supabase.from("profiles").update({ balance: Number(u.balance) + Number(taskReward) }).eq("user_id", userId);
-      const { data: t } = await supabase.from("tasks").select("completed_slots,total_slots").eq("id", taskId).maybeSingle();
-      if (t) {
-        const cs = (t.completed_slots ?? 0) + 1;
-        await supabase.from("tasks").update({
-          completed_slots: cs,
-          status: cs >= (t.total_slots ?? 0) ? "completed" : "active",
-        }).eq("id", taskId);
-      }
-      await supabase.from("payments").insert({
-        user_id: userId, type: "task_earning", amount: taskReward, status: "approved", reference: taskId,
-      });
-    }
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",
