@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { useProfile } from "@/hooks/use-profile";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export const Route = createFileRoute("/app/profile")({
   head: () => ({ meta: [{ title: "Profile — Axora" }] }),
+  staticData: { title: "Profile" },
   component: ProfilePage,
 });
 
@@ -100,7 +100,7 @@ function ProfilePage() {
   };
 
   return (
-    <UserShell title="Profile">
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1">
           <CardContent className="p-6 text-center">
@@ -196,6 +196,6 @@ function ProfilePage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Wallet, TrendingUp, Clock, CheckCircle2, ListTodo, Users2 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Axora" }] }),
+  staticData: { title: "Dashboard" },
   component: DashboardPage,
 });
 
@@ -74,7 +74,7 @@ function DashboardPage() {
   }, [session?.user?.id]);
 
   return (
-    <UserShell title="Dashboard">
+    <>
       <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.02]" />
         <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -138,6 +138,6 @@ function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

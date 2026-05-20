@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Upload, ArrowLeft, Coins, Users2, Clock, ImageIcon, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -15,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
   head: () => ({ meta: [{ title: "Task Details — Axora" }] }),
+  staticData: { title: "Task Details" },
   component: TaskDetailPage,
 });
 
@@ -79,14 +79,14 @@ function TaskDetailPage() {
     } finally { setBusy(false); }
   };
 
-  if (!task) return <UserShell title="Task"><p className="text-muted-foreground">Loading…</p></UserShell>;
+  if (!task) return <p className="text-muted-foreground">Loading…</p>;
 
   const remaining = task.total_slots - task.completed_slots;
   const proofType = task.proof_type ?? "image";
   const proofCount = task.proof_count ?? 1;
 
   return (
-    <UserShell title="Task Details">
+    <>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative max-w-4xl mx-auto">
         <Link to="/app/tasks" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
@@ -175,6 +175,6 @@ function TaskDetailPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

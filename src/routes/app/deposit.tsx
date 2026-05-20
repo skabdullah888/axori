@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { ArrowDownToLine, Copy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export const Route = createFileRoute("/app/deposit")({
   head: () => ({ meta: [{ title: "Deposit — Axora" }] }),
+  staticData: { title: "Deposit" },
   component: DepositPage,
 });
 
@@ -74,7 +74,7 @@ function DepositPage() {
   };
 
   return (
-    <UserShell title="Deposit">
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
@@ -155,6 +155,6 @@ function DepositPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

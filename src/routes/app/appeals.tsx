@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Gavel, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import { fmtDate } from "@/lib/admin-utils";
 type Search = { submissionId?: string };
 export const Route = createFileRoute("/app/appeals")({
   head: () => ({ meta: [{ title: "Appeals — Axora" }] }),
+  staticData: { title: "Appeals" },
   component: AppealsPage,
   validateSearch: (s: Record<string, unknown>): Search => ({ submissionId: s.submissionId as string | undefined }),
 });
@@ -70,7 +70,7 @@ function AppealsPage() {
   const availableSubs = rejected.filter((r) => !usedSubIds.has(r.id));
 
   return (
-    <UserShell title="Appeals">
+    <>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2"><Gavel className="h-5 w-5 text-primary" /> Your Appeals</CardTitle>
@@ -129,6 +129,6 @@ function AppealsPage() {
           )}
         </CardContent>
       </Card>
-    </UserShell>
+    </>
   );
 }

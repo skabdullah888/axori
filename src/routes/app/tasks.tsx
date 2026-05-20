@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, Clock, Coins, Users2, ListTodo, Lock, ImageIcon, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -29,6 +28,7 @@ function shuffle<T>(arr: T[]): T[] {
 
 export const Route = createFileRoute("/app/tasks")({
   head: () => ({ meta: [{ title: "Tasks — Axora" }] }),
+  staticData: { title: "Browse Tasks" },
   component: TasksPage,
 });
 
@@ -97,7 +97,7 @@ function TasksPage() {
   };
 
   return (
-    <UserShell title="Browse Tasks">
+    <>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative">
         {!isActive && (
@@ -254,7 +254,7 @@ function TasksPage() {
           onSuccess={() => { setSubmitOpen(false); setSelected(null); load(); }}
         />
       )}
-    </UserShell>
+    </>
   );
 }
 

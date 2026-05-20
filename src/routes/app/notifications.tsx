@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Bell, CheckCheck, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +10,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/notifications")({
   head: () => ({ meta: [{ title: "Notifications — Axora" }] }),
+  staticData: { title: "Notifications" },
   component: NotificationsPage,
 });
 
@@ -62,7 +62,7 @@ function NotificationsPage() {
   };
 
   return (
-    <UserShell title="Notifications">
+    <>
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-muted-foreground">{items.length} total · {items.filter(i => !i.read).length} unread</p>
         <Button variant="outline" size="sm" onClick={markAll}><CheckCheck className="h-4 w-4" /> Mark all read</Button>
@@ -98,6 +98,6 @@ function NotificationsPage() {
           ))}
         </div>
       )}
-    </UserShell>
+    </>
   );
 }

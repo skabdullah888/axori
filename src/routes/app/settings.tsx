@@ -4,7 +4,6 @@ import { LogOut, KeyRound, User as UserIcon, Bell as BellIcon, Shield, Camera, W
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
   head: () => ({ meta: [{ title: "Settings — Axora" }] }),
+  staticData: { title: "Settings" },
   component: SettingsPage,
 });
 
@@ -125,7 +125,7 @@ function SettingsPage() {
   };
 
   return (
-    <UserShell title="Settings">
+    <>
       <div className="max-w-2xl space-y-6">
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2"><UserIcon className="h-4 w-4" /> Profile Settings</CardTitle></CardHeader>
@@ -238,6 +238,6 @@ function SettingsPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }

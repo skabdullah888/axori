@@ -4,7 +4,6 @@ import { Wallet as WalletIcon, ArrowDownToLine, ArrowUpFromLine, Clock, Trending
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({ meta: [{ title: "Wallet — Axora" }] }),
+  staticData: { title: "Wallet" },
   component: WalletPage,
 });
 
@@ -61,7 +61,7 @@ function WalletPage() {
   const filterByType = (t: string) => payments.filter((p) => p.type === t);
 
   return (
-    <UserShell title="Wallet">
+    <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <Card className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border-primary/30">
           <CardContent className="p-5">
@@ -129,7 +129,7 @@ function WalletPage() {
           </Tabs>
         </CardContent>
       </Card>
-    </UserShell>
+    </>
   );
 }
 
