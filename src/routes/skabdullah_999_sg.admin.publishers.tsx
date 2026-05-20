@@ -121,7 +121,7 @@ function PublishersPage() {
 
   useEffect(() => { loadPublishers(); }, []);
   useEffect(() => {
-    if (selectedPub) loadTasks(selectedPub.id);
+    if (selectedPub) loadTasks(selectedPub.user_id!);
     else { setTasks([]); setSelectedTask(null); }
   }, [selectedPub?.id]);
 
@@ -129,7 +129,7 @@ function PublishersPage() {
     const ch = supabase.channel("admin-pub-tasks-rt")
       .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => {
         loadPublishers();
-        if (selectedPub) loadTasks(selectedPub.id);
+        if (selectedPub) loadTasks(selectedPub.user_id!);
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
@@ -448,7 +448,7 @@ function PublishersPage() {
       </div>
 
       {/* Edit dialog */}
-      <EditTaskDialog task={editTask} onClose={() => setEditTask(null)} onSaved={() => { setEditTask(null); if (selectedPub) loadTasks(selectedPub.id); }} />
+      <EditTaskDialog task={editTask} onClose={() => setEditTask(null)} onSaved={() => { setEditTask(null); if (selectedPub) loadTasks(selectedPub.user_id!); }} />
 
       {/* Submissions dialog */}
       <SubmissionsDialog task={submissionsDialog} onClose={() => setSubmissionsDialog(null)} />
