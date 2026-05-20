@@ -37,6 +37,7 @@ function SettingsPage() {
         minimum_withdrawal: Number(data.minimum_withdrawal),
         publisher_task_tax: Number(data.publisher_task_tax ?? 0),
         referral_bonus: Number(data.referral_bonus ?? 0),
+        minimum_referrals_for_withdrawal: Number((data as any).minimum_referrals_for_withdrawal ?? 0),
       });
     }
   };
