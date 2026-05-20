@@ -1,0 +1,1 @@
+CREATE POLICY "authenticated_view_settings" ON public.settings FOR SELECT TO authenticated USING (true);
