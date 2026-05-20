@@ -176,6 +176,6 @@ function TaskDetailPage() {
           </CardContent>
         </Card>
       </div>
-    </UserShell>
+    </>
   );
 }
