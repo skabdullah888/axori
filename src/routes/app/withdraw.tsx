@@ -75,17 +75,30 @@ function WithdrawPage() {
     if (!session?.user) return;
     if (amt < minAmt) { toast.error(`Minimum withdrawal is ৳${minAmt.toFixed(2)}`); return; }
     if (amt > balance) { toast.error("Insufficient balance"); return; }
+
     const minRefs = Number((settings as any)?.minimum_referrals_for_withdrawal ?? 0);
-    if (minRefs > 0) {
-      const { count } = await supabase
-        .from("profiles")
-        .select("id", { count: "exact", head: true })
-        .eq("referred_by", session.user.id);
-      if ((count ?? 0) < minRefs) {
-        toast.error(`You need at least ${minRefs} referral${minRefs > 1 ? "s" : ""} to withdraw.`);
-        return;
-      }
-    }
+    const minTasks = Number((settings as any)?.minimum_tasks_for_withdrawal ?? 0);
+
+    const [refsRes, tasksRes] = await Promise.all([
+      minRefs > 0
+        ? supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", session.user.id)
+        : Promise.resolve({ count: 0 }) as any,
+      minTasks > 0
+        ? supabase.from("tasks").select("id", { count: "exact", head: true }).eq("publisher_id", session.user.id)
+        : Promise.resolve({ count: 0 }) as any,
+    ]);
+
+    setCheck({
+      refs: refsRes.count ?? 0,
+      minRefs,
+      tasks: tasksRes.count ?? 0,
+      minTasks,
+    });
+  };
+
+  const confirmSubmit = async () => {
+    if (!session?.user || !check) return;
+    if (check.refs < check.minRefs || check.tasks < check.minTasks) return;
     setBusy(true);
     const { error } = await supabase.from("payments").insert({
       user_id: session.user.id,
@@ -99,7 +112,9 @@ function WithdrawPage() {
     if (error) { toast.error(error.message); return; }
     toast.success("Withdrawal request submitted.");
     setForm({ method: "", receiver_number: "", amount: "" });
+    setCheck(null);
   };
+
 
   return (
     <UserShell title="Withdraw">
