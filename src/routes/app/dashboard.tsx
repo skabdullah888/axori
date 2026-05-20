@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Axora" }] }),
+  staticData: { title: "Dashboard" },
   component: DashboardPage,
 });
 
