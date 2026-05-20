@@ -177,9 +177,11 @@ function ProfilePage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Amount (USD)</Label>
-                    <Input type="number" step="0.01" value={form.amount} onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))} required />
+                    <Label>Amount (৳)</Label>
+                    <Input type="number" step="0.01" value={form.amount} readOnly disabled className="opacity-80 cursor-not-allowed" />
+                    <p className="text-xs text-muted-foreground">Fixed amount set by admin.</p>
                   </div>
+
                   <Button type="submit" disabled={busy || !form.method} className="w-full bg-gradient-to-r from-primary to-primary/80">
                     {busy ? "Submitting…" : "Submit activation request"}
                   </Button>
