@@ -28,6 +28,7 @@ const items = [
 type Profile = {
   id: string; user_id: string; username: string; email: string | null;
   status: string; balance: number; avatar_url: string | null;
+  full_name?: string | null;
 };
 
 export function UserShell({ title, children }: { title: string; children: ReactNode }) {
