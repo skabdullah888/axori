@@ -130,7 +130,7 @@ function UsersPage() {
             <table className="w-full text-sm">
               <thead className="bg-muted/30 text-xs uppercase text-muted-foreground">
                 <tr>
-                  <th className="text-left px-4 py-3">Username</th>
+                  <th className="text-left px-4 py-3">User</th>
                   <th className="text-left px-4 py-3">User ID</th>
                   <th className="text-left px-4 py-3">Balance</th>
                   <th className="text-left px-4 py-3">Trust</th>
@@ -141,15 +141,30 @@ function UsersPage() {
               </thead>
               <tbody>
                 {paged.map(r => (
-                  <tr key={r.id} className="border-t border-border hover:bg-accent/30">
-                    <td className="px-4 py-3 font-medium">{r.username}</td>
+                  <tr
+                    key={r.id}
+                    onClick={() => openDetails(r)}
+                    className="border-t border-border hover:bg-accent/30 cursor-pointer"
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={r.avatar_url ?? undefined} alt={r.username} />
+                          <AvatarFallback className="text-xs">{r.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <span className="font-medium">{r.username}</span>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{r.id.slice(0, 8)}…</td>
                     <td className="px-4 py-3">{fmtMoney(r.balance)}</td>
                     <td className="px-4 py-3">{r.trust_score}</td>
                     <td className="px-4 py-3"><StatusPill status={r.status} /></td>
                     <td className="px-4 py-3 text-muted-foreground">{fmtDate(r.created_at)}</td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="inline-flex gap-2">
+                        <Button size="sm" variant="secondary" onClick={() => openDetails(r)}>
+                          <Eye className="h-4 w-4 mr-1" />View
+                        </Button>
                         <Button size="sm" variant="secondary" onClick={() => openEdit(r)}>
                           <Pencil className="h-4 w-4 mr-1" />Edit
                         </Button>
