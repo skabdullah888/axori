@@ -599,13 +599,15 @@ function SubmissionsDialog({ task, onClose }: { task: any | null; onClose: () =>
   useEffect(() => {
     if (!task) return;
     (async () => {
-      const { data } = await supabase.from("task_submissions")
-        .select("*, user:profiles!task_submissions_user_id_fkey(username,email)")
+      const { data: subs } = await supabase.from("task_submissions").select("*")
         .eq("task_id", task.id).order("created_at", { ascending: false });
-      if (!data) {
-        const { data: simple } = await supabase.from("task_submissions").select("*").eq("task_id", task.id).order("created_at", { ascending: false });
-        setRows(simple ?? []);
-      } else setRows(data);
+      const userIds = Array.from(new Set((subs ?? []).map((s: any) => s.user_id).filter(Boolean)));
+      let profilesMap: Record<string, any> = {};
+      if (userIds.length > 0) {
+        const { data: profs } = await supabase.from("profiles").select("user_id,username,email").in("user_id", userIds);
+        (profs ?? []).forEach((p: any) => { profilesMap[p.user_id] = p; });
+      }
+      setRows((subs ?? []).map((s: any) => ({ ...s, user: profilesMap[s.user_id] })));
     })();
   }, [task]);
   return (
