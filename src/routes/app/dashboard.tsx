@@ -99,27 +99,8 @@ function DashboardPage() {
         </div>
       </div>
 
-      {!isActive && !loading && (
-        <Link to="/app/profile" className="block mb-6 group">
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-warning/20 via-warning/10 to-transparent border border-warning/30 flex items-center justify-between gap-4 transition-all hover:border-warning/60 hover:shadow-lg hover:shadow-warning/10">
-            <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-xl bg-warning/20 flex items-center justify-center">
-                <Sparkles className="h-5 w-5 text-warning" />
-              </div>
-              <div>
-                <p className="font-semibold">Activate your account to start earning</p>
-                <p className="text-sm text-muted-foreground">
-                  One-time activation fee:{" "}
-                  <span className="font-bold text-warning">
-                    ৳{Number(activationAmount ?? 0).toFixed(2)}
-                  </span>
-                </p>
-              </div>
-            </div>
-            <span className="text-sm font-medium text-warning group-hover:translate-x-1 transition-transform hidden sm:inline">Activate now →</span>
-          </div>
-        </Link>
-      )}
+
+
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
