@@ -194,7 +194,6 @@ function PublishPage() {
   return (
     <UserShell title="Publish Task">
       <div className="relative">
-        {!isActive && Number(profile?.balance ?? 0) <= 0 && <LockOverlay message="Activate your account or add balance to publish tasks." />}
         <Tabs defaultValue="create">
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mb-6">
             <TabsTrigger value="create"><Plus className="h-3.5 w-3.5" /> Create</TabsTrigger>
