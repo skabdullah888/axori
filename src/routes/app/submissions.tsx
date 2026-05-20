@@ -4,7 +4,6 @@ import { Paginator } from "@/components/paginator";
 const PAGE_SIZE = 15;
 import { Gavel, FileCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";

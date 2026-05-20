@@ -4,7 +4,6 @@ import { LogOut, KeyRound, User as UserIcon, Bell as BellIcon, Shield, Camera, W
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

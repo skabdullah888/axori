@@ -5,7 +5,7 @@ import { ArrowUpFromLine, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { UserShell, LockOverlay } from "@/components/user-shell";
+import { LockOverlay } from "@/components/user-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

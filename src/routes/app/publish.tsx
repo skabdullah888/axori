@@ -4,7 +4,6 @@ import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChar
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { UserShell, LockOverlay } from "@/components/user-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

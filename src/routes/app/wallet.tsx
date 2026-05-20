@@ -4,7 +4,6 @@ import { Wallet as WalletIcon, ArrowDownToLine, ArrowUpFromLine, Clock, Trending
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

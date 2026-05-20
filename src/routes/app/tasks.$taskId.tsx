@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Upload, ArrowLeft, Coins, Users2, Clock, ImageIcon, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";

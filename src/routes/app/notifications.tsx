@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Bell, CheckCheck, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { UserShell } from "@/components/user-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

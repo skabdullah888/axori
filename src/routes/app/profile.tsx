@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, ShieldCheck, Sparkles, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { useProfile } from "@/hooks/use-profile";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

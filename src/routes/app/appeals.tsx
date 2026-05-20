@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Gavel, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserShell } from "@/components/user-shell";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
