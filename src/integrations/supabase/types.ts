@@ -322,6 +322,7 @@ export type Database = {
           activation_fee: number
           id: string
           minimum_referrals_for_withdrawal: number
+          minimum_tasks_for_withdrawal: number
           minimum_withdrawal: number
           publisher_task_tax: number
           referral_bonus: number
@@ -333,6 +334,7 @@ export type Database = {
           activation_fee?: number
           id?: string
           minimum_referrals_for_withdrawal?: number
+          minimum_tasks_for_withdrawal?: number
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
@@ -344,6 +346,7 @@ export type Database = {
           activation_fee?: number
           id?: string
           minimum_referrals_for_withdrawal?: number
+          minimum_tasks_for_withdrawal?: number
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
