@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
   head: () => ({ meta: [{ title: "Task Details — Axora" }] }),
+  staticData: { title: "Task Details" },
   component: TaskDetailPage,
 });
 
