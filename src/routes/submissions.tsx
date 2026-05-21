@@ -10,7 +10,7 @@ import { Eye, Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, notify, fmtMoney } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/submissions")({
-  head: () => ({ meta: [{ title: "Submissions — Axora" }] }),
+  head: () => ({ meta: [{ title: "Submissions — AxoraBD" }] }),
   component: SubmissionsPage,
 });
 

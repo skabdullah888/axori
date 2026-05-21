@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/login")({
-  head: () => ({ meta: [{ title: "Login — Axora" }] }),
+  head: () => ({ meta: [{ title: "Login — AxoraBD" }] }),
   component: LoginPage,
 });
 
@@ -42,7 +42,7 @@ function LoginPage() {
             <Sparkles className="h-7 w-7 text-primary-foreground" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
-          <p className="text-sm text-muted-foreground mt-1">Sign in to your Axora account</p>
+          <p className="text-sm text-muted-foreground mt-1">Sign in to your AxoraBD account</p>
         </div>
         <form onSubmit={submit} className="bg-card/60 backdrop-blur-xl border border-border rounded-2xl p-6 space-y-4 shadow-2xl">
           <div className="space-y-2">

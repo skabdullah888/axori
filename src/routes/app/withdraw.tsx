@@ -16,7 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/app/withdraw")({
-  head: () => ({ meta: [{ title: "Withdraw — Axora" }] }),
+  head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
   staticData: { title: "Withdraw" },
   component: WithdrawPage,
 });

@@ -43,10 +43,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Axora" },
+      { title: "AxoraBD" },
       { name: "description", content: "Guardian Hub is a full admin dashboard for a task earning platform." },
-      { property: "og:title", content: "Axora" },
-      { name: "twitter:title", content: "Axora" },
+      { property: "og:title", content: "AxoraBD" },
+      { name: "twitter:title", content: "AxoraBD" },
       { property: "og:description", content: "Guardian Hub is a full admin dashboard for a task earning platform." },
       { name: "twitter:description", content: "Guardian Hub is a full admin dashboard for a task earning platform." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/5206ea6a-be37-4e7c-b9ed-197fdfd7a158" },

@@ -24,7 +24,7 @@ const PUBLISHER_REJECT_PRESETS = [
 ];
 
 export const Route = createFileRoute("/app/publish")({
-  head: () => ({ meta: [{ title: "Publish Task — Axora" }] }),
+  head: () => ({ meta: [{ title: "Publish Task — AxoraBD" }] }),
   staticData: { title: "Publish Task" },
   component: PublishPage,
 });

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/register")({
-  head: () => ({ meta: [{ title: "Register — Axora" }] }),
+  head: () => ({ meta: [{ title: "Register — AxoraBD" }] }),
   component: RegisterPage,
   validateSearch: (s: Record<string, unknown>) => ({ ref: (s.ref as string) || "" }),
 });
@@ -112,7 +112,7 @@ function RegisterPage() {
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/50 mb-4 shadow-lg shadow-primary/30">
             <Sparkles className="h-7 w-7 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Join Axora</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Join AxoraBD</h1>
           <p className="text-sm text-muted-foreground mt-1">Earn by completing tasks</p>
         </div>
         <form onSubmit={submit} className="bg-card/60 backdrop-blur-xl border border-border rounded-2xl p-6 space-y-3 shadow-2xl">

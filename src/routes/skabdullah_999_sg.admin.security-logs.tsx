@@ -10,7 +10,7 @@ import { AlertTriangle } from "lucide-react";
 import { fmtDate, EmptyState } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/security-logs")({
-  head: () => ({ meta: [{ title: "Admin Security Logs — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Security Logs — AxoraBD" }] }),
   component: SecurityLogsPage,
 });
 

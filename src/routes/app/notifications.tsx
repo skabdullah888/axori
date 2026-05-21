@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/notifications")({
-  head: () => ({ meta: [{ title: "Notifications — Axora" }] }),
+  head: () => ({ meta: [{ title: "Notifications — AxoraBD" }] }),
   staticData: { title: "Notifications" },
   component: NotificationsPage,
 });

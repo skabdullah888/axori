@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/app/submissions")({
-  head: () => ({ meta: [{ title: "My Submissions — Axora" }] }),
+  head: () => ({ meta: [{ title: "My Submissions — AxoraBD" }] }),
   staticData: { title: "My Submissions" },
   component: SubmissionsPage,
 });

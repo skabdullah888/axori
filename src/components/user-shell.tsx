@@ -127,7 +127,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           <div>
-            <div className="text-lg font-bold tracking-tight text-foreground">Axora</div>
+            <div className="text-lg font-bold tracking-tight text-foreground">AxoraBD</div>
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Earn tasks</div>
           </div>
         </div>

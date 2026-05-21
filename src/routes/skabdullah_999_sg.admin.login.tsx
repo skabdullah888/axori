@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/login")({
-  head: () => ({ meta: [{ title: "Admin Login — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Login — AxoraBD" }] }),
   component: LoginPage,
 });
 

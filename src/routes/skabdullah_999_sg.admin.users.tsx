@@ -18,7 +18,7 @@ import { deleteUserAccount } from "@/lib/admin-users.functions";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({
-  head: () => ({ meta: [{ title: "Admin Users — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Users — AxoraBD" }] }),
   component: UsersPage,
 });
 
