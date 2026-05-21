@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { toast } from "sonner";
 import { Eye, Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, notify, fmtMoney } from "@/lib/admin-utils";
+import { ProofThumb } from "@/components/proof-image";
 
 export const Route = createFileRoute("/submissions")({
   head: () => ({ meta: [{ title: "Submissions — AxoraBD" }] }),
