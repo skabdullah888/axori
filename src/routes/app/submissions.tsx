@@ -86,10 +86,7 @@ function SubmissionsPage() {
                         {r.proofs?.length > 0 && (
                           <div className="flex gap-2 mt-3 flex-wrap">
                             {r.proofs.map((p: any, i: number) => (
-                              <a key={i} href={p.image_url} target="_blank" rel="noreferrer"
-                                 className="block w-16 h-16 rounded-lg overflow-hidden border border-border hover:border-primary">
-                                <img src={p.image_url} alt="" className="w-full h-full object-cover" />
-                              </a>
+                              <ProofThumb key={i} src={p.image_url} className="w-16 h-16 object-cover rounded-lg overflow-hidden border border-border hover:border-primary" />
                             ))}
                           </div>
                         )}
