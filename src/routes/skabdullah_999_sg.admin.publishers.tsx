@@ -656,10 +656,10 @@ function ProofsDialog({ task, onClose }: { task: any | null; onClose: () => void
         {proofs.length === 0 ? <p className="text-sm text-muted-foreground py-8 text-center">No proofs uploaded</p> : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {proofs.map(p => (
-              <a key={p.id} href={p.image_url} target="_blank" rel="noreferrer" className="block group">
-                <img src={p.image_url} alt="" className="w-full h-32 object-cover rounded-md border border-border group-hover:border-primary transition-colors" />
+              <div key={p.id} className="group">
+                <ProofThumb src={p.image_url} className="w-full h-32 object-cover rounded-md border border-border group-hover:border-primary transition-colors" />
                 <p className="text-[10px] text-muted-foreground mt-1">{fmtDate(p.created_at)}</p>
-              </a>
+              </div>
             ))}
           </div>
         )}
