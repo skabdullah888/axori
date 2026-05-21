@@ -202,22 +202,38 @@ function PublishPage() {
                     <Textarea value={form.instructions} onChange={(e) => setForm(f => ({ ...f, instructions: e.target.value }))} rows={4} required /></div>
                   {/* Banner upload */}
                   <div className="space-y-2">
-                    <Label>Task banner (optional, max 5MB)</Label>
-                    <div className="border-2 border-dashed border-border rounded-xl p-4 hover:border-primary/40 transition-colors">
-                      {bannerPreview ? (
-                        <div className="relative">
-                          <img src={bannerPreview} alt="banner preview" className="w-full max-h-48 object-cover rounded-lg" />
-                          <Button type="button" size="sm" variant="destructive" className="absolute top-2 right-2"
-                            onClick={() => { setBannerFile(null); setBannerPreview(null); }}>Remove</Button>
-                        </div>
-                      ) : (
-                        <input type="file" accept="image/*" onChange={(e) => {
+                    <Label>Task banner / thumbnail (optional, max 5MB)</Label>
+                    {bannerPreview ? (
+                      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border bg-accent/30">
+                        <img src={bannerPreview} alt="banner preview" className="absolute inset-0 w-full h-full object-cover" />
+                        <Button type="button" size="sm" variant="destructive" className="absolute top-2 right-2"
+                          onClick={() => { setBannerFile(null); setBannerPreview(null); }}>Remove</Button>
+                      </div>
+                    ) : (
+                      <label
+                        htmlFor="banner-input"
+                        onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add("border-primary","bg-primary/5"); }}
+                        onDragLeave={(e) => { e.currentTarget.classList.remove("border-primary","bg-primary/5"); }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.classList.remove("border-primary","bg-primary/5");
+                          const f = e.dataTransfer.files?.[0]; if (!f) return;
+                          if (!f.type.startsWith("image/")) { toast.error("Banner must be an image"); return; }
+                          if (f.size > 5 * 1024 * 1024) { toast.error("Banner must be under 5MB"); return; }
+                          setBannerFile(f); setBannerPreview(URL.createObjectURL(f));
+                        }}
+                        className="flex flex-col items-center justify-center w-full aspect-video border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary/40 hover:bg-accent/30 transition-colors text-center px-4"
+                      >
+                        <Megaphone className="h-8 w-8 text-muted-foreground/60 mb-2" />
+                        <p className="text-sm font-medium">Drag & drop an image here</p>
+                        <p className="text-xs text-muted-foreground mt-1">or click to browse · 16:9 recommended · max 5MB</p>
+                        <input id="banner-input" type="file" accept="image/*" className="hidden" onChange={(e) => {
                           const f = e.target.files?.[0]; if (!f) return;
                           if (f.size > 5 * 1024 * 1024) { toast.error("Banner must be under 5MB"); return; }
                           setBannerFile(f); setBannerPreview(URL.createObjectURL(f));
-                        }} className="block w-full text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-primary file:text-primary-foreground file:cursor-pointer" />
-                      )}
-                    </div>
+                        }} />
+                      </label>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
