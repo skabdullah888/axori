@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { toast } from "sonner";
 import { Eye, Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, notify, fmtMoney } from "@/lib/admin-utils";
+import { ProofThumb } from "@/components/proof-image";
 
 export const Route = createFileRoute("/submissions")({
   head: () => ({ meta: [{ title: "Submissions — AxoraBD" }] }),
@@ -100,9 +101,7 @@ function SubmissionsPage() {
                   <div className="text-xs text-muted-foreground mb-2">Proof images</div>
                   <div className="grid grid-cols-3 gap-2">
                     {open.proofs.map((p: any) => (
-                      <a key={p.id} href={p.image_url} target="_blank" rel="noreferrer">
-                        <img src={p.image_url} alt="proof" className="rounded-md border border-border w-full h-28 object-cover" />
-                      </a>
+                      <ProofThumb key={p.id} src={p.image_url} className="rounded-md border border-border w-full h-28 object-cover" />
                     ))}
                   </div>
                 </div>

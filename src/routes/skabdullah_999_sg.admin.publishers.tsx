@@ -17,6 +17,7 @@ import { fmtDate, fmtMoney, StatusPill, notify } from "@/lib/admin-utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 import { cn } from "@/lib/utils";
+import { ProofThumb } from "@/components/proof-image";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/publishers")({
   head: () => ({ meta: [{ title: "Admin Publishers — AxoraBD" }] }),
@@ -655,10 +656,10 @@ function ProofsDialog({ task, onClose }: { task: any | null; onClose: () => void
         {proofs.length === 0 ? <p className="text-sm text-muted-foreground py-8 text-center">No proofs uploaded</p> : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {proofs.map(p => (
-              <a key={p.id} href={p.image_url} target="_blank" rel="noreferrer" className="block group">
-                <img src={p.image_url} alt="" className="w-full h-32 object-cover rounded-md border border-border group-hover:border-primary transition-colors" />
+              <div key={p.id} className="group">
+                <ProofThumb src={p.image_url} className="w-full h-32 object-cover rounded-md border border-border group-hover:border-primary transition-colors" />
                 <p className="text-[10px] text-muted-foreground mt-1">{fmtDate(p.created_at)}</p>
-              </a>
+              </div>
             ))}
           </div>
         )}

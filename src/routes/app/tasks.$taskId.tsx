@@ -70,8 +70,7 @@ function TaskDetailPage() {
         const path = `${session.user.id}/${sub.id}/${Date.now()}-${f.name}`;
         const { error: upErr } = await supabase.storage.from("proofs").upload(path, f);
         if (upErr) throw upErr;
-        const { data: pub } = supabase.storage.from("proofs").getPublicUrl(path);
-        await supabase.from("task_submission_proofs").insert({ submission_id: sub.id, image_url: pub.publicUrl });
+        await supabase.from("task_submission_proofs").insert({ submission_id: sub.id, image_url: path });
       }
       toast.success("Submission sent! Awaiting publisher review.");
       navigate({ to: "/app/submissions" });

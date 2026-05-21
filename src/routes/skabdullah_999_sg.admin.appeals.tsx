@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
+import { ProofThumb } from "@/components/proof-image";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/appeals")({
   head: () => ({ meta: [{ title: "Admin Appeals — AxoraBD" }] }),
@@ -130,9 +131,7 @@ function AppealsPage() {
                   <div className="text-xs text-muted-foreground mb-2">Proof images</div>
                   <div className="grid grid-cols-3 gap-2">
                     {open.submission.proofs.map((p: any) => (
-                      <a key={p.id} href={p.image_url} target="_blank" rel="noreferrer">
-                        <img src={p.image_url} alt="proof" className="rounded-md border border-border w-full h-24 object-cover" />
-                      </a>
+                      <ProofThumb key={p.id} src={p.image_url} className="rounded-md border border-border w-full h-24 object-cover" />
                     ))}
                   </div>
                 </div>

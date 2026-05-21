@@ -27,11 +27,11 @@ function ReferralsPage() {
     if (!session?.user) return;
     const [e, r, s] = await Promise.all([
       supabase.from("referral_earnings").select("*").eq("referrer_id", session.user.id).order("created_at", { ascending: false }),
-      supabase.from("profiles").select("id,username,status,created_at").eq("referred_by", session.user.id).order("created_at", { ascending: false }),
+      supabase.rpc("get_my_referrals" as any),
       supabase.from("settings").select("*").limit(1).maybeSingle(),
     ]);
     setEarnings(e.data ?? []);
-    setReferred(r.data ?? []);
+    setReferred((r.data as any[]) ?? []);
     setSettings(s.data);
   };
 

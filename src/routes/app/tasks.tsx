@@ -314,8 +314,7 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
         const path = `${session.user.id}/${sub.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
         const { error: upErr } = await supabase.storage.from("proofs").upload(path, file);
         if (upErr) throw upErr;
-        const pub = supabase.storage.from("proofs").getPublicUrl(path).data.publicUrl;
-        await supabase.from("task_submission_proofs").insert({ submission_id: sub.id, image_url: pub });
+        await supabase.from("task_submission_proofs").insert({ submission_id: sub.id, image_url: path });
       }
 
       // Notify publisher
