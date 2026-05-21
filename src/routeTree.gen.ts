@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
@@ -43,6 +45,16 @@ import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
 const SubmissionsRoute = SubmissionsRouteImport.update({
   id: '/submissions',
   path: '/submissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -204,6 +216,8 @@ const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submissions': typeof SubmissionsRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -236,6 +250,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submissions': typeof SubmissionsRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -269,6 +285,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submissions': typeof SubmissionsRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
@@ -303,6 +321,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/submissions'
     | '/app/appeals'
     | '/app/dashboard'
@@ -335,6 +355,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/app'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/submissions'
     | '/app/appeals'
     | '/app/dashboard'
@@ -367,6 +389,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/robots.txt'
+    | '/sitemap.xml'
     | '/submissions'
     | '/app/appeals'
     | '/app/dashboard'
@@ -400,6 +424,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubmissionsRoute: typeof SubmissionsRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
@@ -424,6 +450,20 @@ declare module '@tanstack/react-router' {
       path: '/submissions'
       fullPath: '/submissions'
       preLoaderRoute: typeof SubmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -679,6 +719,8 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubmissionsRoute: SubmissionsRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
