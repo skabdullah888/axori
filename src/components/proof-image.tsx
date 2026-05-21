@@ -30,7 +30,12 @@ export function ProofImage({ src, alt, className, onClick }: { src: string; alt?
   return <img src={url} alt={alt} className={className} onClick={onClick} />;
 }
 
-export function ProofLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
-  const url = useProofUrl(href);
-  return <a href={url || "#"} target="_blank" rel="noreferrer" className={className}>{children}</a>;
+export function ProofThumb({ src, className, alt }: { src: string; className?: string; alt?: string }) {
+  const url = useProofUrl(src);
+  if (!url) return <div className={(className ?? "") + " bg-muted animate-pulse"} />;
+  return (
+    <a href={url} target="_blank" rel="noreferrer" className="block">
+      <img src={url} alt={alt ?? "proof"} className={className} />
+    </a>
+  );
 }
