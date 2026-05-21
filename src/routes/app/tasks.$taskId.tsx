@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Linkified } from "@/lib/linkify";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
   head: () => ({ meta: [{ title: "Task Details — Axora" }] }),
@@ -117,11 +118,13 @@ function TaskDetailPage() {
         <Card className="mb-4">
           <CardHeader><CardTitle className="text-base">Description</CardTitle></CardHeader>
           <CardContent>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed">{task.description ?? "—"}</p>
+            {task.description ? (
+              <Linkified text={task.description} className="text-sm leading-relaxed block" />
+            ) : <p className="text-sm text-muted-foreground">—</p>}
             {task.instructions && (
               <div className="mt-4 p-4 rounded-lg bg-accent/30 border border-border">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Instructions</p>
-                <p className="whitespace-pre-wrap text-sm">{task.instructions}</p>
+                <Linkified text={task.instructions} className="text-sm block" />
               </div>
             )}
           </CardContent>

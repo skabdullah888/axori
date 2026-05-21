@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Paginator } from "@/components/paginator";
+import { Linkified } from "@/lib/linkify";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
@@ -217,13 +218,13 @@ function TasksPage() {
               {selected.description && (
                 <div>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Description</p>
-                  <p className="text-sm whitespace-pre-wrap">{selected.description}</p>
+                  <Linkified text={selected.description} className="text-sm block" />
                 </div>
               )}
               {selected.instructions && (
                 <div className="p-3 rounded-lg bg-accent/30 border border-border">
                   <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Instructions</p>
-                  <p className="text-sm whitespace-pre-wrap">{selected.instructions}</p>
+                  <Linkified text={selected.instructions} className="text-sm block" />
                 </div>
               )}
 
