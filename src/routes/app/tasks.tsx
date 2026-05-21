@@ -224,7 +224,9 @@ function TasksPage() {
               {selected.instructions && (
                 <div className="p-3 rounded-lg bg-accent/30 border border-border">
                   <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Instructions</p>
-                  <Linkified text={selected.instructions} className="text-sm block" />
+                  <div className="max-h-[200px] instructions-scroll">
+                    <Linkified text={selected.instructions} className="text-sm block" />
+                  </div>
                 </div>
               )}
 
