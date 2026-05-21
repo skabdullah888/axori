@@ -17,6 +17,7 @@ import { fmtDate, fmtMoney, StatusPill, notify } from "@/lib/admin-utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 import { cn } from "@/lib/utils";
+import { ProofThumb } from "@/components/proof-image";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/publishers")({
   head: () => ({ meta: [{ title: "Admin Publishers — AxoraBD" }] }),
