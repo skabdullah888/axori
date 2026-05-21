@@ -130,9 +130,7 @@ function AppealsPage() {
                   <div className="text-xs text-muted-foreground mb-2">Proof images</div>
                   <div className="grid grid-cols-3 gap-2">
                     {open.submission.proofs.map((p: any) => (
-                      <a key={p.id} href={p.image_url} target="_blank" rel="noreferrer">
-                        <img src={p.image_url} alt="proof" className="rounded-md border border-border w-full h-24 object-cover" />
-                      </a>
+                      <ProofThumb key={p.id} src={p.image_url} className="rounded-md border border-border w-full h-24 object-cover" />
                     ))}
                   </div>
                 </div>
