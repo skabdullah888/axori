@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
+import { ProofThumb } from "@/components/proof-image";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/appeals")({
   head: () => ({ meta: [{ title: "Admin Appeals — AxoraBD" }] }),
