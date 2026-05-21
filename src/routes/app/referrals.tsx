@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/referrals")({
-  head: () => ({ meta: [{ title: "Referrals — Axora" }] }),
+  head: () => ({ meta: [{ title: "Referrals — AxoraBD" }] }),
   staticData: { title: "Referrals" },
   component: ReferralsPage,
 });
@@ -52,7 +52,7 @@ function ReferralsPage() {
 
   const copy = (v: string) => { navigator.clipboard.writeText(v); toast.success("Copied!"); };
   const share = async () => {
-    if (navigator.share) await navigator.share({ title: "Join Axora", text: "Earn money by completing tasks!", url: refLink });
+    if (navigator.share) await navigator.share({ title: "Join AxoraBD", text: "Earn money by completing tasks!", url: refLink });
     else copy(refLink);
   };
 

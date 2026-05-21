@@ -14,7 +14,7 @@ import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-u
 import { RejectDialog, ConfirmDialog } from "@/components/reject-dialog";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/payments")({
-  head: () => ({ meta: [{ title: "Admin Payments — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Payments — AxoraBD" }] }),
   component: PaymentsPage,
 });
 

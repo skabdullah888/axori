@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
-  head: () => ({ meta: [{ title: "Settings — Axora" }] }),
+  head: () => ({ meta: [{ title: "Settings — AxoraBD" }] }),
   staticData: { title: "Settings" },
   component: SettingsPage,
 });

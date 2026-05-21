@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({
-  head: () => ({ meta: [{ title: "Admin Tasks — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Tasks — AxoraBD" }] }),
   component: TasksPage,
 });
 

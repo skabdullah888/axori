@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Settings2, Wallet, Plus, Trash2, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
-  head: () => ({ meta: [{ title: "Admin Settings — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
   component: SettingsPage,
 });
 

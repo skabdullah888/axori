@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const Route = createFileRoute("/app/wallet")({
-  head: () => ({ meta: [{ title: "Wallet — Axora" }] }),
+  head: () => ({ meta: [{ title: "Wallet — AxoraBD" }] }),
   staticData: { title: "Wallet" },
   component: WalletPage,
 });

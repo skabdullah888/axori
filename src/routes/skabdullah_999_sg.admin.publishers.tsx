@@ -19,7 +19,7 @@ import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/publishers")({
-  head: () => ({ meta: [{ title: "Admin Publishers — Axora" }] }),
+  head: () => ({ meta: [{ title: "Admin Publishers — AxoraBD" }] }),
   component: PublishersPage,
 });
 

@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Linkified } from "@/lib/linkify";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
-  head: () => ({ meta: [{ title: "Task Details — Axora" }] }),
+  head: () => ({ meta: [{ title: "Task Details — AxoraBD" }] }),
   staticData: { title: "Task Details" },
   component: TaskDetailPage,
 });

@@ -28,7 +28,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export const Route = createFileRoute("/app/tasks")({
-  head: () => ({ meta: [{ title: "Tasks — Axora" }] }),
+  head: () => ({ meta: [{ title: "Tasks — AxoraBD" }] }),
   staticData: { title: "Browse Tasks" },
   component: TasksPage,
 });
