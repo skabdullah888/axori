@@ -124,7 +124,9 @@ function TaskDetailPage() {
             {task.instructions && (
               <div className="mt-4 p-4 rounded-lg bg-accent/30 border border-border">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Instructions</p>
-                <Linkified text={task.instructions} className="text-sm block" />
+                <div className="max-h-[200px] instructions-scroll">
+                  <Linkified text={task.instructions} className="text-sm block" />
+                </div>
               </div>
             )}
           </CardContent>
