@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /skabdullah_999_sg/
+
+Sitemap: https://axorabd.site/sitemap.xml
