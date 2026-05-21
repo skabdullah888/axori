@@ -119,7 +119,7 @@ function DepositPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Amount (USD)</Label>
+                  <Label>Amount (৳)</Label>
                   <Input type="number" step="0.01" min="1" value={form.amount} onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))} required />
                 </div>
                 <Button type="submit" disabled={busy || !form.method} className="w-full bg-gradient-to-r from-primary to-primary/80">

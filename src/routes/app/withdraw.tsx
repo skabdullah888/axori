@@ -149,7 +149,7 @@ function WithdrawPage() {
                 <Input value={form.receiver_number} onChange={(e) => setForm((f) => ({ ...f, receiver_number: e.target.value }))} required />
               </div>
               <div className="space-y-2">
-                <Label>Amount (USD)</Label>
+                <Label>Amount (৳)</Label>
                 <Input type="number" step="0.01" min={minAmt} value={form.amount} onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))} required />
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>Min: ৳{minAmt.toFixed(2)} · Fee: {feePct}% (৳{feeAmt.toFixed(2)})</span>
