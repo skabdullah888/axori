@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Copy, Users2, DollarSign, Share2, Lock, Sparkles } from "lucide-react";
+import { Copy, Users2, Banknote, Share2, Lock, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -64,11 +64,11 @@ function ReferralsPage() {
           <p className="text-3xl font-bold mt-1">{referred.length}</p>
         </CardContent></Card>
         <Card><CardContent className="p-5">
-          <div className="flex items-center gap-2 text-muted-foreground text-xs"><DollarSign className="h-3.5 w-3.5" /> TOTAL EARNED</div>
+          <div className="flex items-center gap-2 text-muted-foreground text-xs"><Banknote className="h-3.5 w-3.5" /> TOTAL EARNED</div>
           <p className="text-3xl font-bold mt-1 text-success">৳{totalEarned.toFixed(2)}</p>
         </CardContent></Card>
         <Card><CardContent className="p-5">
-          <div className="flex items-center gap-2 text-muted-foreground text-xs"><DollarSign className="h-3.5 w-3.5" /> PENDING</div>
+          <div className="flex items-center gap-2 text-muted-foreground text-xs"><Banknote className="h-3.5 w-3.5" /> PENDING</div>
           <p className="text-3xl font-bold mt-1 text-warning">৳{pending.toFixed(2)}</p>
         </CardContent></Card>
       </div>
