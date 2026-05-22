@@ -198,7 +198,7 @@ function TasksPage() {
               );
             })}
           </div>
-          <Paginator page={page} pageSize={PAGE_SIZE} total={filtered.length} onChange={setPage} />
+          <Paginator page={page} pageSize={PAGE_SIZE} total={total} onChange={setPage} />
           </>
         )}
       </div>
