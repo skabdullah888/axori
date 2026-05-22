@@ -544,6 +544,21 @@ export type Database = {
         Args: { p_message: string; p_title: string; p_type: string }
         Returns: undefined
       }
+      publish_task_with_charge: {
+        Args: {
+          p_banner_url: string
+          p_category: string
+          p_description: string
+          p_instructions: string
+          p_proof_count: number
+          p_proof_fields: Json
+          p_proof_type: string
+          p_reward: number
+          p_title: string
+          p_total_slots: number
+        }
+        Returns: string
+      }
       publisher_review_submission: {
         Args: { p_approve: boolean; p_reason?: string; p_submission_id: string }
         Returns: undefined
