@@ -145,7 +145,7 @@ function ReferralsPage() {
         <Card>
           <CardHeader><CardTitle>Referred users</CardTitle></CardHeader>
           <CardContent>
-            {referred.length === 0 ? (
+            {loading ? <ListSkeleton count={3} /> : referred.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-6">No referrals yet. Share your link!</p>
             ) : (
               <div className="space-y-2">
