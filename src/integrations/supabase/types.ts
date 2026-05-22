@@ -523,6 +523,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_reject_task_with_refund: {
+        Args: { p_reason?: string; p_task_id: string }
+        Returns: undefined
+      }
       gen_referral_code: { Args: never; Returns: string }
       get_my_referrals: {
         Args: never

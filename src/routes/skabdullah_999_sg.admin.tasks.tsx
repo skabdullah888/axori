@@ -65,10 +65,10 @@ function TasksPage() {
   };
 
   const doReject = async (row: any, reason: string) => {
-    const { error } = await supabase.from("tasks").update({ status: "rejected" }).eq("id", row.id);
+    const { error } = await supabase.rpc("admin_reject_task_with_refund", { p_task_id: row.id, p_reason: reason });
     if (error) { toast.error(error.message); return; }
-    await notify(row.publisher_id, "system", "Task rejected", `Your task "${row.title}" was rejected. Reason: ${reason}`);
-    toast.success("Task rejected");
+    await notify(row.publisher_id, "system", "Task rejected & refunded", `Your task "${row.title}" was rejected. Reason: ${reason}. The held amount has been refunded to your balance.`);
+    toast.success("Task rejected & publisher refunded");
     setRejectRow(null);
   };
 
