@@ -60,7 +60,9 @@ function SubmissionsPage() {
           <TabsTrigger value="all">All</TabsTrigger>
         </TabsList>
         <TabsContent value={tab}>
-          {filtered.length === 0 ? (
+          {loading ? (
+            <ListSkeleton count={4} />
+          ) : filtered.length === 0 ? (
             <Card><CardContent className="py-16 text-center text-muted-foreground">
               <FileCheck className="h-10 w-10 mx-auto mb-2 opacity-50" />
               No submissions in this tab.
