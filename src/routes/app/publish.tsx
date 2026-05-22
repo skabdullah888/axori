@@ -349,22 +349,25 @@ function PublishPage() {
                         <p className="text-sm font-bold">৳{(Number(t.reward) * t.completed_slots).toFixed(2)}</p>
                         <p className="text-[10px] text-muted-foreground">paid out</p>
                       </div>
+                      {!["completed", "rejected", "cancelled"].includes(t.status) && (
+                        <div className="w-full flex justify-end">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                            onClick={() => setCancelTask(t)}
+                          >
+                            <Trash2 className="h-3.5 w-3.5 mr-1" />
+                            Cancel task
+                          </Button>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
               </div>
             )}
           </TabsContent>
-
-          <TabsContent value="reviews">
-            {pendingSubs.length === 0 ? (
-              <Card><CardContent className="py-12 text-center text-muted-foreground">
-                <Clock className="h-10 w-10 mx-auto mb-3 opacity-40" />No pending submissions.
-              </CardContent></Card>
-            ) : (
-              <div className="space-y-3">
-                {pendingSubs.map((s) => {
-                  const task = tasks.find(t => t.id === s.task_id);
                   return (
                     <Card key={s.id}>
                       <CardContent className="p-4">
