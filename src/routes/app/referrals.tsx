@@ -63,6 +63,14 @@ function ReferralsPage() {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-5 space-y-3">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-8 w-20" />
+            </CardContent></Card>
+          ))
+        ) : (<>
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Users2 className="h-3.5 w-3.5" /> TOTAL REFERRED</div>
           <p className="text-3xl font-bold mt-1">{referred.length}</p>
@@ -75,6 +83,7 @@ function ReferralsPage() {
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Banknote className="h-3.5 w-3.5" /> PENDING</div>
           <p className="text-3xl font-bold mt-1 text-warning">৳{pending.toFixed(2)}</p>
         </CardContent></Card>
+        </>)}
       </div>
 
       <Card className="mb-6 bg-gradient-to-br from-primary/10 to-transparent border-primary/30">
