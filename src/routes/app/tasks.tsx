@@ -38,7 +38,10 @@ type ProofField = { id: string; type: string; label: string; required: boolean }
 function TasksPage() {
   const { session } = useAuth();
   const { isActive } = useProfile();
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [paged, setPaged] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<string[]>(["all"]);
   const [mine, setMine] = useState<Set<string>>(new Set());
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
@@ -49,46 +52,63 @@ function TasksPage() {
   const [submitOpen, setSubmitOpen] = useState(false);
   const [activationOpen, setActivationOpen] = useState(false);
 
-  const load = async () => {
-    const { data } = await supabase.from("tasks").select("*, publisher:profiles!tasks_publisher_id_fkey(username, avatar_url)")
-      .eq("status", "active").order("created_at", { ascending: false });
-    setTasks(data ?? []);
-    if (session?.user) {
-      const { data: subs } = await supabase.from("task_submissions").select("task_id")
-        .eq("user_id", session.user.id);
-      setMine(new Set((subs ?? []).map((s) => s.task_id).filter((id): id is string => !!id)));
-    }
+  // Load distinct categories once (lightweight)
+  const loadCategories = async () => {
+    const { data } = await supabase.from("tasks").select("category").eq("status", "active").limit(1000);
+    const s = new Set<string>();
+    (data ?? []).forEach((t: any) => t.category && s.add(t.category));
+    setCategories(["all", ...Array.from(s)]);
+  };
+
+  const loadMine = async () => {
+    if (!session?.user) return;
+    const { data: subs } = await supabase.from("task_submissions").select("task_id")
+      .eq("user_id", session.user.id);
+    setMine(new Set((subs ?? []).map((s) => s.task_id).filter((id): id is string => !!id)));
+  };
+
+  // Server-side paged fetch — only loads the current page
+  const loadPage = async () => {
+    setLoading(true);
+    let query = supabase
+      .from("tasks")
+      .select("*, publisher:profiles!tasks_publisher_id_fkey(username, avatar_url)", { count: "exact" })
+      .eq("status", "active")
+      .filter("completed_slots", "lt", "total_slots");
+
+    if (q) query = query.ilike("title", `%${q}%`);
+    if (cat !== "all") query = query.eq("category", cat);
+
+    if (sort === "reward") query = query.order("reward", { ascending: false });
+    else if (sort === "slots") query = query.order("total_slots", { ascending: false });
+    else query = query.order("created_at", { ascending: false }); // new + random both use newest from DB
+
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    const { data, count } = await query.range(from, to);
+
+    let rows = data ?? [];
+    if (sort === "random") rows = shuffle(rows);
+    setPaged(rows);
+    setTotal(count ?? 0);
+    setLoading(false);
   };
 
   useEffect(() => {
-    load();
+    loadCategories();
+    loadMine();
     const ch = supabase.channel("tasks-browse")
-      .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "task_submissions" }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => loadPage())
+      .on("postgres_changes", { event: "*", schema: "public", table: "task_submissions" }, () => loadMine())
       .subscribe();
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id]);
 
-  const categories = useMemo(() => {
-    const s = new Set<string>(); tasks.forEach((t) => t.category && s.add(t.category));
-    return ["all", ...Array.from(s)];
-  }, [tasks]);
+  useEffect(() => { setPage(1); }, [q, cat, sort]);
+  useEffect(() => { loadPage(); /* eslint-disable-next-line */ }, [q, cat, sort, page, shuffleSeed]);
 
-  const filtered = useMemo(() => {
-    let arr = tasks.filter((t) => t.completed_slots < t.total_slots);
-    if (q) arr = arr.filter((t) => t.title.toLowerCase().includes(q.toLowerCase()));
-    if (cat !== "all") arr = arr.filter((t) => t.category === cat);
-    if (sort === "reward") arr = [...arr].sort((a, b) => Number(b.reward) - Number(a.reward));
-    else if (sort === "slots") arr = [...arr].sort((a, b) => (b.total_slots - b.completed_slots) - (a.total_slots - a.completed_slots));
-    else if (sort === "new") arr = [...arr].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-    else arr = shuffle(arr); // random
-    return arr;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tasks, q, cat, sort, shuffleSeed]);
-
-  useEffect(() => { setPage(1); }, [q, cat, sort, shuffleSeed]);
-  const paged = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+  const load = loadPage; // used by submission success
 
   const openDetails = (t: any) => { setSelected(t); };
   const openSubmit = () => {
@@ -138,7 +158,7 @@ function TasksPage() {
           )}
         </div>
 
-        {filtered.length === 0 ? (
+        {!loading && total === 0 ? (
           <Card><CardContent className="py-16 text-center text-muted-foreground">
             <ListTodo className="h-10 w-10 mx-auto mb-2 opacity-50" />
             No tasks available right now. Check back soon!
@@ -178,7 +198,7 @@ function TasksPage() {
               );
             })}
           </div>
-          <Paginator page={page} pageSize={PAGE_SIZE} total={filtered.length} onChange={setPage} />
+          <Paginator page={page} pageSize={PAGE_SIZE} total={total} onChange={setPage} />
           </>
         )}
       </div>
