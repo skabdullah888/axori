@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
@@ -30,6 +31,7 @@ function WithdrawPage() {
   const [form, setForm] = useState({ method: "", receiver_number: "", amount: "" });
   const [busy, setBusy] = useState(false);
   const [check, setCheck] = useState<null | { refs: number; minRefs: number; tasks: number; minTasks: number }>(null);
+  const [loading, setLoading] = useState(true);
 
 
   const reload = async () => {
@@ -42,6 +44,7 @@ function WithdrawPage() {
     setSettings(s.data);
     setMethods(m.data ?? []);
     setHistory(h.data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -175,7 +178,9 @@ function WithdrawPage() {
         <Card>
           <CardHeader><CardTitle>Recent withdrawals</CardTitle></CardHeader>
           <CardContent>
-            {history.length === 0 ? (
+            {loading ? (
+              <ListSkeleton count={3} />
+            ) : history.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">No withdrawals yet.</p>
             ) : (
               <div className="space-y-2">

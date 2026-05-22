@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/deposit")({
   head: () => ({ meta: [{ title: "Deposit — AxoraBD" }] }),
@@ -23,6 +24,7 @@ function DepositPage() {
   const [history, setHistory] = useState<any[]>([]);
   const [form, setForm] = useState({ method: "", sender_number: "", trnx_id: "", amount: "" });
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const reload = async () => {
     if (!session?.user) return;
@@ -32,6 +34,7 @@ function DepositPage() {
     ]);
     setMethods(m.data ?? []);
     setHistory(h.data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -133,7 +136,9 @@ function DepositPage() {
         <Card>
           <CardHeader><CardTitle>Recent deposits</CardTitle></CardHeader>
           <CardContent>
-            {history.length === 0 ? (
+            {loading ? (
+              <ListSkeleton count={3} />
+            ) : history.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">No deposits yet.</p>
             ) : (
               <div className="space-y-2">

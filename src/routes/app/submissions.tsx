@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 import { ProofThumb } from "@/components/proof-image";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/submissions")({
   head: () => ({ meta: [{ title: "My Submissions — AxoraBD" }] }),
@@ -23,6 +24,7 @@ function SubmissionsPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [tab, setTab] = useState("pending");
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   useEffect(() => { setPage(1); }, [tab]);
 
   const load = async () => {
@@ -31,6 +33,7 @@ function SubmissionsPage() {
       .select("*, task:tasks(title,reward,publisher:profiles(username)), proofs:task_submission_proofs(image_url)")
       .eq("user_id", session.user.id).order("created_at", { ascending: false });
     setRows(data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -57,7 +60,9 @@ function SubmissionsPage() {
           <TabsTrigger value="all">All</TabsTrigger>
         </TabsList>
         <TabsContent value={tab}>
-          {filtered.length === 0 ? (
+          {loading ? (
+            <ListSkeleton count={4} />
+          ) : filtered.length === 0 ? (
             <Card><CardContent className="py-16 text-center text-muted-foreground">
               <FileCheck className="h-10 w-10 mx-auto mb-2 opacity-50" />
               No submissions in this tab.

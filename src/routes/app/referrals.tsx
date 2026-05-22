@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/referrals")({
   head: () => ({ meta: [{ title: "Referrals — AxoraBD" }] }),
@@ -22,6 +24,7 @@ function ReferralsPage() {
   const [earnings, setEarnings] = useState<any[]>([]);
   const [referred, setReferred] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
     if (!session?.user) return;
@@ -33,6 +36,7 @@ function ReferralsPage() {
     setEarnings(e.data ?? []);
     setReferred((r.data as any[]) ?? []);
     setSettings(s.data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -59,6 +63,14 @@ function ReferralsPage() {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-5 space-y-3">
+              <Skeleton className="h-3 w-24" />
+              <Skeleton className="h-8 w-20" />
+            </CardContent></Card>
+          ))
+        ) : (<>
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Users2 className="h-3.5 w-3.5" /> TOTAL REFERRED</div>
           <p className="text-3xl font-bold mt-1">{referred.length}</p>
@@ -71,6 +83,7 @@ function ReferralsPage() {
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Banknote className="h-3.5 w-3.5" /> PENDING</div>
           <p className="text-3xl font-bold mt-1 text-warning">৳{pending.toFixed(2)}</p>
         </CardContent></Card>
+        </>)}
       </div>
 
       <Card className="mb-6 bg-gradient-to-br from-primary/10 to-transparent border-primary/30">
@@ -132,7 +145,7 @@ function ReferralsPage() {
         <Card>
           <CardHeader><CardTitle>Referred users</CardTitle></CardHeader>
           <CardContent>
-            {referred.length === 0 ? (
+            {loading ? <ListSkeleton count={3} /> : referred.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-6">No referrals yet. Share your link!</p>
             ) : (
               <div className="space-y-2">
@@ -155,7 +168,7 @@ function ReferralsPage() {
         <Card>
           <CardHeader><CardTitle>Earnings history</CardTitle></CardHeader>
           <CardContent>
-            {earnings.length === 0 ? (
+            {loading ? <ListSkeleton count={3} /> : earnings.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-6">No earnings yet.</p>
             ) : (
               <div className="space-y-2">

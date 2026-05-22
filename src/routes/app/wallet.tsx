@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({ meta: [{ title: "Wallet — AxoraBD" }] }),
@@ -29,6 +30,7 @@ function WalletPage() {
   const [held, setHeld] = useState(0);
   const [pendingEarnings, setPendingEarnings] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const reload = async () => {
     if (!session?.user) return;
@@ -43,6 +45,7 @@ function WalletPage() {
     const subs = (s.data ?? []) as any[];
     setPendingEarnings(subs.filter((x) => x.status === "pending").reduce((a, x) => a + Number(x.tasks?.reward ?? 0), 0));
     setTotalEarned(subs.filter((x) => x.status === "approved").reduce((a, x) => a + Number(x.tasks?.reward ?? 0), 0));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -63,6 +66,14 @@ function WalletPage() {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {loading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-5 space-y-3">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-8 w-28" />
+            </CardContent></Card>
+          ))
+        ) : (<>
         <Card className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border-primary/30">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-2">
@@ -101,6 +112,7 @@ function WalletPage() {
             <div className="text-3xl font-bold">{fmt(totalEarned)}</div>
           </CardContent>
         </Card>
+        </>)}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -123,7 +135,15 @@ function WalletPage() {
             </TabsList>
             {["all", "deposit", "withdrawal", "activation"].map((t) => (
               <TabsContent key={t} value={t} className="mt-4">
-                <TxTable rows={t === "all" ? payments : filterByType(t)} />
+                {loading ? (
+                  <div className="space-y-2 py-2">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <Skeleton key={i} className="h-10 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <TxTable rows={t === "all" ? payments : filterByType(t)} />
+                )}
               </TabsContent>
             ))}
           </Tabs>

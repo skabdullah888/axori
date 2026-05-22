@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { fmtDate } from "@/lib/admin-utils";
+import { ListSkeleton } from "@/components/section-loader";
 
 type Search = { submissionId?: string };
 export const Route = createFileRoute("/app/appeals")({
@@ -29,6 +30,7 @@ function AppealsPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ submission_id: initial.submissionId ?? "", reason: "" });
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
     if (!session?.user) return;
@@ -40,6 +42,7 @@ function AppealsPage() {
     ]);
     setAppeals(a.data ?? []);
     setRejected(r.data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -100,7 +103,9 @@ function AppealsPage() {
           </Dialog>
         </CardHeader>
         <CardContent>
-          {appeals.length === 0 ? (
+          {loading ? (
+            <ListSkeleton count={3} />
+          ) : appeals.length === 0 ? (
             <p className="text-center py-12 text-muted-foreground text-sm">No appeals filed.</p>
           ) : (
             <div className="space-y-3">
