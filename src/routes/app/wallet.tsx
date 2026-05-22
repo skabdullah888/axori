@@ -73,7 +73,9 @@ function WalletPage() {
               <Skeleton className="h-8 w-28" />
             </CardContent></Card>
           ))
-        ) : (<>
+        ) : (
+          <>
+            {/* stat cards */}
         <Card className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border-primary/30">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-2">
