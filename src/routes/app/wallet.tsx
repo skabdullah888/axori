@@ -112,6 +112,7 @@ function WalletPage() {
             <div className="text-3xl font-bold">{fmt(totalEarned)}</div>
           </CardContent>
         </Card>
+        </>)}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
