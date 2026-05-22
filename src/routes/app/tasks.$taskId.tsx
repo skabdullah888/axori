@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Linkified } from "@/lib/linkify";
+import { SectionLoader } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
   head: () => ({ meta: [{ title: "Task Details — AxoraBD" }] }),
@@ -79,7 +80,7 @@ function TaskDetailPage() {
     } finally { setBusy(false); }
   };
 
-  if (!task) return <p className="text-muted-foreground">Loading…</p>;
+  if (!task) return <SectionLoader label="Loading task…" />;
 
   const remaining = task.total_slots - task.completed_slots;
   const proofType = task.proof_type ?? "image";

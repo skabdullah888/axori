@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Paginator } from "@/components/paginator";
 import { Linkified } from "@/lib/linkify";
+import { CardGridSkeleton } from "@/components/section-loader";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
@@ -157,7 +158,9 @@ function TasksPage() {
           )}
         </div>
 
-        {!loading && total === 0 ? (
+        {loading ? (
+          <CardGridSkeleton count={6} />
+        ) : total === 0 ? (
           <Card><CardContent className="py-16 text-center text-muted-foreground">
             <ListTodo className="h-10 w-10 mx-auto mb-2 opacity-50" />
             No tasks available right now. Check back soon!

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/notifications")({
   head: () => ({ meta: [{ title: "Notifications — AxoraBD" }] }),
@@ -68,7 +69,7 @@ function NotificationsPage() {
         <Button variant="outline" size="sm" onClick={markAll}><CheckCheck className="h-4 w-4" /> Mark all read</Button>
       </div>
       {loading ? (
-        <div className="text-center text-muted-foreground py-10">Loading…</div>
+        <ListSkeleton count={5} />
       ) : items.length === 0 ? (
         <Card><CardContent className="py-12 text-center text-muted-foreground">
           <Bell className="h-10 w-10 mx-auto mb-3 opacity-40" />
