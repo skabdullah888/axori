@@ -24,6 +24,7 @@ function ReferralsPage() {
   const [earnings, setEarnings] = useState<any[]>([]);
   const [referred, setReferred] = useState<any[]>([]);
   const [settings, setSettings] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
     if (!session?.user) return;
@@ -35,6 +36,7 @@ function ReferralsPage() {
     setEarnings(e.data ?? []);
     setReferred((r.data as any[]) ?? []);
     setSettings(s.data);
+    setLoading(false);
   };
 
   useEffect(() => {
