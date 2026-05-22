@@ -136,7 +136,9 @@ function DepositPage() {
         <Card>
           <CardHeader><CardTitle>Recent deposits</CardTitle></CardHeader>
           <CardContent>
-            {history.length === 0 ? (
+            {loading ? (
+              <ListSkeleton count={3} />
+            ) : history.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">No deposits yet.</p>
             ) : (
               <div className="space-y-2">
