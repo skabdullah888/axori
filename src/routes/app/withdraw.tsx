@@ -31,6 +31,7 @@ function WithdrawPage() {
   const [form, setForm] = useState({ method: "", receiver_number: "", amount: "" });
   const [busy, setBusy] = useState(false);
   const [check, setCheck] = useState<null | { refs: number; minRefs: number; tasks: number; minTasks: number }>(null);
+  const [loading, setLoading] = useState(true);
 
 
   const reload = async () => {
@@ -43,6 +44,7 @@ function WithdrawPage() {
     setSettings(s.data);
     setMethods(m.data ?? []);
     setHistory(h.data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
