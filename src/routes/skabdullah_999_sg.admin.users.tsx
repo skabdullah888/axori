@@ -302,7 +302,7 @@ function UsersPage() {
               <div>
                 <div className="text-sm font-semibold mb-2">Activity</div>
                 {!detailsStats ? (
-                  <div className="text-sm text-muted-foreground">Loading…</div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground"><span className="inline-block h-3 w-3 rounded-full border-2 border-primary/30 border-t-primary animate-spin" /> Loading…</div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     <Stat label="Submissions" value={detailsStats.submissionsTotal} />
