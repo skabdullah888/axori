@@ -126,7 +126,15 @@ function WalletPage() {
             </TabsList>
             {["all", "deposit", "withdrawal", "activation"].map((t) => (
               <TabsContent key={t} value={t} className="mt-4">
-                <TxTable rows={t === "all" ? payments : filterByType(t)} />
+                {loading ? (
+                  <div className="space-y-2 py-2">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <Skeleton key={i} className="h-10 w-full" />
+                    ))}
+                  </div>
+                ) : (
+                  <TxTable rows={t === "all" ? payments : filterByType(t)} />
+                )}
               </TabsContent>
             ))}
           </Tabs>
