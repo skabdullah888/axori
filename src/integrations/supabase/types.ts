@@ -563,6 +563,7 @@ export type Database = {
         }
         Returns: string
       }
+      publisher_cancel_task: { Args: { p_task_id: string }; Returns: Json }
       publisher_review_submission: {
         Args: { p_approve: boolean; p_reason?: string; p_submission_id: string }
         Returns: undefined

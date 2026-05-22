@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3 } from "lucide-react";
+import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -56,6 +57,21 @@ function PublishPage() {
     reward: "", total_slots: "1",
   });
   const [rejectSub, setRejectSub] = useState<any | null>(null);
+  const [cancelTask, setCancelTask] = useState<any | null>(null);
+
+  async function confirmCancelTask() {
+    if (!cancelTask) return;
+    setBusy(true);
+    const { data, error } = await (supabase as any).rpc("publisher_cancel_task", { p_task_id: cancelTask.id });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    const refunded = Number((data as any)?.refunded ?? 0);
+    toast.success(refunded > 0 ? `Task cancelled. ৳${refunded.toFixed(2)} refunded to your balance.` : "Task cancelled. No refund (task was already active).");
+    setCancelTask(null);
+    // refresh list
+    const { data: ts } = await supabase.from("tasks").select("*").eq("publisher_id", session?.user?.id ?? "").order("created_at", { ascending: false });
+    setTasks(ts ?? []);
+  }
 
 
   const load = async () => {
@@ -333,6 +349,19 @@ function PublishPage() {
                         <p className="text-sm font-bold">৳{(Number(t.reward) * t.completed_slots).toFixed(2)}</p>
                         <p className="text-[10px] text-muted-foreground">paid out</p>
                       </div>
+                      {!["completed", "rejected", "cancelled"].includes(t.status) && (
+                        <div className="w-full flex justify-end">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                            onClick={() => setCancelTask(t)}
+                          >
+                            <Trash2 className="h-3.5 w-3.5 mr-1" />
+                            Cancel task
+                          </Button>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
@@ -412,6 +441,41 @@ function PublishPage() {
         onCancel={() => setRejectSub(null)}
         onConfirm={(reason) => rejectSub && reviewSub(rejectSub.id, false, rejectSub.task_id, rejectSub.user_id, rejectSub._reward, reason)}
       />
+      <AlertDialog open={!!cancelTask} onOpenChange={(o) => !o && setCancelTask(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+              Cancel "{cancelTask?.title}"?
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-2 text-sm">
+                {cancelTask?.status === "pending" ? (
+                  <p className="text-success">
+                    ✓ This task is still pending review. Your full payment will be refunded to your balance.
+                  </p>
+                ) : (
+                  <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-destructive">
+                    <p className="font-semibold mb-1">⚠ Warning: No refund</p>
+                    <p>
+                      This task is already <b>{cancelTask?.status}</b> and workers can submit proofs.
+                      If you cancel now, <b>you will NOT get any refund</b> for the remaining slots.
+                      Unused funds will be lost.
+                    </p>
+                  </div>
+                )}
+                <p className="text-muted-foreground text-xs">This action cannot be undone.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep task</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmCancelTask} className="bg-destructive hover:bg-destructive/90">
+              {cancelTask?.status === "pending" ? "Cancel & refund" : "Cancel without refund"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
