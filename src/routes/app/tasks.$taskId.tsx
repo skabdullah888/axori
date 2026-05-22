@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Linkified } from "@/lib/linkify";
+import { SectionLoader } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
   head: () => ({ meta: [{ title: "Task Details — AxoraBD" }] }),
