@@ -109,10 +109,10 @@ function TasksPage() {
                       <div className="inline-flex gap-2">
                         <Button size="sm" variant="outline" onClick={() => setViewRow(r)}><Eye className="h-4 w-4 mr-1" />View</Button>
                         {r.status === "pending" && (
-                          <>
-                            <Button size="sm" variant="destructive" onClick={() => setRejectRow(r)}><X className="h-4 w-4 mr-1" />Reject</Button>
-                            <Button size="sm" onClick={() => setApproveRow(r)}><Check className="h-4 w-4 mr-1" />Accept</Button>
-                          </>
+                          <Button size="sm" onClick={() => setApproveRow(r)}><Check className="h-4 w-4 mr-1" />Accept</Button>
+                        )}
+                        {["pending","active","paused"].includes(r.status) && (
+                          <Button size="sm" variant="destructive" onClick={() => setRejectRow(r)}><X className="h-4 w-4 mr-1" />Reject</Button>
                         )}
                       </div>
                     </td>
