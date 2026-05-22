@@ -131,7 +131,7 @@ function PublishPage() {
         p_proof_type: primaryProofType,
         p_proof_count: proofCount,
         p_proof_fields: cleanFields as any,
-        p_banner_url: banner_url,
+        p_banner_url: banner_url ?? "",
       });
       if (error || !newTaskId) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
 
