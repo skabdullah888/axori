@@ -30,6 +30,7 @@ function WalletPage() {
   const [held, setHeld] = useState(0);
   const [pendingEarnings, setPendingEarnings] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const reload = async () => {
     if (!session?.user) return;
@@ -44,6 +45,7 @@ function WalletPage() {
     const subs = (s.data ?? []) as any[];
     setPendingEarnings(subs.filter((x) => x.status === "pending").reduce((a, x) => a + Number(x.tasks?.reward ?? 0), 0));
     setTotalEarned(subs.filter((x) => x.status === "approved").reduce((a, x) => a + Number(x.tasks?.reward ?? 0), 0));
+    setLoading(false);
   };
 
   useEffect(() => {
