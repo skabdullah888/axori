@@ -30,6 +30,7 @@ function AppealsPage() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ submission_id: initial.submissionId ?? "", reason: "" });
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const load = async () => {
     if (!session?.user) return;
@@ -41,6 +42,7 @@ function AppealsPage() {
     ]);
     setAppeals(a.data ?? []);
     setRejected(r.data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
