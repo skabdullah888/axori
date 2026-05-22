@@ -40,6 +40,7 @@ function DashboardPage() {
   const { profile, isActive, loading } = useProfile();
   const [stats, setStats] = useState({ totalEarn: 0, pending: 0, completed: 0, active: 0, refEarn: 0 });
   const [activity, setActivity] = useState<any[]>([]);
+  const [statsLoading, setStatsLoading] = useState(true);
 
 
   const load = async () => {
@@ -61,6 +62,7 @@ function DashboardPage() {
       refEarn: (ref.data ?? []).reduce((s, r) => s + Number(r.amount), 0),
     });
     setActivity(notif.data ?? []);
+    setStatsLoading(false);
   };
 
   useEffect(() => {
