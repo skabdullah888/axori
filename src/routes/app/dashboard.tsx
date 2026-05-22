@@ -78,46 +78,68 @@ function DashboardPage() {
 
   return (
     <>
-      <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.02]" />
-        <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Welcome back,</p>
-            <h2 className="text-2xl font-bold mt-1">{profile?.username ?? "—"}</h2>
-            <div className="flex items-center gap-2 mt-2">
-              <Badge variant="outline" className={isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}>
-                {isActive ? "✓ Account Active" : "⚠ Account Inactive"}
-              </Badge>
-              {profile?.referral_code && isActive && (
-                <Badge variant="outline" className="border-primary/40 text-primary">Ref: {profile.referral_code}</Badge>
-              )}
-            </div>
+      {loading ? (
+        <div className="mb-6 p-6 rounded-2xl border border-border/60 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="h-7 w-40" />
+            <Skeleton className="h-5 w-32 mt-2" />
           </div>
-          <div className="text-right">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider">Available Balance</p>
-            <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mt-1">
-              ৳{Number(profile?.balance ?? 0).toFixed(2)}
-            </p>
+          <div className="space-y-2 text-right">
+            <Skeleton className="h-3 w-28 ml-auto" />
+            <Skeleton className="h-9 w-36 ml-auto" />
           </div>
         </div>
-      </div>
-
-
-
+      ) : (
+        <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-grid-white/[0.02]" />
+          <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Welcome back,</p>
+              <h2 className="text-2xl font-bold mt-1">{profile?.username ?? "—"}</h2>
+              <div className="flex items-center gap-2 mt-2">
+                <Badge variant="outline" className={isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}>
+                  {isActive ? "✓ Account Active" : "⚠ Account Inactive"}
+                </Badge>
+                {profile?.referral_code && isActive && (
+                  <Badge variant="outline" className="border-primary/40 text-primary">Ref: {profile.referral_code}</Badge>
+                )}
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Available Balance</p>
+              <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mt-1">
+                ৳{Number(profile?.balance ?? 0).toFixed(2)}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
-        <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
-        <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
-        <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
-        <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
+        {statsLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Card key={i} className="border-border/60"><CardContent className="p-5">
+              <Skeleton className="h-3 w-16 mb-3" />
+              <Skeleton className="h-7 w-20" />
+            </CardContent></Card>
+          ))
+        ) : (
+          <>
+            <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
+            <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
+            <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
+            <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
+            <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
+          </>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2"><ListTodo className="h-4 w-4 text-primary" /> Available tasks</CardTitle>
-            <Badge variant="outline">{stats.active} active</Badge>
+            {statsLoading ? <Skeleton className="h-5 w-16" /> : <Badge variant="outline">{stats.active} active</Badge>}
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">Browse tasks to start earning. New tasks appear here in realtime.</p>
@@ -126,8 +148,8 @@ function DashboardPage() {
         <Card>
           <CardHeader><CardTitle className="text-base">Recent activity</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            {loading ? (
-              <Skeleton className="h-20 w-full" />
+            {statsLoading ? (
+              <ListSkeleton count={3} />
             ) : activity.length === 0 ? (
               <p className="text-sm text-muted-foreground">No activity yet.</p>
             ) : (
