@@ -158,7 +158,7 @@ function TasksPage() {
           )}
         </div>
 
-        {filtered.length === 0 ? (
+        {!loading && total === 0 ? (
           <Card><CardContent className="py-16 text-center text-muted-foreground">
             <ListTodo className="h-10 w-10 mx-auto mb-2 opacity-50" />
             No tasks available right now. Check back soon!
