@@ -185,14 +185,16 @@ function TasksPage() {
                   </ul>
                 </Section>
               )}
-              {viewRow.status === "pending" && (
+              {["pending","active","paused"].includes(viewRow.status) && (
                 <div className="flex gap-2 pt-2 border-t border-border">
                   <Button variant="destructive" className="flex-1" onClick={() => { setRejectRow(viewRow); setViewRow(null); }}>
-                    <X className="h-4 w-4 mr-1" />Reject
+                    <X className="h-4 w-4 mr-1" />Reject & Refund
                   </Button>
-                  <Button className="flex-1" onClick={() => { setApproveRow(viewRow); setViewRow(null); }}>
-                    <Check className="h-4 w-4 mr-1" />Accept
-                  </Button>
+                  {viewRow.status === "pending" && (
+                    <Button className="flex-1" onClick={() => { setApproveRow(viewRow); setViewRow(null); }}>
+                      <Check className="h-4 w-4 mr-1" />Accept
+                    </Button>
+                  )}
                 </div>
               )}
             </div>
