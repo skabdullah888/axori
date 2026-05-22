@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { fmtDate } from "@/lib/admin-utils";
+import { ListSkeleton } from "@/components/section-loader";
 
 type Search = { submissionId?: string };
 export const Route = createFileRoute("/app/appeals")({
