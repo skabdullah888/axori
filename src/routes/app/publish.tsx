@@ -121,23 +121,20 @@ function PublishPage() {
       const primaryProofType = cleanFields.find(f => f.type === "image")?.type ?? cleanFields[0].type;
       const proofCount = cleanFields.filter(f => f.type === "image").length || 1;
 
-      const { data: task, error } = await supabase.from("tasks").insert({
-        publisher_id: session.user.id,
-        title: form.title, description: form.description, instructions: form.instructions,
-        category: form.category, reward, total_slots: slots,
-        proof_type: primaryProofType, proof_count: proofCount,
-        proof_fields: cleanFields as any,
-        banner_url,
-        status: "pending",
-      }).select().single();
-      if (error || !task) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
-
-      const newBalance = balance - totalCost;
-      await supabase.from("profiles").update({ balance: newBalance, is_publisher: true }).eq("user_id", session.user.id);
-      await supabase.from("payments").insert({
-        user_id: session.user.id, type: "task_publish_hold", amount: totalCost,
-        status: "approved", reference: task.id,
+      const { data: newTaskId, error } = await supabase.rpc("publish_task_with_charge", {
+        p_title: form.title,
+        p_description: form.description,
+        p_instructions: form.instructions,
+        p_category: form.category,
+        p_reward: reward,
+        p_total_slots: slots,
+        p_proof_type: primaryProofType,
+        p_proof_count: proofCount,
+        p_proof_fields: cleanFields as any,
+        p_banner_url: banner_url,
       });
+      if (error || !newTaskId) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
+
       toast.success("Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
