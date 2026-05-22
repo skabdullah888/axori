@@ -24,6 +24,7 @@ function DepositPage() {
   const [history, setHistory] = useState<any[]>([]);
   const [form, setForm] = useState({ method: "", sender_number: "", trnx_id: "", amount: "" });
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const reload = async () => {
     if (!session?.user) return;
@@ -33,6 +34,7 @@ function DepositPage() {
     ]);
     setMethods(m.data ?? []);
     setHistory(h.data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
