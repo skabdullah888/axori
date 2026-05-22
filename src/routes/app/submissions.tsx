@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 import { ProofThumb } from "@/components/proof-image";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/submissions")({
   head: () => ({ meta: [{ title: "My Submissions — AxoraBD" }] }),
