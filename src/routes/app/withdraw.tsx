@@ -178,7 +178,9 @@ function WithdrawPage() {
         <Card>
           <CardHeader><CardTitle>Recent withdrawals</CardTitle></CardHeader>
           <CardContent>
-            {history.length === 0 ? (
+            {loading ? (
+              <ListSkeleton count={3} />
+            ) : history.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">No withdrawals yet.</p>
             ) : (
               <div className="space-y-2">
