@@ -103,7 +103,9 @@ function AppealsPage() {
           </Dialog>
         </CardHeader>
         <CardContent>
-          {appeals.length === 0 ? (
+          {loading ? (
+            <ListSkeleton count={3} />
+          ) : appeals.length === 0 ? (
             <p className="text-center py-12 text-muted-foreground text-sm">No appeals filed.</p>
           ) : (
             <div className="space-y-3">
