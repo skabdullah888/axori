@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { ListSkeleton } from "@/components/section-loader";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
