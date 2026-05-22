@@ -70,7 +70,9 @@ function ReferralsPage() {
               <Skeleton className="h-8 w-20" />
             </CardContent></Card>
           ))
-        ) : (<>
+        ) : (
+          <>
+
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Users2 className="h-3.5 w-3.5" /> TOTAL REFERRED</div>
           <p className="text-3xl font-bold mt-1">{referred.length}</p>
@@ -83,7 +85,8 @@ function ReferralsPage() {
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Banknote className="h-3.5 w-3.5" /> PENDING</div>
           <p className="text-3xl font-bold mt-1 text-warning">৳{pending.toFixed(2)}</p>
         </CardContent></Card>
-        </>)}
+          </>
+        )}
       </div>
 
       <Card className="mb-6 bg-gradient-to-br from-primary/10 to-transparent border-primary/30">

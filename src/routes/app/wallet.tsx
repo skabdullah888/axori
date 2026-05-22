@@ -73,7 +73,9 @@ function WalletPage() {
               <Skeleton className="h-8 w-28" />
             </CardContent></Card>
           ))
-        ) : (<>
+        ) : (
+          <>
+            {/* stat cards */}
         <Card className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border-primary/30">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-2">
@@ -112,7 +114,8 @@ function WalletPage() {
             <div className="text-3xl font-bold">{fmt(totalEarned)}</div>
           </CardContent>
         </Card>
-        </>)}
+          </>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
