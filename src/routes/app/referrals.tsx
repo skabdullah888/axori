@@ -70,7 +70,9 @@ function ReferralsPage() {
               <Skeleton className="h-8 w-20" />
             </CardContent></Card>
           ))
-        ) : (<>
+        ) : (
+          <>
+
         <Card><CardContent className="p-5">
           <div className="flex items-center gap-2 text-muted-foreground text-xs"><Users2 className="h-3.5 w-3.5" /> TOTAL REFERRED</div>
           <p className="text-3xl font-bold mt-1">{referred.length}</p>
