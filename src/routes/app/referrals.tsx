@@ -168,7 +168,7 @@ function ReferralsPage() {
         <Card>
           <CardHeader><CardTitle>Earnings history</CardTitle></CardHeader>
           <CardContent>
-            {earnings.length === 0 ? (
+            {loading ? <ListSkeleton count={3} /> : earnings.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-6">No earnings yet.</p>
             ) : (
               <div className="space-y-2">
