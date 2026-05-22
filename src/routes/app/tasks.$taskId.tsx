@@ -80,7 +80,7 @@ function TaskDetailPage() {
     } finally { setBusy(false); }
   };
 
-  if (!task) return <p className="text-muted-foreground">Loading…</p>;
+  if (!task) return <SectionLoader label="Loading task…" />;
 
   const remaining = task.total_slots - task.completed_slots;
   const proofType = task.proof_type ?? "image";
