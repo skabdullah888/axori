@@ -57,6 +57,21 @@ function PublishPage() {
     reward: "", total_slots: "1",
   });
   const [rejectSub, setRejectSub] = useState<any | null>(null);
+  const [cancelTask, setCancelTask] = useState<any | null>(null);
+
+  async function confirmCancelTask() {
+    if (!cancelTask) return;
+    setBusy(true);
+    const { data, error } = await (supabase as any).rpc("publisher_cancel_task", { p_task_id: cancelTask.id });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    const refunded = Number((data as any)?.refunded ?? 0);
+    toast.success(refunded > 0 ? `Task cancelled. ৳${refunded.toFixed(2)} refunded to your balance.` : "Task cancelled. No refund (task was already active).");
+    setCancelTask(null);
+    // refresh list
+    const { data: ts } = await supabase.from("tasks").select("*").eq("publisher_id", session?.user?.id ?? "").order("created_at", { ascending: false });
+    setTasks(ts ?? []);
+  }
 
 
   const load = async () => {
