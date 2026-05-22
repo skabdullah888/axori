@@ -73,8 +73,7 @@ function TasksPage() {
     let query = supabase
       .from("tasks")
       .select("*, publisher:profiles!tasks_publisher_id_fkey(username, avatar_url)", { count: "exact" })
-      .eq("status", "active")
-      .filter("completed_slots", "lt", "total_slots");
+      .eq("status", "active");
 
     if (q) query = query.ilike("title", `%${q}%`);
     if (cat !== "all") query = query.eq("category", cat);
