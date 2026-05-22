@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Paginator } from "@/components/paginator";
 import { Linkified } from "@/lib/linkify";
+import { CardGridSkeleton } from "@/components/section-loader";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
