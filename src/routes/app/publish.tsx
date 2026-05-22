@@ -441,6 +441,41 @@ function PublishPage() {
         onCancel={() => setRejectSub(null)}
         onConfirm={(reason) => rejectSub && reviewSub(rejectSub.id, false, rejectSub.task_id, rejectSub.user_id, rejectSub._reward, reason)}
       />
+      <AlertDialog open={!!cancelTask} onOpenChange={(o) => !o && setCancelTask(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+              Cancel "{cancelTask?.title}"?
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-2 text-sm">
+                {cancelTask?.status === "pending" ? (
+                  <p className="text-success">
+                    ✓ This task is still pending review. Your full payment will be refunded to your balance.
+                  </p>
+                ) : (
+                  <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-destructive">
+                    <p className="font-semibold mb-1">⚠ Warning: No refund</p>
+                    <p>
+                      This task is already <b>{cancelTask?.status}</b> and workers can submit proofs.
+                      If you cancel now, <b>you will NOT get any refund</b> for the remaining slots.
+                      Unused funds will be lost.
+                    </p>
+                  </div>
+                )}
+                <p className="text-muted-foreground text-xs">This action cannot be undone.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep task</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmCancelTask} className="bg-destructive hover:bg-destructive/90">
+              {cancelTask?.status === "pending" ? "Cancel & refund" : "Cancel without refund"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }
