@@ -24,6 +24,7 @@ function SubmissionsPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [tab, setTab] = useState("pending");
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   useEffect(() => { setPage(1); }, [tab]);
 
   const load = async () => {
@@ -32,6 +33,7 @@ function SubmissionsPage() {
       .select("*, task:tasks(title,reward,publisher:profiles(username)), proofs:task_submission_proofs(image_url)")
       .eq("user_id", session.user.id).order("created_at", { ascending: false });
     setRows(data ?? []);
+    setLoading(false);
   };
 
   useEffect(() => {
