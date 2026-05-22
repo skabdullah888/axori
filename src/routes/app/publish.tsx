@@ -368,6 +368,16 @@ function PublishPage() {
               </div>
             )}
           </TabsContent>
+
+          <TabsContent value="reviews">
+            {pendingSubs.length === 0 ? (
+              <Card><CardContent className="py-12 text-center text-muted-foreground">
+                <Clock className="h-10 w-10 mx-auto mb-3 opacity-40" />No pending submissions.
+              </CardContent></Card>
+            ) : (
+              <div className="space-y-3">
+                {pendingSubs.map((s) => {
+                  const task = tasks.find(t => t.id === s.task_id);
                   return (
                     <Card key={s.id}>
                       <CardContent className="p-4">
