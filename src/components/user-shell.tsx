@@ -155,8 +155,11 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
+          const trackedTypes = new Set(
+            items.flatMap((i) => (i.types.includes("*") ? [] : i.types))
+          );
           const count = it.types.includes("*")
-            ? unread
+            ? Object.entries(unreadByType).reduce((s, [t, n]) => s + (trackedTypes.has(t) ? 0 : n), 0)
             : it.types.reduce((sum, t) => sum + (unreadByType[t] ?? 0), 0);
           return (
             <Link key={it.to} to={it.to} onClick={() => setMobileOpen(false)}
