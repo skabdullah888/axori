@@ -120,6 +120,7 @@ function PublishPage() {
     e.preventDefault();
     if (!session?.user || !profile) return;
     if (belowMinPublish) { toast.error(`You need at least ৳${minPublishAmount.toFixed(2)} balance to publish a task`); return; }
+    if (belowMinTaskTotal) { toast.error(`Task total (reward × slots) must be at least ৳${minTaskTotal.toFixed(2)}`); return; }
     if (insufficient) { toast.error("Insufficient balance to publish this task"); return; }
     if ((profile as any).publisher_restricted) { toast.error("Publisher access is restricted"); return; }
     setBusy(true);
