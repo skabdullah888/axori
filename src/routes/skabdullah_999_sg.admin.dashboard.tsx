@@ -36,7 +36,7 @@ function DashboardPage() {
   const load = async () => {
     const [u, t, ps, pa, pp, sl] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
-      supabase.from("tasks").select("*", { count: "exact", head: true }),
+      supabase.from("tasks").select("*", { count: "exact", head: true }).neq("status", "rejected"),
       supabase.from("task_submissions").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("appeals").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
