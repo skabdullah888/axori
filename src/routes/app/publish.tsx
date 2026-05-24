@@ -111,7 +111,9 @@ function PublishPage() {
   const totalCost = subtotal + tax;
   const balance = Number(profile?.balance ?? 0);
   const minPublishAmount = Number(settings?.minimum_task_publish_amount ?? 0);
+  const minTaskTotal = Number(settings?.minimum_task_total_amount ?? 0);
   const belowMinPublish = minPublishAmount > 0 && balance < minPublishAmount;
+  const belowMinTaskTotal = minTaskTotal > 0 && subtotal > 0 && subtotal < minTaskTotal;
   const insufficient = totalCost > balance;
 
   const createTask = async (e: React.FormEvent) => {
