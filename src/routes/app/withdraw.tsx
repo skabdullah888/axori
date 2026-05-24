@@ -163,6 +163,13 @@ function WithdrawPage() {
                 </div>
               </div>
 
+              {!withdrawalsEnabled && (
+                <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-sm flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-destructive" />
+                  Withdrawals are temporarily disabled. Please check back later.
+                </div>
+              )}
+
               {!isActive && (
                 <div className="rounded-lg bg-warning/10 border border-warning/30 p-3 text-sm flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-warning" />
@@ -170,8 +177,8 @@ function WithdrawPage() {
                 </div>
               )}
 
-              <Button type="submit" disabled={busy || !isActive} className="w-full bg-gradient-to-r from-primary to-primary/80">
-                {busy ? "Submitting…" : "Submit withdrawal"}
+              <Button type="submit" disabled={busy || !isActive || !withdrawalsEnabled} className="w-full bg-gradient-to-r from-primary to-primary/80">
+                {busy ? "Submitting…" : !withdrawalsEnabled ? "Withdrawals disabled" : "Submit withdrawal"}
               </Button>
             </form>
             {!isActive && <LockOverlay message="Account activation required to withdraw funds." />}
