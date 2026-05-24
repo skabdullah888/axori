@@ -171,6 +171,12 @@ function SettingsPage() {
                 value={form.minimum_task_publish_amount}
                 onChange={(v) => setForm(f => ({ ...f, minimum_task_publish_amount: v }))}
               />
+              <Field
+                label="Minimum task total amount — reward × slots (৳)"
+                hint="A new task's total value (reward × slots, before tax) must be at least this much. Set to 0 to disable."
+                value={form.minimum_task_total_amount}
+                onChange={(v) => setForm(f => ({ ...f, minimum_task_total_amount: v }))}
+              />
             </div>
             <Separator className="my-5" />
             <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
