@@ -76,6 +76,9 @@ function TasksPage() {
       .select("*, publisher:profiles!tasks_publisher_id_fkey(username, avatar_url)", { count: "exact" })
       .eq("status", "active");
 
+    if (mine.size > 0) {
+      query = query.not("id", "in", `(${Array.from(mine).join(",")})`);
+    }
     if (q) query = query.ilike("title", `%${q}%`);
     if (cat !== "all") query = query.eq("category", cat);
 
