@@ -105,9 +105,15 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     if (!it) return;
     const isNotifPage = it.types.includes("*");
     if (isNotifPage) {
-      if (unread > 0) {
+      const trackedTypes = items.flatMap((i) => (i.types.includes("*") ? [] : i.types));
+      const generalUnread = Object.entries(unreadByType)
+        .filter(([t]) => !trackedTypes.includes(t))
+        .reduce((s, [, n]) => s + n, 0);
+      if (generalUnread > 0) {
         supabase.from("notifications").update({ read: true })
-          .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false).then(() => loadUnread());
+          .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false)
+          .not("type", "in", `(${trackedTypes.map((t) => `"${t}"`).join(",")})`)
+          .then(() => loadUnread());
       }
       return;
     }
