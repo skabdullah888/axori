@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, Gavel, Wallet, Users, Building2,
-  ListTodo, Bell, Settings as SettingsIcon, ShieldAlert, LogOut,
+  ListTodo, Bell, Settings as SettingsIcon, ShieldAlert, LogOut, Video,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
