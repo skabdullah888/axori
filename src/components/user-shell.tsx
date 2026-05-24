@@ -78,10 +78,14 @@ export function UserShell({ title, children }: { title: string; children: ReactN
 
   const loadUnread = async () => {
     if (!session?.user) return;
-    const { count } = await supabase
-      .from("notifications").select("id", { count: "exact", head: true })
+    const { data } = await supabase
+      .from("notifications").select("type")
       .eq("user_id", session.user.id).eq("read", false);
-    setUnread(count ?? 0);
+    const rows = (data as { type: string }[] | null) ?? [];
+    const map: Record<string, number> = {};
+    for (const r of rows) map[r.type] = (map[r.type] ?? 0) + 1;
+    setUnreadByType(map);
+    setUnread(rows.length);
   };
 
   useEffect(() => {
