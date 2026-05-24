@@ -227,6 +227,10 @@ function SettingsPage() {
               <Label>Account number</Label>
               <Input value={wAccount} onChange={(e) => setWAccount(e.target.value)} placeholder="e.g. 01XXXXXXXXX" />
             </div>
+            <div className="space-y-2">
+              <Label>Confirm with current password</Label>
+              <Input type="password" value={wPwd} onChange={(e) => setWPwd(e.target.value)} placeholder="Required to change withdrawal destination" />
+            </div>
             <Button onClick={savePayment} disabled={savingPayment} className="bg-gradient-to-r from-primary to-primary/80">
               {savingPayment ? "Saving…" : "Save withdrawal info"}
             </Button>
