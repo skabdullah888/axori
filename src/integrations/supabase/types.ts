@@ -362,6 +362,7 @@ export type Database = {
           id: string
           minimum_referrals_for_withdrawal: number
           minimum_task_publish_amount: number
+          minimum_task_total_amount: number
           minimum_tasks_for_withdrawal: number
           minimum_withdrawal: number
           publisher_task_tax: number
@@ -379,6 +380,7 @@ export type Database = {
           id?: string
           minimum_referrals_for_withdrawal?: number
           minimum_task_publish_amount?: number
+          minimum_task_total_amount?: number
           minimum_tasks_for_withdrawal?: number
           minimum_withdrawal?: number
           publisher_task_tax?: number
@@ -396,6 +398,7 @@ export type Database = {
           id?: string
           minimum_referrals_for_withdrawal?: number
           minimum_task_publish_amount?: number
+          minimum_task_total_amount?: number
           minimum_tasks_for_withdrawal?: number
           minimum_withdrawal?: number
           publisher_task_tax?: number

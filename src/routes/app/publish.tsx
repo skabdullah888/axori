@@ -111,13 +111,16 @@ function PublishPage() {
   const totalCost = subtotal + tax;
   const balance = Number(profile?.balance ?? 0);
   const minPublishAmount = Number(settings?.minimum_task_publish_amount ?? 0);
+  const minTaskTotal = Number(settings?.minimum_task_total_amount ?? 0);
   const belowMinPublish = minPublishAmount > 0 && balance < minPublishAmount;
+  const belowMinTaskTotal = minTaskTotal > 0 && subtotal > 0 && subtotal < minTaskTotal;
   const insufficient = totalCost > balance;
 
   const createTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user || !profile) return;
     if (belowMinPublish) { toast.error(`You need at least ৳${minPublishAmount.toFixed(2)} balance to publish a task`); return; }
+    if (belowMinTaskTotal) { toast.error(`Task total (reward × slots) must be at least ৳${minTaskTotal.toFixed(2)}`); return; }
     if (insufficient) { toast.error("Insufficient balance to publish this task"); return; }
     if ((profile as any).publisher_restricted) { toast.error("Publisher access is restricted"); return; }
     setBusy(true);
@@ -313,13 +316,18 @@ function PublishPage() {
                       <span className={insufficient ? "text-destructive" : "text-success"}>৳{balance.toFixed(2)}</span></div>
                   </div>
 
-                  <Button type="submit" disabled={busy || belowMinPublish || insufficient || !form.reward || !form.total_slots}
+                  <Button type="submit" disabled={busy || belowMinPublish || belowMinTaskTotal || insufficient || !form.reward || !form.total_slots}
                     className="w-full bg-gradient-to-r from-primary to-primary/80">
-                    {busy ? "Publishing…" : belowMinPublish ? `Need ৳${minPublishAmount.toFixed(2)} min. balance` : insufficient ? "Insufficient balance" : `Publish task (৳${totalCost.toFixed(2)})`}
+                    {busy ? "Publishing…" : belowMinPublish ? `Need ৳${minPublishAmount.toFixed(2)} min. balance` : belowMinTaskTotal ? `Min. task total ৳${minTaskTotal.toFixed(2)}` : insufficient ? "Insufficient balance" : `Publish task (৳${totalCost.toFixed(2)})`}
                   </Button>
                   {belowMinPublish && (
                     <p className="text-xs text-center text-destructive">
                       You need at least ৳{minPublishAmount.toFixed(2)} balance to publish a task. <Link to="/app/deposit" className="text-primary hover:underline">Deposit funds</Link>
+                    </p>
+                  )}
+                  {belowMinTaskTotal && !belowMinPublish && (
+                    <p className="text-xs text-center text-destructive">
+                      Task total (reward × slots) must be at least ৳{minTaskTotal.toFixed(2)}.
                     </p>
                   )}
                   {insufficient && !belowMinPublish && (
