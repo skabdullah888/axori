@@ -20,6 +20,18 @@ type Notif = {
   read: boolean; created_at: string;
 };
 
+// Types that already have dedicated sidebar badges — exclude from this page
+const TRACKED_TYPES = [
+  "submission_approved", "submission_rejected",
+  "appeal_approved", "appeal_rejected", "appeal_response",
+  "deposit_approved", "deposit_rejected",
+  "withdrawal_approved", "withdrawal_rejected",
+  "activation_approved", "activation_rejected",
+  "submission_new", "task_published",
+  "referral_joined", "referral_bonus",
+  "account_status_changed",
+];
+
 function NotificationsPage() {
   const { session } = useAuth();
   const [items, setItems] = useState<Notif[]>([]);
@@ -29,6 +41,7 @@ function NotificationsPage() {
     if (!session?.user) return;
     const { data } = await supabase.from("notifications").select("*")
       .eq("user_id", session.user.id).eq("admin_targeted", false)
+      .not("type", "in", `(${TRACKED_TYPES.map((t) => `"${t}"`).join(",")})`)
       .order("created_at", { ascending: false }).limit(200);
     setItems((data as Notif[]) ?? []);
     setLoading(false);
@@ -47,7 +60,8 @@ function NotificationsPage() {
   const markAll = async () => {
     if (!session?.user) return;
     const { error } = await supabase.from("notifications").update({ read: true })
-      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false);
+      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false)
+      .not("type", "in", `(${TRACKED_TYPES.map((t) => `"${t}"`).join(",")})`);
     if (error) toast.error(error.message); else { toast.success("All marked as read"); load(); }
   };
 

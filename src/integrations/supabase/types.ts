@@ -361,6 +361,7 @@ export type Database = {
           referral_bonus: number
           updated_at: string
           withdrawal_fee: number
+          withdrawals_enabled: boolean
         }
         Insert: {
           activation_amount?: number
@@ -373,6 +374,7 @@ export type Database = {
           referral_bonus?: number
           updated_at?: string
           withdrawal_fee?: number
+          withdrawals_enabled?: boolean
         }
         Update: {
           activation_amount?: number
@@ -385,6 +387,7 @@ export type Database = {
           referral_bonus?: number
           updated_at?: string
           withdrawal_fee?: number
+          withdrawals_enabled?: boolean
         }
         Relationships: []
       }

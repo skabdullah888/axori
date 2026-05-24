@@ -20,7 +20,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0,
+    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true,
   });
   const [saving, setSaving] = useState(false);
   const [methods, setMethods] = useState<any[]>([]);
@@ -39,6 +39,7 @@ function SettingsPage() {
         referral_bonus: Number(data.referral_bonus ?? 0),
         minimum_referrals_for_withdrawal: Number((data as any).minimum_referrals_for_withdrawal ?? 0),
         minimum_tasks_for_withdrawal: Number((data as any).minimum_tasks_for_withdrawal ?? 0),
+        withdrawals_enabled: (data as any).withdrawals_enabled ?? true,
       });
     }
   };
@@ -63,6 +64,7 @@ function SettingsPage() {
       referral_bonus: form.referral_bonus,
       minimum_referrals_for_withdrawal: form.minimum_referrals_for_withdrawal,
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
+      withdrawals_enabled: form.withdrawals_enabled,
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase.from("settings").update(payload).eq("id", row.id);
@@ -158,6 +160,17 @@ function SettingsPage() {
                 hint="User must have published at least this many tasks before they can request a withdrawal. Set to 0 to disable."
                 value={form.minimum_tasks_for_withdrawal}
                 onChange={(v) => setForm(f => ({ ...f, minimum_tasks_for_withdrawal: v }))}
+              />
+            </div>
+            <Separator className="my-5" />
+            <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
+              <div>
+                <Label className="text-sm font-medium">Allow withdrawals</Label>
+                <p className="text-xs text-muted-foreground mt-1">When off, users cannot submit new withdrawal requests.</p>
+              </div>
+              <Switch
+                checked={form.withdrawals_enabled}
+                onCheckedChange={(v) => setForm((f) => ({ ...f, withdrawals_enabled: v }))}
               />
             </div>
             <Separator className="my-5" />

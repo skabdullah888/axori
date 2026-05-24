@@ -74,9 +74,12 @@ function WithdrawPage() {
   const feeAmt = +(amt * feePct / 100).toFixed(2);
   const willReceive = Math.max(0, amt - feeAmt);
 
+  const withdrawalsEnabled = (settings as any)?.withdrawals_enabled ?? true;
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user) return;
+    if (!withdrawalsEnabled) { toast.error("Withdrawals are currently disabled by admin."); return; }
     if (amt < minAmt) { toast.error(`Minimum withdrawal is ৳${minAmt.toFixed(2)}`); return; }
     if (amt > balance) { toast.error("Insufficient balance"); return; }
 
@@ -160,6 +163,13 @@ function WithdrawPage() {
                 </div>
               </div>
 
+              {!withdrawalsEnabled && (
+                <div className="rounded-lg bg-destructive/10 border border-destructive/30 p-3 text-sm flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-destructive" />
+                  Withdrawals are temporarily disabled. Please check back later.
+                </div>
+              )}
+
               {!isActive && (
                 <div className="rounded-lg bg-warning/10 border border-warning/30 p-3 text-sm flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-warning" />
@@ -167,8 +177,8 @@ function WithdrawPage() {
                 </div>
               )}
 
-              <Button type="submit" disabled={busy || !isActive} className="w-full bg-gradient-to-r from-primary to-primary/80">
-                {busy ? "Submitting…" : "Submit withdrawal"}
+              <Button type="submit" disabled={busy || !isActive || !withdrawalsEnabled} className="w-full bg-gradient-to-r from-primary to-primary/80">
+                {busy ? "Submitting…" : !withdrawalsEnabled ? "Withdrawals disabled" : "Submit withdrawal"}
               </Button>
             </form>
             {!isActive && <LockOverlay message="Account activation required to withdraw funds." />}
