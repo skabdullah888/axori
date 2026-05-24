@@ -12,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Check, Trash2, Pencil, Send, Bell } from "lucide-react";
+import { Check, Trash2, Pencil, Send, Bell, Megaphone, Plus, Eye, EyeOff } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { fmtDate, EmptyState } from "@/lib/admin-utils";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/notifications")({
