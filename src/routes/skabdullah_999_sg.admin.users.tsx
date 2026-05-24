@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Ban, ShieldCheck, Pencil, Trash2, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
@@ -32,6 +34,8 @@ function UsersPage() {
   const [edit, setEdit] = useState<any | null>(null);
   const [details, setDetails] = useState<any | null>(null);
   const [detailsStats, setDetailsStats] = useState<any | null>(null);
+  const [earningHistory, setEarningHistory] = useState<any[] | null>(null);
+  const [detailsTab, setDetailsTab] = useState("overview");
   const [deleteRow, setDeleteRow] = useState<any | null>(null);
   const [deleting, setDeleting] = useState(false);
   const callDelete = useServerFn(deleteUserAccount);
