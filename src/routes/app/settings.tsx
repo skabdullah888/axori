@@ -42,6 +42,7 @@ function SettingsPage() {
 
   const [wMethod, setWMethod] = useState("");
   const [wAccount, setWAccount] = useState("");
+  const [wPwd, setWPwd] = useState("");
   const [savingPayment, setSavingPayment] = useState(false);
 
   useEffect(() => {
