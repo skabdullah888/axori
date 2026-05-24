@@ -61,6 +61,7 @@ function PublishPage() {
   });
   const [rejectSub, setRejectSub] = useState<any | null>(null);
   const [cancelTask, setCancelTask] = useState<any | null>(null);
+  const [viewSub, setViewSub] = useState<any | null>(null);
 
   async function confirmCancelTask() {
     if (!cancelTask) return;
