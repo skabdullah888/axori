@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Settings2, Wallet, Plus, Trash2, CreditCard } from "lucide-react";
 
@@ -56,7 +57,6 @@ function SettingsPage() {
   const save = async () => {
     if (!row) return;
     setSaving(true);
-    // keep activation_fee and activation_amount in sync for backward compatibility
     const payload = {
       activation_amount: form.activation_amount,
       activation_fee: form.activation_amount,
@@ -107,159 +107,168 @@ function SettingsPage() {
 
   return (
     <AdminShell title="Settings">
-      <div className="grid gap-6 max-w-5xl">
-        {/* Fees & limits */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
-                <Settings2 className="h-4 w-4" />
-              </div>
-              <div>
-                <CardTitle>Fees & limits</CardTitle>
-                <CardDescription>Platform-wide amounts and percentages applied across the app.</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid sm:grid-cols-2 gap-5">
-              <Field
-                label="Activation amount (৳)"
-                hint="Amount each user must pay to activate their account."
-                value={form.activation_amount}
-                onChange={(v) => setForm(f => ({ ...f, activation_amount: v }))}
-              />
-              <Field
-                label="Minimum withdrawal (৳)"
-                hint="Smallest amount a user can request to withdraw."
-                value={form.minimum_withdrawal}
-                onChange={(v) => setForm(f => ({ ...f, minimum_withdrawal: v }))}
-              />
-              <Field
-                label="Withdrawal fee (%)"
-                hint="Percentage deducted from each withdrawal request."
-                value={form.withdrawal_fee}
-                onChange={(v) => setForm(f => ({ ...f, withdrawal_fee: v }))}
-              />
-              <Field
-                label="Publisher task tax (%)"
-                hint="Deducted from publisher's balance for each new task."
-                value={form.publisher_task_tax}
-                onChange={(v) => setForm(f => ({ ...f, publisher_task_tax: v }))}
-              />
-              <Field
-                label="Referral bonus (৳)"
-                hint="Credited to the referrer when their referred user activates."
-                value={form.referral_bonus}
-                onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
-              />
-              <Field
-                label="Minimum referrals to withdraw"
-                hint="User must have referred at least this many people before they can request a withdrawal. Set to 0 to disable."
-                value={form.minimum_referrals_for_withdrawal}
-                onChange={(v) => setForm(f => ({ ...f, minimum_referrals_for_withdrawal: v }))}
-              />
-              <Field
-                label="Minimum tasks published to withdraw"
-                hint="User must have published at least this many tasks before they can request a withdrawal. Set to 0 to disable."
-                value={form.minimum_tasks_for_withdrawal}
-                onChange={(v) => setForm(f => ({ ...f, minimum_tasks_for_withdrawal: v }))}
-              />
-              <Field
-                label="Minimum balance to publish task (৳)"
-                hint="User must have at least this much balance to create a new task. Set to 0 to disable."
-                value={form.minimum_task_publish_amount}
-                onChange={(v) => setForm(f => ({ ...f, minimum_task_publish_amount: v }))}
-              />
-              <Field
-                label="Minimum task total amount — reward × slots (৳)"
-                hint="A new task's total value (reward × slots, before tax) must be at least this much. Set to 0 to disable."
-                value={form.minimum_task_total_amount}
-                onChange={(v) => setForm(f => ({ ...f, minimum_task_total_amount: v }))}
-              />
-            </div>
-            <Separator className="my-5" />
-            <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
-              <div>
-                <Label className="text-sm font-medium">Allow withdrawals</Label>
-                <p className="text-xs text-muted-foreground mt-1">When off, users cannot submit new withdrawal requests.</p>
-              </div>
-              <Switch
-                checked={form.withdrawals_enabled}
-                onCheckedChange={(v) => setForm((f) => ({ ...f, withdrawals_enabled: v }))}
-              />
-            </div>
-            <Separator className="my-5" />
-            <div className="flex justify-end">
-              <Button onClick={save} disabled={saving}>
-                {saving ? "Saving…" : "Save changes"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="fees" className="max-w-5xl">
+        <TabsList className="mb-6">
+          <TabsTrigger value="fees" className="flex items-center gap-2">
+            <Settings2 className="h-4 w-4" /> Fees & Limits
+          </TabsTrigger>
+          <TabsTrigger value="payments" className="flex items-center gap-2">
+            <Wallet className="h-4 w-4" /> Payment Methods
+          </TabsTrigger>
+        </TabsList>
 
-        {/* Payment methods */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
-                <Wallet className="h-4 w-4" />
-              </div>
-              <div>
-                <CardTitle>Payment methods</CardTitle>
-                <CardDescription>Receiver numbers users send activation & deposit funds to.</CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            {/* Add new */}
-            <div className="rounded-lg border border-dashed border-border p-4 bg-muted/20">
-              <div className="flex items-center gap-2 mb-3 text-sm font-medium">
-                <Plus className="h-4 w-4 text-primary" /> Add new method
-              </div>
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Name</Label>
-                  <Input placeholder="bKash / Nagad / Rocket"
-                    value={newMethod.name}
-                    onChange={(e) => setNewMethod(m => ({ ...m, name: e.target.value }))} />
+        <TabsContent value="fees">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Settings2 className="h-4 w-4" />
                 </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Receiver number</Label>
-                  <Input placeholder="01XXXXXXXXX"
-                    value={newMethod.receiver_number}
-                    onChange={(e) => setNewMethod(m => ({ ...m, receiver_number: e.target.value }))} />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-xs">Type (optional)</Label>
-                  <Input placeholder="Send Money / Personal"
-                    value={newMethod.instructions}
-                    onChange={(e) => setNewMethod(m => ({ ...m, instructions: e.target.value }))} />
+                <div>
+                  <CardTitle>Fees & limits</CardTitle>
+                  <CardDescription>Platform-wide amounts and percentages applied across the app.</CardDescription>
                 </div>
               </div>
-              <div className="flex justify-end mt-3">
-                <Button size="sm" onClick={addMethod} disabled={addingMethod}>
-                  <Plus className="h-4 w-4" /> {addingMethod ? "Adding…" : "Add method"}
+            </CardHeader>
+            <CardContent>
+              <div className="grid sm:grid-cols-2 gap-5">
+                <Field
+                  label="Activation amount (৳)"
+                  hint="Amount each user must pay to activate their account."
+                  value={form.activation_amount}
+                  onChange={(v) => setForm(f => ({ ...f, activation_amount: v }))}
+                />
+                <Field
+                  label="Minimum withdrawal (৳)"
+                  hint="Smallest amount a user can request to withdraw."
+                  value={form.minimum_withdrawal}
+                  onChange={(v) => setForm(f => ({ ...f, minimum_withdrawal: v }))}
+                />
+                <Field
+                  label="Withdrawal fee (%)"
+                  hint="Percentage deducted from each withdrawal request."
+                  value={form.withdrawal_fee}
+                  onChange={(v) => setForm(f => ({ ...f, withdrawal_fee: v }))}
+                />
+                <Field
+                  label="Publisher task tax (%)"
+                  hint="Deducted from publisher's balance for each new task."
+                  value={form.publisher_task_tax}
+                  onChange={(v) => setForm(f => ({ ...f, publisher_task_tax: v }))}
+                />
+                <Field
+                  label="Referral bonus (৳)"
+                  hint="Credited to the referrer when their referred user activates."
+                  value={form.referral_bonus}
+                  onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
+                />
+                <Field
+                  label="Minimum referrals to withdraw"
+                  hint="User must have referred at least this many people before they can request a withdrawal. Set to 0 to disable."
+                  value={form.minimum_referrals_for_withdrawal}
+                  onChange={(v) => setForm(f => ({ ...f, minimum_referrals_for_withdrawal: v }))}
+                />
+                <Field
+                  label="Minimum tasks published to withdraw"
+                  hint="User must have published at least this many tasks before they can request a withdrawal. Set to 0 to disable."
+                  value={form.minimum_tasks_for_withdrawal}
+                  onChange={(v) => setForm(f => ({ ...f, minimum_tasks_for_withdrawal: v }))}
+                />
+                <Field
+                  label="Minimum balance to publish task (৳)"
+                  hint="User must have at least this much balance to create a new task. Set to 0 to disable."
+                  value={form.minimum_task_publish_amount}
+                  onChange={(v) => setForm(f => ({ ...f, minimum_task_publish_amount: v }))}
+                />
+                <Field
+                  label="Minimum task total amount — reward × slots (৳)"
+                  hint="A new task's total value (reward × slots, before tax) must be at least this much. Set to 0 to disable."
+                  value={form.minimum_task_total_amount}
+                  onChange={(v) => setForm(f => ({ ...f, minimum_task_total_amount: v }))}
+                />
+              </div>
+              <Separator className="my-5" />
+              <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
+                <div>
+                  <Label className="text-sm font-medium">Allow withdrawals</Label>
+                  <p className="text-xs text-muted-foreground mt-1">When off, users cannot submit new withdrawal requests.</p>
+                </div>
+                <Switch
+                  checked={form.withdrawals_enabled}
+                  onCheckedChange={(v) => setForm((f) => ({ ...f, withdrawals_enabled: v }))}
+                />
+              </div>
+              <Separator className="my-5" />
+              <div className="flex justify-end">
+                <Button onClick={save} disabled={saving}>
+                  {saving ? "Saving…" : "Save changes"}
                 </Button>
               </div>
-            </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            {/* List */}
-            {methods.length === 0 ? (
-              <div className="text-center text-sm text-muted-foreground py-10 border border-dashed border-border rounded-lg">
-                <CreditCard className="h-8 w-8 mx-auto mb-2 opacity-40" />
-                No payment methods yet. Add one above.
+        <TabsContent value="payments">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Wallet className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Payment methods</CardTitle>
+                  <CardDescription>Receiver numbers users send activation & deposit funds to.</CardDescription>
+                </div>
               </div>
-            ) : (
-              <div className="space-y-3">
-                {methods.map((m) => (
-                  <MethodRow key={m.id} method={m} onUpdate={updateMethod} onDelete={deleteMethod} />
-                ))}
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="rounded-lg border border-dashed border-border p-4 bg-muted/20">
+                <div className="flex items-center gap-2 mb-3 text-sm font-medium">
+                  <Plus className="h-4 w-4 text-primary" /> Add new method
+                </div>
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Name</Label>
+                    <Input placeholder="bKash / Nagad / Rocket"
+                      value={newMethod.name}
+                      onChange={(e) => setNewMethod(m => ({ ...m, name: e.target.value }))} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Receiver number</Label>
+                    <Input placeholder="01XXXXXXXXX"
+                      value={newMethod.receiver_number}
+                      onChange={(e) => setNewMethod(m => ({ ...m, receiver_number: e.target.value }))} />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Type (optional)</Label>
+                    <Input placeholder="Send Money / Personal"
+                      value={newMethod.instructions}
+                      onChange={(e) => setNewMethod(m => ({ ...m, instructions: e.target.value }))} />
+                  </div>
+                </div>
+                <div className="flex justify-end mt-3">
+                  <Button size="sm" onClick={addMethod} disabled={addingMethod}>
+                    <Plus className="h-4 w-4" /> {addingMethod ? "Adding…" : "Add method"}
+                  </Button>
+                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+
+              {methods.length === 0 ? (
+                <div className="text-center text-sm text-muted-foreground py-10 border border-dashed border-border rounded-lg">
+                  <CreditCard className="h-8 w-8 mx-auto mb-2 opacity-40" />
+                  No payment methods yet. Add one above.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {methods.map((m) => (
+                    <MethodRow key={m.id} method={m} onUpdate={updateMethod} onDelete={deleteMethod} />
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </AdminShell>
   );
 }
