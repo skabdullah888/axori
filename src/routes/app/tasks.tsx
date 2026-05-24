@@ -109,7 +109,7 @@ function TasksPage() {
   }, [session?.user?.id]);
 
   useEffect(() => { setPage(1); }, [q, cat, sort]);
-  useEffect(() => { loadPage(); /* eslint-disable-next-line */ }, [q, cat, sort, page, shuffleSeed]);
+  useEffect(() => { loadPage(); /* eslint-disable-next-line */ }, [q, cat, sort, page, shuffleSeed, mine]);
 
   const load = loadPage; // used by submission success
 
