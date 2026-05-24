@@ -39,6 +39,7 @@ function SettingsPage() {
         referral_bonus: Number(data.referral_bonus ?? 0),
         minimum_referrals_for_withdrawal: Number((data as any).minimum_referrals_for_withdrawal ?? 0),
         minimum_tasks_for_withdrawal: Number((data as any).minimum_tasks_for_withdrawal ?? 0),
+        withdrawals_enabled: (data as any).withdrawals_enabled ?? true,
       });
     }
   };
