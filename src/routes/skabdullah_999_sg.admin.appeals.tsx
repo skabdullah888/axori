@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 import { ProofThumb } from "@/components/proof-image";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/appeals")({
   head: () => ({ meta: [{ title: "Admin Appeals — AxoraBD" }] }),
@@ -49,7 +50,7 @@ function AppealsPage() {
     const { error } = await supabase.from("appeals")
       .update({ status: decision, admin_note: note, updated_at: new Date().toISOString() })
       .eq("id", row.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
 
     if (decision === "approved" && row.submission) {
       const reward = Number(row.submission.task?.reward ?? 0);

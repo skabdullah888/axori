@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Check, Trash2, Pencil, Send, Bell, Megaphone, Plus, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { fmtDate, EmptyState } from "@/lib/admin-utils";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/notifications")({
   head: () => ({ meta: [{ title: "Admin Notifications — AxoraBD" }] }),
@@ -79,13 +80,13 @@ function NoticeBoardPanel() {
       const { error } = await supabase.from("notice_board").insert({
         title: edit.title, body: edit.body, type: edit.type, active: edit.active, created_by: u.user?.id ?? null,
       });
-      if (error) return toast.error(error.message);
+      if (error) return toast.error(friendlyError(error));
       toast.success("Notice posted");
     } else {
       const { error } = await supabase.from("notice_board").update({
         title: edit.title, body: edit.body, type: edit.type, active: edit.active,
       }).eq("id", edit.id);
-      if (error) return toast.error(error.message);
+      if (error) return toast.error(friendlyError(error));
       toast.success("Updated");
     }
     setEdit(null);
@@ -200,7 +201,7 @@ function DuplicateIpWarningPanel() {
       duplicate_ip_warning_message: message,
     }).eq("id", row.id);
     setSaving(false);
-    if (error) toast.error(error.message); else toast.success("Saved");
+    if (error) toast.error(friendlyError(error)); else toast.success("Saved");
   };
 
   if (loading) return null;
@@ -268,7 +269,7 @@ function AdminInbox() {
     const { error } = await supabase.from("notifications")
       .update({ title: edit.title, message: edit.message, type: edit.type })
       .eq("id", edit.id);
-    if (error) toast.error(error.message);
+    if (error) toast.error(friendlyError(error));
     else { toast.success("Updated"); setEdit(null); }
   };
 
@@ -376,7 +377,7 @@ function ComposePanel() {
       }
       setTitle(""); setMessage(""); setTarget("");
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(friendlyError(e));
     } finally { setSending(false); }
   };
 

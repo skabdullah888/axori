@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Linkified } from "@/lib/linkify";
 import { SectionLoader } from "@/components/section-loader";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/app/tasks/$taskId")({
   head: () => ({ meta: [{ title: "Task Details — AxoraBD" }] }),
@@ -76,7 +77,7 @@ function TaskDetailPage() {
       toast.success("Submission sent! Awaiting publisher review.");
       navigate({ to: "/app/submissions" });
     } catch (err: any) {
-      toast.error(err.message ?? "Submission failed");
+      toast.error(friendlyError(err, "Submission failed"));
     } finally { setBusy(false); }
   };
 

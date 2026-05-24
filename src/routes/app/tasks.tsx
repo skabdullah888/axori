@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Paginator } from "@/components/paginator";
 import { Linkified } from "@/lib/linkify";
 import { CardGridSkeleton } from "@/components/section-loader";
+import { friendlyError } from "@/lib/friendly-error";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
@@ -355,7 +356,7 @@ function SubmissionDialog({ task, open, onOpenChange, onSuccess }: {
       toast.success("Submission sent! Awaiting publisher review.");
       onSuccess();
     } catch (err: any) {
-      toast.error(err?.message ?? "Submission failed");
+      toast.error(friendlyError(err, "Submission failed"));
     } finally { setBusy(false); }
   };
 

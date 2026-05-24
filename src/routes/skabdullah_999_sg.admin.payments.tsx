@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Check, X, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-utils";
 import { RejectDialog, ConfirmDialog } from "@/components/reject-dialog";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/payments")({
   head: () => ({ meta: [{ title: "Admin Payments — AxoraBD" }] }),
@@ -94,7 +95,7 @@ function PaymentsTable({ type }: { type: PayType }) {
   const doApprove = async (row: any) => {
     const { error } = await supabase.from("payments")
       .update({ status: "approved", updated_at: new Date().toISOString() }).eq("id", row.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await clearAdminNotifs(row);
 
     if (type === "activation") {
@@ -149,7 +150,7 @@ function PaymentsTable({ type }: { type: PayType }) {
   const doReject = async (row: any, reason: string) => {
     const { error } = await supabase.from("payments")
       .update({ status: "rejected", updated_at: new Date().toISOString() }).eq("id", row.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await clearAdminNotifs(row);
     await notify(
       row.user_id, "payment",

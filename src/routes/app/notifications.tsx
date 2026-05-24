@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { ListSkeleton } from "@/components/section-loader";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/app/notifications")({
   head: () => ({ meta: [{ title: "Notifications — AxoraBD" }] }),
@@ -62,12 +63,12 @@ function NotificationsPage() {
     const { error } = await supabase.from("notifications").update({ read: true })
       .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false)
       .not("type", "in", `(${TRACKED_TYPES.map((t) => `"${t}"`).join(",")})`);
-    if (error) toast.error(error.message); else { toast.success("All marked as read"); load(); }
+    if (error) toast.error(friendlyError(error)); else { toast.success("All marked as read"); load(); }
   };
 
   const remove = async (id: string) => {
     const { error } = await supabase.from("notifications").delete().eq("id", id);
-    if (error) toast.error(error.message); else load();
+    if (error) toast.error(friendlyError(error)); else load();
   };
 
   const typeColor = (t: string) => {

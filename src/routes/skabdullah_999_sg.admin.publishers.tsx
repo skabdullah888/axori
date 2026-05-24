@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 import { cn } from "@/lib/utils";
 import { ProofThumb } from "@/components/proof-image";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/publishers")({
   head: () => ({ meta: [{ title: "Admin Publishers — AxoraBD" }] }),
@@ -158,7 +159,7 @@ function PublishersPage() {
   // === Actions ===
   const setTaskStatus = async (task: any, status: string, label: string) => {
     const { error } = await supabase.from("tasks").update({ status }).eq("id", task.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await notify(task.publisher_id, "system", `Task ${label}`, `Your task "${task.title}" was ${label} by an administrator.`);
     toast.success(`Task ${label}`);
   };
@@ -166,7 +167,7 @@ function PublishersPage() {
   const doDeleteTask = async () => {
     if (!deleteTask) return;
     const { error } = await supabase.from("tasks").delete().eq("id", deleteTask.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await notify(deleteTask.publisher_id, "system", "Task deleted", `Your task "${deleteTask.title}" was deleted by an administrator.`);
     toast.success("Task deleted");
     setSelectedTask(null);
@@ -176,7 +177,7 @@ function PublishersPage() {
   const doRejectTask = async (reason: string) => {
     if (!rejectTask) return;
     const { error } = await supabase.from("tasks").update({ status: "rejected" }).eq("id", rejectTask.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await notify(rejectTask.publisher_id, "system", "Task rejected", `Your task "${rejectTask.title}" was rejected. Reason: ${reason}`);
     toast.success("Task rejected");
     setRejectTask(null);
@@ -192,7 +193,7 @@ function PublishersPage() {
   const doBan = async () => {
     if (!banPub) return;
     const { error } = await supabase.from("profiles").update({ status: "banned" }).eq("id", banPub.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     toast.success("Publisher banned");
     setBanPub(null);
     loadPublishers();
@@ -201,7 +202,7 @@ function PublishersPage() {
   const toggleRestrict = async (p: Publisher) => {
     const { error } = await supabase.from("profiles")
       .update({ publisher_restricted: !p.publisher_restricted }).eq("id", p.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     toast.success(p.publisher_restricted ? "Restriction lifted" : "Publisher restricted");
     loadPublishers();
   };
@@ -210,7 +211,7 @@ function PublishersPage() {
     const featured = !(task.category === "featured");
     const newCat = featured ? "featured" : "general";
     const { error } = await supabase.from("tasks").update({ category: newCat }).eq("id", task.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     toast.success(featured ? "Task featured" : "Feature removed");
   };
 
@@ -570,7 +571,7 @@ function EditTaskDialog({ task, onClose, onSaved }: { task: any | null; onClose:
       reward: Number(form.reward) || 0,
       total_slots: Number(form.total_slots) || 1,
     }).eq("id", task.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await notify(task.publisher_id, "system", "Task updated", `Your task "${form.title}" was edited by an administrator.`);
     toast.success("Task updated");
     onSaved();

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Eye, Check, X } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, notify, fmtMoney } from "@/lib/admin-utils";
 import { ProofThumb } from "@/components/proof-image";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/submissions")({
   head: () => ({ meta: [{ title: "Submissions — AxoraBD" }] }),
@@ -37,7 +38,7 @@ function SubmissionsPage() {
   const override = async (row: any, decision: "approved" | "rejected") => {
     const { error } = await supabase.from("task_submissions")
       .update({ status: decision, updated_at: new Date().toISOString() }).eq("id", row.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     if (decision === "approved") {
       const reward = Number(row.task?.reward ?? 0);
       await notify(row.user_id, "submission", "Submission approved", `Admin approved your submission. ${fmtMoney(reward)} credited.`);

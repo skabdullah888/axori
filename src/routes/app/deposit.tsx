@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ListSkeleton } from "@/components/section-loader";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/app/deposit")({
   head: () => ({ meta: [{ title: "Deposit — AxoraBD" }] }),
@@ -66,7 +67,7 @@ function DepositPage() {
       status: "pending",
     });
     setBusy(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     toast.success("Deposit request submitted. Admin will review shortly.");
     setForm({ method: "", sender_number: "", trnx_id: "", amount: "" });
   };
