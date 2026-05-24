@@ -52,7 +52,7 @@ function DashboardPage() {
       supabase.from("task_submissions").select("id", { count: "exact", head: true }).eq("user_id", uid).eq("status", "approved"),
       supabase.from("tasks").select("id", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("referral_earnings").select("amount").eq("referrer_id", uid).eq("status", "approved"),
-      supabase.from("notifications").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(5),
+      supabase.from("notifications").select("*").eq("user_id", uid).eq("admin_targeted", false).order("created_at", { ascending: false }).limit(5),
     ]);
     setStats({
       totalEarn: (earn.data ?? []).reduce((s, r) => s + Number(r.amount), 0),
