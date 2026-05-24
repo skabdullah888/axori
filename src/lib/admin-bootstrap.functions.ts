@@ -12,6 +12,9 @@ export const bootstrapAdmin = createServerFn({ method: "POST" })
     z.object({ username: z.string(), password: z.string() }).parse(d),
   )
   .handler(async ({ data }) => {
+    if (!ADMIN_USERNAME || !ADMIN_EMAIL || !ADMIN_PASSWORD) {
+      return { ok: false as const, email: null, error: "Admin credentials not configured" };
+    }
     if (data.username !== ADMIN_USERNAME || data.password !== ADMIN_PASSWORD) {
       return { ok: false as const, email: null };
     }
