@@ -58,9 +58,7 @@ export function NoticeBoard() {
                 <Icon className="h-4 w-4 mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-foreground text-sm">{n.title}</p>
-                  <p className="text-sm text-muted-foreground mt-0.5 whitespace-pre-wrap break-words">
-                    {linkify(n.body)}
-                  </p>
+                  <Linkified text={n.body} className="text-sm text-muted-foreground mt-0.5 whitespace-pre-wrap break-words block" />
                 </div>
               </div>
             );
