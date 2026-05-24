@@ -313,11 +313,16 @@ function PublishPage() {
                       <span className={insufficient ? "text-destructive" : "text-success"}>৳{balance.toFixed(2)}</span></div>
                   </div>
 
-                  <Button type="submit" disabled={busy || insufficient || !form.reward || !form.total_slots}
+                  <Button type="submit" disabled={busy || belowMinPublish || insufficient || !form.reward || !form.total_slots}
                     className="w-full bg-gradient-to-r from-primary to-primary/80">
-                    {busy ? "Publishing…" : insufficient ? "Insufficient balance" : `Publish task (৳${totalCost.toFixed(2)})`}
+                    {busy ? "Publishing…" : belowMinPublish ? `Need ৳${minPublishAmount.toFixed(2)} min. balance` : insufficient ? "Insufficient balance" : `Publish task (৳${totalCost.toFixed(2)})`}
                   </Button>
-                  {insufficient && (
+                  {belowMinPublish && (
+                    <p className="text-xs text-center text-destructive">
+                      You need at least ৳{minPublishAmount.toFixed(2)} balance to publish a task. <Link to="/app/deposit" className="text-primary hover:underline">Deposit funds</Link>
+                    </p>
+                  )}
+                  {insufficient && !belowMinPublish && (
                     <p className="text-xs text-center text-muted-foreground">
                       <Link to="/app/deposit" className="text-primary hover:underline">Deposit funds</Link> to publish
                     </p>
