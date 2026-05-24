@@ -57,12 +57,19 @@ function RegisterPage() {
         throw new Error("An account with these details already exists");
       }
 
+      let signupIp: string | null = null;
+      try {
+        const ipRes = await fetch("https://api.ipify.org?format=json");
+        const ipJson = await ipRes.json();
+        if (typeof ipJson?.ip === "string") signupIp = ipJson.ip;
+      } catch {}
+
       const { data: res, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
           emailRedirectTo: `${window.location.origin}/app/dashboard`,
-          data: { username: data.username, phone: data.phone, referral_code: data.referral_code || null },
+          data: { username: data.username, phone: data.phone, referral_code: data.referral_code || null, signup_ip: signupIp },
         },
       });
       if (error) throw error;
