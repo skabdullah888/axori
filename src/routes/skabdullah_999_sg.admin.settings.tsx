@@ -20,7 +20,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true,
+    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0,
   });
   const [saving, setSaving] = useState(false);
   const [methods, setMethods] = useState<any[]>([]);
@@ -40,6 +40,7 @@ function SettingsPage() {
         minimum_referrals_for_withdrawal: Number((data as any).minimum_referrals_for_withdrawal ?? 0),
         minimum_tasks_for_withdrawal: Number((data as any).minimum_tasks_for_withdrawal ?? 0),
         withdrawals_enabled: (data as any).withdrawals_enabled ?? true,
+        minimum_task_publish_amount: Number((data as any).minimum_task_publish_amount ?? 0),
       });
     }
   };
@@ -65,6 +66,7 @@ function SettingsPage() {
       minimum_referrals_for_withdrawal: form.minimum_referrals_for_withdrawal,
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
       withdrawals_enabled: form.withdrawals_enabled,
+      minimum_task_publish_amount: form.minimum_task_publish_amount,
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase.from("settings").update(payload).eq("id", row.id);
@@ -160,6 +162,12 @@ function SettingsPage() {
                 hint="User must have published at least this many tasks before they can request a withdrawal. Set to 0 to disable."
                 value={form.minimum_tasks_for_withdrawal}
                 onChange={(v) => setForm(f => ({ ...f, minimum_tasks_for_withdrawal: v }))}
+              />
+              <Field
+                label="Minimum balance to publish task (৳)"
+                hint="User must have at least this much balance to create a new task. Set to 0 to disable."
+                value={form.minimum_task_publish_amount}
+                onChange={(v) => setForm(f => ({ ...f, minimum_task_publish_amount: v }))}
               />
             </div>
             <Separator className="my-5" />
