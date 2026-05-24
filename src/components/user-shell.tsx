@@ -23,7 +23,7 @@ const items = [
   { to: "/app/notifications", label: "Notifications", icon: Bell, types: ["*"] },
   { to: "/app/profile", label: "Profile", icon: User, types: ["account_status_changed"] },
   { to: "/app/settings", label: "Settings", icon: SettingsIcon, types: [] as string[] },
-] as const;
+];
 
 type Profile = {
   id: string; user_id: string; username: string; email: string | null;
