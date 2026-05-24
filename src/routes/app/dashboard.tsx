@@ -79,6 +79,7 @@ function DashboardPage() {
 
   return (
     <>
+      <NoticeBoard />
       {loading ? (
         <div className="mb-6 p-6 rounded-2xl border border-border/60 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-2">
