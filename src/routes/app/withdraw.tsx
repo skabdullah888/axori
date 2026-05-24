@@ -74,9 +74,12 @@ function WithdrawPage() {
   const feeAmt = +(amt * feePct / 100).toFixed(2);
   const willReceive = Math.max(0, amt - feeAmt);
 
+  const withdrawalsEnabled = (settings as any)?.withdrawals_enabled ?? true;
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user) return;
+    if (!withdrawalsEnabled) { toast.error("Withdrawals are currently disabled by admin."); return; }
     if (amt < minAmt) { toast.error(`Minimum withdrawal is ৳${minAmt.toFixed(2)}`); return; }
     if (amt > balance) { toast.error("Insufficient balance"); return; }
 
