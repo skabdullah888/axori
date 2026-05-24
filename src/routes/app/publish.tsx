@@ -110,11 +110,14 @@ function PublishPage() {
   const tax = (subtotal * taxPct) / 100;
   const totalCost = subtotal + tax;
   const balance = Number(profile?.balance ?? 0);
+  const minPublishAmount = Number(settings?.minimum_task_publish_amount ?? 0);
+  const belowMinPublish = minPublishAmount > 0 && balance < minPublishAmount;
   const insufficient = totalCost > balance;
 
   const createTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user || !profile) return;
+    if (belowMinPublish) { toast.error(`You need at least ৳${minPublishAmount.toFixed(2)} balance to publish a task`); return; }
     if (insufficient) { toast.error("Insufficient balance to publish this task"); return; }
     if ((profile as any).publisher_restricted) { toast.error("Publisher access is restricted"); return; }
     setBusy(true);
