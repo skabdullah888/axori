@@ -142,7 +142,9 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
-          const showBadge = it.to === "/app/notifications" && unread > 0;
+          const count = it.types.includes("*")
+            ? unread
+            : it.types.reduce((sum, t) => sum + (unreadByType[t] ?? 0), 0);
           return (
             <Link key={it.to} to={it.to} onClick={() => setMobileOpen(false)}
               className={cn(
@@ -153,9 +155,9 @@ export function UserShell({ title, children }: { title: string; children: ReactN
               )}>
               <Icon className="h-4 w-4" />
               <span className="flex-1">{it.label}</span>
-              {showBadge && (
+              {count > 0 && (
                 <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold">
-                  {unread > 99 ? "99+" : unread}
+                  {count > 99 ? "99+" : count}
                 </span>
               )}
             </Link>
