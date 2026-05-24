@@ -100,12 +100,25 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   }, [session?.user?.id]);
 
   useEffect(() => {
-    if (path === "/app/notifications" && unread > 0 && session?.user) {
-      supabase.from("notifications").update({ read: true })
-        .eq("user_id", session.user.id).eq("read", false).then(() => loadUnread());
+    if (!session?.user) return;
+    const it = items.find((i) => path === i.to || path.startsWith(i.to + "/"));
+    if (!it) return;
+    const isNotifPage = it.types.includes("*");
+    if (isNotifPage) {
+      if (unread > 0) {
+        supabase.from("notifications").update({ read: true })
+          .eq("user_id", session.user.id).eq("read", false).then(() => loadUnread());
+      }
+      return;
     }
+    if (it.types.length === 0) return;
+    const hasUnread = it.types.some((t) => (unreadByType[t] ?? 0) > 0);
+    if (!hasUnread) return;
+    supabase.from("notifications").update({ read: true })
+      .eq("user_id", session.user.id).eq("read", false)
+      .in("type", it.types as string[]).then(() => loadUnread());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  }, [path, unreadByType, unread]);
 
   const logout = async () => {
     await supabase.auth.signOut();
