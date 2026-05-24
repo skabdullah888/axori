@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Ban, ShieldCheck, Pencil, Trash2, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
@@ -32,6 +34,8 @@ function UsersPage() {
   const [edit, setEdit] = useState<any | null>(null);
   const [details, setDetails] = useState<any | null>(null);
   const [detailsStats, setDetailsStats] = useState<any | null>(null);
+  const [earningHistory, setEarningHistory] = useState<any[] | null>(null);
+  const [detailsTab, setDetailsTab] = useState("overview");
   const [deleteRow, setDeleteRow] = useState<any | null>(null);
   const [deleting, setDeleting] = useState(false);
   const callDelete = useServerFn(deleteUserAccount);
@@ -40,12 +44,15 @@ function UsersPage() {
   const openDetails = async (r: any) => {
     setDetails(r);
     setDetailsStats(null);
-    const [subs, pays, tks, refs, appeals] = await Promise.all([
+    setEarningHistory(null);
+    setDetailsTab("overview");
+    const [subs, pays, tks, refs, appeals, earnings] = await Promise.all([
       supabase.from("task_submissions").select("status", { count: "exact" }).eq("user_id", r.user_id),
       supabase.from("payments").select("type,status,amount").eq("user_id", r.user_id),
       supabase.from("tasks").select("id", { count: "exact", head: true }).eq("publisher_id", r.id),
       supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", r.user_id),
       supabase.from("appeals").select("id", { count: "exact", head: true }).eq("user_id", r.user_id),
+      supabase.from("payments").select("id,amount,type,status,created_at,reference").eq("user_id", r.user_id).or("type.eq.earning,type.eq.referral").order("created_at", { ascending: false }),
     ]);
     const subRows = subs.data ?? [];
     const payRows = pays.data ?? [];
@@ -63,6 +70,7 @@ function UsersPage() {
       withdrawApproved: sum("withdrawal", "approved"),
       withdrawPending: sum("withdrawal", "pending"),
     });
+    setEarningHistory(earnings.data ?? []);
   };
 
   const load = async () => {
@@ -264,62 +272,102 @@ function UsersPage() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <Dialog open={!!details} onOpenChange={(o) => !o && (setDetails(null), setDetailsStats(null))}>
+      <Dialog open={!!details} onOpenChange={(o) => !o && (setDetails(null), setDetailsStats(null), setEarningHistory(null))}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>User details</DialogTitle>
           </DialogHeader>
           {details && (
-            <div className="space-y-5">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src={details.avatar_url ?? undefined} alt={details.username} />
-                  <AvatarFallback className="text-lg">{details.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="text-xl font-semibold">@{details.username}</div>
-                  {details.full_name && <div className="text-sm text-muted-foreground">{details.full_name}</div>}
-                  <div className="mt-1"><StatusPill status={details.status} /></div>
+            <Tabs value={detailsTab} onValueChange={setDetailsTab} className="w-full">
+              <TabsList className="mb-4">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="earnings">Earning History</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview" className="space-y-5">
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-20 w-20">
+                    <AvatarImage src={details.avatar_url ?? undefined} alt={details.username} />
+                    <AvatarFallback className="text-lg">{details.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="text-xl font-semibold">@{details.username}</div>
+                    {details.full_name && <div className="text-sm text-muted-foreground">{details.full_name}</div>}
+                    <div className="mt-1"><StatusPill status={details.status} /></div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-                <Field label="Email" value={details.email} />
-                <Field label="Phone" value={details.phone} />
-                <Field label="Balance" value={fmtMoney(details.balance)} />
-                <Field label="Trust score" value={details.trust_score} />
-                <Field label="Referral code" value={details.referral_code} mono />
-                <Field label="Referred by" value={details.referred_by ? String(details.referred_by).slice(0, 8) + "…" : "—"} mono />
-                <Field label="Publisher" value={details.is_publisher ? "Yes" : "No"} />
-                <Field label="Publisher restricted" value={details.publisher_restricted ? "Yes" : "No"} />
-                <Field label="Withdrawal method" value={details.withdrawal_method} />
-                <Field label="Withdrawal account" value={details.withdrawal_account} mono />
-                <Field label="Joined" value={fmtDate(details.created_at)} />
-                <Field label="Activated at" value={details.activated_at ? fmtDate(details.activated_at) : "—"} />
-                <Field label="User ID" value={details.user_id} mono />
-                <Field label="Profile ID" value={details.id} mono />
-              </div>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                  <Field label="Email" value={details.email} />
+                  <Field label="Phone" value={details.phone} />
+                  <Field label="Balance" value={fmtMoney(details.balance)} />
+                  <Field label="Trust score" value={details.trust_score} />
+                  <Field label="Referral code" value={details.referral_code} mono />
+                  <Field label="Referred by" value={details.referred_by ? String(details.referred_by).slice(0, 8) + "…" : "—"} mono />
+                  <Field label="Publisher" value={details.is_publisher ? "Yes" : "No"} />
+                  <Field label="Publisher restricted" value={details.publisher_restricted ? "Yes" : "No"} />
+                  <Field label="Withdrawal method" value={details.withdrawal_method} />
+                  <Field label="Withdrawal account" value={details.withdrawal_account} mono />
+                  <Field label="Joined" value={fmtDate(details.created_at)} />
+                  <Field label="Activated at" value={details.activated_at ? fmtDate(details.activated_at) : "—"} />
+                  <Field label="User ID" value={details.user_id} mono />
+                  <Field label="Profile ID" value={details.id} mono />
+                </div>
 
-              <div>
-                <div className="text-sm font-semibold mb-2">Activity</div>
-                {!detailsStats ? (
+                <div>
+                  <div className="text-sm font-semibold mb-2">Activity</div>
+                  {!detailsStats ? (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground"><span className="inline-block h-3 w-3 rounded-full border-2 border-primary/30 border-t-primary animate-spin" /> Loading…</div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      <Stat label="Submissions" value={detailsStats.submissionsTotal} />
+                      <Stat label="Approved" value={detailsStats.submissionsApproved} />
+                      <Stat label="Rejected" value={detailsStats.submissionsRejected} />
+                      <Stat label="Pending" value={detailsStats.submissionsPending} />
+                      <Stat label="Tasks published" value={detailsStats.tasksPublished} />
+                      <Stat label="Referrals" value={detailsStats.referralsCount} />
+                      <Stat label="Appeals" value={detailsStats.appealsCount} />
+                      <Stat label="Deposits (approved)" value={fmtMoney(detailsStats.depositApproved)} />
+                      <Stat label="Withdrawn" value={fmtMoney(detailsStats.withdrawApproved)} />
+                      <Stat label="Withdraw pending" value={fmtMoney(detailsStats.withdrawPending)} />
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="earnings">
+                {!earningHistory ? (
                   <div className="flex items-center gap-2 text-sm text-muted-foreground"><span className="inline-block h-3 w-3 rounded-full border-2 border-primary/30 border-t-primary animate-spin" /> Loading…</div>
+                ) : earningHistory.length === 0 ? (
+                  <EmptyState message="No earning history found." />
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <Stat label="Submissions" value={detailsStats.submissionsTotal} />
-                    <Stat label="Approved" value={detailsStats.submissionsApproved} />
-                    <Stat label="Rejected" value={detailsStats.submissionsRejected} />
-                    <Stat label="Pending" value={detailsStats.submissionsPending} />
-                    <Stat label="Tasks published" value={detailsStats.tasksPublished} />
-                    <Stat label="Referrals" value={detailsStats.referralsCount} />
-                    <Stat label="Appeals" value={detailsStats.appealsCount} />
-                    <Stat label="Deposits (approved)" value={fmtMoney(detailsStats.depositApproved)} />
-                    <Stat label="Withdrawn" value={fmtMoney(detailsStats.withdrawApproved)} />
-                    <Stat label="Withdraw pending" value={fmtMoney(detailsStats.withdrawPending)} />
+                  <div className="overflow-x-auto rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead className="text-right">Amount</TableHead>
+                          <TableHead>Reference</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {earningHistory.map((e: any) => (
+                          <TableRow key={e.id}>
+                            <TableCell className="text-xs whitespace-nowrap">{fmtDate(e.created_at)}</TableCell>
+                            <TableCell className="capitalize">{e.type}</TableCell>
+                            <TableCell><StatusPill status={e.status} /></TableCell>
+                            <TableCell className="text-right font-medium">{fmtMoney(e.amount)}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground max-w-[120px] truncate">{e.reference ?? "—"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </div>
                 )}
-              </div>
-            </div>
+              </TabsContent>
+            </Tabs>
           )}
         </DialogContent>
       </Dialog>
