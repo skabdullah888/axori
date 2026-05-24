@@ -37,6 +37,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const path = useRouterState({ select: (r) => r.location.pathname });
   const [profile, setProfile] = useState<Profile | null>(null);
   const [unread, setUnread] = useState(0);
+  const [unreadByType, setUnreadByType] = useState<Record<string, number>>({});
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
