@@ -18,7 +18,7 @@ const items = [
   { to: `${BASE}/notifications`, label: "Notifications", icon: Bell, types: ["*"] },
   { to: `${BASE}/settings`, label: "Settings", icon: SettingsIcon, types: [] as string[] },
   { to: `${BASE}/security-logs`, label: "Security Logs", icon: ShieldAlert, types: [] as string[] },
-] as const;
+];
 
 export function AdminSidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
