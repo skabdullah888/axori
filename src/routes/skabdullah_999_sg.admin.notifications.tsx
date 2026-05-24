@@ -215,9 +215,10 @@ function AdminInbox() {
   };
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 space-y-4">
+      <DuplicateIpWarningPanel />
       <div className="flex items-center gap-2 mb-4 flex-wrap">
-        {["all", "appeal", "payment", "system", "warning", "error"].map(f => (
+        {["all", "appeal", "payment", "system", "warning", "error", "duplicate_ip"].map(f => (
           <Button key={f} size="sm" variant={filter === f ? "default" : "secondary"} onClick={() => setFilter(f)}>{f}</Button>
         ))}
       </div>
