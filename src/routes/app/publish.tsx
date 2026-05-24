@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle } from "lucide-react";
+import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle, User, ChevronRight } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -15,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { RejectDialog } from "@/components/reject-dialog";
+import { ProofThumb } from "@/components/proof-image";
+import { Linkified } from "@/lib/linkify";
 
 const PUBLISHER_REJECT_PRESETS = [
   "Proof is invalid or fake",
