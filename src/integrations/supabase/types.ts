@@ -403,6 +403,33 @@ export type Database = {
         }
         Relationships: []
       }
+      section_videos: {
+        Row: {
+          created_at: string
+          id: string
+          section_key: string
+          title: string
+          updated_at: string
+          video_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          section_key: string
+          title?: string
+          updated_at?: string
+          video_url?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          section_key?: string
+          title?: string
+          updated_at?: string
+          video_url?: string
+        }
+        Relationships: []
+      }
       security_logs: {
         Row: {
           action: string
