@@ -1,0 +1,2 @@
+CREATE POLICY "admin_delete_proofs" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'proofs' AND public.has_role(auth.uid(), 'admin'));
+CREATE POLICY "admin_update_proofs" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'proofs' AND public.has_role(auth.uid(), 'admin')) WITH CHECK (bucket_id = 'proofs' AND public.has_role(auth.uid(), 'admin'));
