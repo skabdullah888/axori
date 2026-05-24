@@ -47,7 +47,7 @@ function NotificationsPage() {
   const markAll = async () => {
     if (!session?.user) return;
     const { error } = await supabase.from("notifications").update({ read: true })
-      .eq("user_id", session.user.id).eq("read", false);
+      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false);
     if (error) toast.error(error.message); else { toast.success("All marked as read"); load(); }
   };
 
