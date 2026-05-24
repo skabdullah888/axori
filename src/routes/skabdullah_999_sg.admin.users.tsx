@@ -44,12 +44,15 @@ function UsersPage() {
   const openDetails = async (r: any) => {
     setDetails(r);
     setDetailsStats(null);
-    const [subs, pays, tks, refs, appeals] = await Promise.all([
+    setEarningHistory(null);
+    setDetailsTab("overview");
+    const [subs, pays, tks, refs, appeals, earnings] = await Promise.all([
       supabase.from("task_submissions").select("status", { count: "exact" }).eq("user_id", r.user_id),
       supabase.from("payments").select("type,status,amount").eq("user_id", r.user_id),
       supabase.from("tasks").select("id", { count: "exact", head: true }).eq("publisher_id", r.id),
       supabase.from("profiles").select("id", { count: "exact", head: true }).eq("referred_by", r.user_id),
       supabase.from("appeals").select("id", { count: "exact", head: true }).eq("user_id", r.user_id),
+      supabase.from("payments").select("id,amount,type,status,created_at,reference").eq("user_id", r.user_id).or("type.eq.earning,type.eq.referral").order("created_at", { ascending: false }),
     ]);
     const subRows = subs.data ?? [];
     const payRows = pays.data ?? [];
@@ -67,6 +70,7 @@ function UsersPage() {
       withdrawApproved: sum("withdrawal", "approved"),
       withdrawPending: sum("withdrawal", "pending"),
     });
+    setEarningHistory(earnings.data ?? []);
   };
 
   const load = async () => {
