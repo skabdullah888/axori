@@ -383,17 +383,22 @@ function PublishPage() {
                 {pendingSubs.map((s) => {
                   const task = tasks.find(t => t.id === s.task_id);
                   return (
-                    <Card key={s.id}>
+                    <Card key={s.id}
+                      onClick={() => setViewSub({ ...s, _reward: Number(task?.reward ?? 0) })}
+                      className="cursor-pointer hover:border-primary/40 transition-colors">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-                          <div>
-                            <p className="font-semibold text-sm">{s.tasks?.title ?? task?.title}</p>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-sm truncate">{s.tasks?.title ?? task?.title}</p>
                             <p className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString()}</p>
                           </div>
-                          <Badge className="bg-warning/20 text-warning border-warning/30">Pending</Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge className="bg-warning/20 text-warning border-warning/30">Pending</Badge>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
                         </div>
-                        {s.proof_text && <p className="text-sm bg-accent/40 p-3 rounded mb-3 whitespace-pre-wrap">{s.proof_text}</p>}
-                        <div className="flex gap-2">
+                        {s.proof_text && <p className="text-xs bg-accent/40 p-2 rounded mb-3 whitespace-pre-wrap line-clamp-2">{s.proof_text}</p>}
+                        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                           <Button size="sm" onClick={() => reviewSub(s.id, true, s.task_id, s.user_id, Number(task?.reward ?? 0))}
                             className="bg-success text-success-foreground hover:bg-success/90">
                             <CheckCircle2 className="h-4 w-4" /> Approve & Pay
