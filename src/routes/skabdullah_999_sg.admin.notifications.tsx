@@ -168,7 +168,65 @@ function NoticeBoardPanel() {
   );
 }
 
-/** Admin-targeted critical alerts only (excludes general user activity logs). */
+function DuplicateIpWarningPanel() {
+  const [enabled, setEnabled] = useState(true);
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.from("settings")
+        .select("duplicate_ip_warning_enabled,duplicate_ip_warning_title,duplicate_ip_warning_message")
+        .limit(1).maybeSingle();
+      if (data) {
+        setEnabled(!!data.duplicate_ip_warning_enabled);
+        setTitle(data.duplicate_ip_warning_title ?? "");
+        setMessage(data.duplicate_ip_warning_message ?? "");
+      }
+      setLoading(false);
+    })();
+  }, []);
+
+  const save = async () => {
+    if (!title.trim() || !message.trim()) { toast.error("Title and message required"); return; }
+    setSaving(true);
+    const { data: row } = await supabase.from("settings").select("id").limit(1).maybeSingle();
+    if (!row?.id) { toast.error("Settings row missing"); setSaving(false); return; }
+    const { error } = await supabase.from("settings").update({
+      duplicate_ip_warning_enabled: enabled,
+      duplicate_ip_warning_title: title,
+      duplicate_ip_warning_message: message,
+    }).eq("id", row.id);
+    setSaving(false);
+    if (error) toast.error(error.message); else toast.success("Saved");
+  };
+
+  if (loading) return null;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Duplicate-IP auto warning</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <p className="text-xs text-muted-foreground">
+          When a new user signs up from an IP that already has another account, this warning notification is automatically sent to them.
+        </p>
+        <div className="flex items-center gap-2">
+          <Switch checked={enabled} onCheckedChange={setEnabled} />
+          <Label>Enable auto warning</Label>
+        </div>
+        <div><Label>Warning title</Label><Input value={title} onChange={(e) => setTitle(e.target.value)} /></div>
+        <div><Label>Warning message</Label><Textarea rows={4} value={message} onChange={(e) => setMessage(e.target.value)} /></div>
+        <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+
 function AdminInbox() {
   const [rows, setRows] = useState<any[]>([]);
   const [filter, setFilter] = useState<string>("all");
