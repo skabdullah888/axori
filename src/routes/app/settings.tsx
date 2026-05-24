@@ -110,14 +110,15 @@ function SettingsPage() {
   };
 
   const savePayment = async () => {
-    if (!session?.user) return;
+    if (!session?.user?.email) return;
     if (!wMethod || !wAccount.trim()) { toast.error("Select method and enter account number"); return; }
+    if (!wPwd) { toast.error("Enter your current password to confirm"); return; }
     setSavingPayment(true);
-    const { error } = await supabase.from("profiles")
-      .update({ withdrawal_method: wMethod, withdrawal_account: wAccount.trim(), updated_at: new Date().toISOString() } as any)
-      .eq("user_id", session.user.id);
+    const { error: signErr } = await supabase.auth.signInWithPassword({ email: session.user.email, password: wPwd });
+    if (signErr) { setSavingPayment(false); toast.error("Password is incorrect"); return; }
+    const { error } = await supabase.rpc("set_withdrawal_destination" as any, { p_method: wMethod, p_account: wAccount.trim() } as any);
     setSavingPayment(false);
-    if (error) toast.error(error.message); else { toast.success("Withdrawal info saved"); reload(); }
+    if (error) toast.error(error.message); else { toast.success("Withdrawal info saved"); setWPwd(""); reload(); }
   };
 
   const logout = async () => {
