@@ -2,15 +2,19 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { z } from "zod";
 
-const ADMIN_USERNAME = "skabdullah999";
-const ADMIN_EMAIL = "skabdullah999@admin.local";
-const ADMIN_PASSWORD = "520aaAA@@";
+// Credentials are read from server-side secrets — never hardcoded.
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export const bootstrapAdmin = createServerFn({ method: "POST" })
   .inputValidator((d: { username: string; password: string }) =>
     z.object({ username: z.string(), password: z.string() }).parse(d),
   )
   .handler(async ({ data }) => {
+    if (!ADMIN_USERNAME || !ADMIN_EMAIL || !ADMIN_PASSWORD) {
+      return { ok: false as const, email: null, error: "Admin credentials not configured" };
+    }
     if (data.username !== ADMIN_USERNAME || data.password !== ADMIN_PASSWORD) {
       return { ok: false as const, email: null };
     }
