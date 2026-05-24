@@ -226,6 +226,7 @@ export type Database = {
           publisher_restricted: boolean
           referral_code: string | null
           referred_by: string | null
+          signup_ip: string | null
           status: string
           trust_score: number
           updated_at: string
@@ -251,6 +252,7 @@ export type Database = {
           publisher_restricted?: boolean
           referral_code?: string | null
           referred_by?: string | null
+          signup_ip?: string | null
           status?: string
           trust_score?: number
           updated_at?: string
@@ -276,6 +278,7 @@ export type Database = {
           publisher_restricted?: boolean
           referral_code?: string | null
           referred_by?: string | null
+          signup_ip?: string | null
           status?: string
           trust_score?: number
           updated_at?: string
@@ -353,6 +356,9 @@ export type Database = {
         Row: {
           activation_amount: number
           activation_fee: number
+          duplicate_ip_warning_enabled: boolean
+          duplicate_ip_warning_message: string
+          duplicate_ip_warning_title: string
           id: string
           minimum_referrals_for_withdrawal: number
           minimum_task_publish_amount: number
@@ -367,6 +373,9 @@ export type Database = {
         Insert: {
           activation_amount?: number
           activation_fee?: number
+          duplicate_ip_warning_enabled?: boolean
+          duplicate_ip_warning_message?: string
+          duplicate_ip_warning_title?: string
           id?: string
           minimum_referrals_for_withdrawal?: number
           minimum_task_publish_amount?: number
@@ -381,6 +390,9 @@ export type Database = {
         Update: {
           activation_amount?: number
           activation_fee?: number
+          duplicate_ip_warning_enabled?: boolean
+          duplicate_ip_warning_message?: string
+          duplicate_ip_warning_title?: string
           id?: string
           minimum_referrals_for_withdrawal?: number
           minimum_task_publish_amount?: number
