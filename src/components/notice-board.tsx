@@ -3,7 +3,7 @@ import { Megaphone, Info, AlertTriangle, AlertCircle, CheckCircle2 } from "lucid
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { linkify } from "@/lib/linkify";
+import { Linkified } from "@/lib/linkify";
 
 type Notice = {
   id: string;
