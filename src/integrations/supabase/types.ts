@@ -62,6 +62,39 @@ export type Database = {
           },
         ]
       }
+      notice_board: {
+        Row: {
+          active: boolean
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          body: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           admin_targeted: boolean
