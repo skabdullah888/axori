@@ -42,6 +42,7 @@ function SettingsPage() {
 
   const [wMethod, setWMethod] = useState("");
   const [wAccount, setWAccount] = useState("");
+  const [wPwd, setWPwd] = useState("");
   const [savingPayment, setSavingPayment] = useState(false);
 
   useEffect(() => {
@@ -109,14 +110,15 @@ function SettingsPage() {
   };
 
   const savePayment = async () => {
-    if (!session?.user) return;
+    if (!session?.user?.email) return;
     if (!wMethod || !wAccount.trim()) { toast.error("Select method and enter account number"); return; }
+    if (!wPwd) { toast.error("Enter your current password to confirm"); return; }
     setSavingPayment(true);
-    const { error } = await supabase.from("profiles")
-      .update({ withdrawal_method: wMethod, withdrawal_account: wAccount.trim(), updated_at: new Date().toISOString() } as any)
-      .eq("user_id", session.user.id);
+    const { error: signErr } = await supabase.auth.signInWithPassword({ email: session.user.email, password: wPwd });
+    if (signErr) { setSavingPayment(false); toast.error("Password is incorrect"); return; }
+    const { error } = await supabase.rpc("set_withdrawal_destination" as any, { p_method: wMethod, p_account: wAccount.trim() } as any);
     setSavingPayment(false);
-    if (error) toast.error(error.message); else { toast.success("Withdrawal info saved"); reload(); }
+    if (error) toast.error(error.message); else { toast.success("Withdrawal info saved"); setWPwd(""); reload(); }
   };
 
   const logout = async () => {
@@ -224,6 +226,10 @@ function SettingsPage() {
             <div className="space-y-2">
               <Label>Account number</Label>
               <Input value={wAccount} onChange={(e) => setWAccount(e.target.value)} placeholder="e.g. 01XXXXXXXXX" />
+            </div>
+            <div className="space-y-2">
+              <Label>Confirm with current password</Label>
+              <Input type="password" value={wPwd} onChange={(e) => setWPwd(e.target.value)} placeholder="Required to change withdrawal destination" />
             </div>
             <Button onClick={savePayment} disabled={savingPayment} className="bg-gradient-to-r from-primary to-primary/80">
               {savingPayment ? "Saving…" : "Save withdrawal info"}

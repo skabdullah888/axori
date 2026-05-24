@@ -568,6 +568,10 @@ export type Database = {
         Args: { p_approve: boolean; p_reason?: string; p_submission_id: string }
         Returns: undefined
       }
+      set_withdrawal_destination: {
+        Args: { p_account: string; p_method: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "user"
