@@ -175,12 +175,33 @@ function PublishPage() {
 
 
   const reviewSub = async (subId: string, approve: boolean, _taskId: string, userId: string, taskReward: number, reason?: string) => {
+    let proofPaths: string[] = [];
+    if (approve) {
+      const { data: proofs } = await supabase
+        .from("task_submission_proofs")
+        .select("image_url")
+        .eq("submission_id", subId);
+      proofPaths = (proofs ?? [])
+        .map((p: any) => {
+          const url: string = p.image_url ?? "";
+          const idx = url.indexOf("/proofs/");
+          if (idx >= 0) return url.substring(idx + 8);
+          return url.replace(/^\/+/, "");
+        })
+        .filter(Boolean);
+    }
+
     const { error } = await supabase.rpc("publisher_review_submission" as any, {
       p_submission_id: subId,
       p_approve: approve,
       p_reason: reason ?? null,
     });
     if (error) { toast.error(friendlyError(error)); return; }
+
+    if (approve && proofPaths.length > 0) {
+      await supabase.storage.from("proofs").remove(proofPaths);
+    }
+
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",
