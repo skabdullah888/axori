@@ -12,6 +12,7 @@ import { fmtDate, StatusPill, EmptyState, fmtMoney, notify } from "@/lib/admin-u
 import { ConfirmDialog, RejectDialog } from "@/components/reject-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/tasks")({
   head: () => ({ meta: [{ title: "Admin Tasks — AxoraBD" }] }),
@@ -58,7 +59,7 @@ function TasksPage() {
 
   const doApprove = async (row: any) => {
     const { error } = await supabase.from("tasks").update({ status: "active" }).eq("id", row.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await notify(row.publisher_id, "system", "Task approved", `Your task "${row.title}" has been approved and is now live.`);
     toast.success("Task approved");
     setApproveRow(null);
@@ -66,7 +67,7 @@ function TasksPage() {
 
   const doReject = async (row: any, reason: string) => {
     const { error } = await supabase.rpc("admin_reject_task_with_refund", { p_task_id: row.id, p_reason: reason });
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await notify(row.publisher_id, "system", "Task rejected & refunded", `Your task "${row.title}" was rejected. Reason: ${reason}. The held amount has been refunded to your balance.`);
     toast.success("Task rejected & publisher refunded");
     setRejectRow(null);

@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { RejectDialog } from "@/components/reject-dialog";
 import { ProofThumb } from "@/components/proof-image";
 import { Linkified } from "@/lib/linkify";
+import { friendlyError } from "@/lib/friendly-error";
 
 const PUBLISHER_REJECT_PRESETS = [
   "Proof is invalid or fake",
@@ -68,7 +69,7 @@ function PublishPage() {
     setBusy(true);
     const { data, error } = await (supabase as any).rpc("publisher_cancel_task", { p_task_id: cancelTask.id });
     setBusy(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     const refunded = Number((data as any)?.refunded ?? 0);
     toast.success(refunded > 0 ? `Task cancelled. ৳${refunded.toFixed(2)} refunded to your balance.` : "Task cancelled. No refund (task was already active).");
     setCancelTask(null);
@@ -140,7 +141,7 @@ function PublishPage() {
         if (!bannerFile.type.startsWith("image/")) { toast.error("Banner must be an image"); setBusy(false); return; }
         const path = `${session.user.id}/${Date.now()}-${bannerFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
         const { error: upErr } = await supabase.storage.from("task-banners").upload(path, bannerFile);
-        if (upErr) { toast.error(upErr.message); setBusy(false); return; }
+        if (upErr) { toast.error(friendlyError(upErr)); setBusy(false); return; }
         banner_url = supabase.storage.from("task-banners").getPublicUrl(path).data.publicUrl;
       }
 
@@ -159,14 +160,14 @@ function PublishPage() {
         p_proof_fields: cleanFields as any,
         p_banner_url: banner_url ?? "",
       });
-      if (error || !newTaskId) { toast.error(error?.message ?? "Failed to publish"); setBusy(false); return; }
+      if (error || !newTaskId) { toast.error(friendlyError(error, "Failed to publish")); setBusy(false); return; }
 
       toast.success("Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
       setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
     } catch (err: any) {
-      toast.error(err?.message ?? "Failed to publish");
+      toast.error(friendlyError(err, "Failed to publish"));
     } finally {
       setBusy(false);
     }
@@ -179,7 +180,7 @@ function PublishPage() {
       p_approve: approve,
       p_reason: reason ?? null,
     });
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     await supabase.from("notifications").insert({
       user_id: userId,
       title: approve ? "Submission approved" : "Submission rejected",

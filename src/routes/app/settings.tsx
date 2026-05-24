@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
@@ -63,14 +64,14 @@ function SettingsPage() {
     const ext = file.name.split(".").pop() || "png";
     const path = `${session.user.id}/avatar-${Date.now()}.${ext}`;
     const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
-    if (upErr) { setUploading(false); toast.error(upErr.message); return; }
+    if (upErr) { setUploading(false); toast.error(friendlyError(upErr)); return; }
     const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
     const url = pub.publicUrl;
     const { error } = await supabase.from("profiles")
       .update({ avatar_url: url, updated_at: new Date().toISOString() })
       .eq("user_id", session.user.id);
     setUploading(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     setAvatarUrl(url);
     toast.success("Profile picture updated");
     reload();
@@ -83,7 +84,7 @@ function SettingsPage() {
       .update({ full_name: fullName, updated_at: new Date().toISOString() } as any)
       .eq("user_id", session.user.id);
     setSavingProfile(false);
-    if (error) toast.error(error.message); else { toast.success("Profile updated"); reload(); }
+    if (error) toast.error(friendlyError(error)); else { toast.success("Profile updated"); reload(); }
   };
 
   const changePwd = async () => {
@@ -95,7 +96,7 @@ function SettingsPage() {
     if (signErr) { setSavingPwd(false); toast.error("Current password is incorrect"); return; }
     const { error } = await supabase.auth.updateUser({ password: newPwd });
     setSavingPwd(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(friendlyError(error));
     else { toast.success("Password changed"); setCurrentPwd(""); setNewPwd(""); setConfirmPwd(""); }
   };
 
@@ -106,7 +107,7 @@ function SettingsPage() {
       .update({ notify_tasks: notifyTasks, notify_payments: notifyPayments, notify_appeals: notifyAppeals, updated_at: new Date().toISOString() } as any)
       .eq("user_id", session.user.id);
     setSavingNotif(false);
-    if (error) toast.error(error.message); else { toast.success("Notification settings saved"); reload(); }
+    if (error) toast.error(friendlyError(error)); else { toast.success("Notification settings saved"); reload(); }
   };
 
   const savePayment = async () => {
@@ -118,7 +119,7 @@ function SettingsPage() {
     if (signErr) { setSavingPayment(false); toast.error("Password is incorrect"); return; }
     const { error } = await supabase.rpc("set_withdrawal_destination" as any, { p_method: wMethod, p_account: wAccount.trim() } as any);
     setSavingPayment(false);
-    if (error) toast.error(error.message); else { toast.success("Withdrawal info saved"); setWPwd(""); reload(); }
+    if (error) toast.error(friendlyError(error)); else { toast.success("Withdrawal info saved"); setWPwd(""); reload(); }
   };
 
   const logout = async () => {

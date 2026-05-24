@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/auth/reset-password")({
   head: () => ({ meta: [{ title: "Reset Password — AxoraBD" }] }),
@@ -40,7 +41,7 @@ function ResetPage() {
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
-    if (error) { setError(error.message); return; }
+    if (error) { setError(friendlyError(error)); return; }
     setDone(true);
     setTimeout(() => navigate({ to: "/auth/login" }), 1500);
   };

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/login")({
   head: () => ({ meta: [{ title: "Admin Login — AxoraBD" }] }),
@@ -44,7 +45,7 @@ function LoginPage() {
       const { error: signErr } = await supabase.auth.signInWithPassword({
         email: res.email, password,
       });
-      if (signErr) { setError(signErr.message); return; }
+      if (signErr) { setError(friendlyError(signErr)); return; }
       await supabase.from("security_logs").insert({
         username, action: "login_success", suspicious: false,
       });

@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/app/profile")({
   head: () => ({ meta: [{ title: "Profile — AxoraBD" }] }),
@@ -91,7 +92,7 @@ function ProfilePage() {
       amount: Number(form.amount),
       status: "pending",
     });
-    if (error) { toast.error(error.message); setBusy(false); return; }
+    if (error) { toast.error(friendlyError(error)); setBusy(false); return; }
     await supabase.from("profiles").update({ last_activation_request_at: new Date().toISOString() })
       .eq("user_id", session.user.id);
     toast.success("Activation request submitted. Admin will review shortly.");

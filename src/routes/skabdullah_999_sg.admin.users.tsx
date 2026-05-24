@@ -16,6 +16,7 @@ import { Ban, ShieldCheck, Pencil, Trash2, Eye } from "lucide-react";
 import { fmtDate, StatusPill, EmptyState, fmtMoney } from "@/lib/admin-utils";
 import { deleteUserAccount } from "@/lib/admin-users.functions";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/users")({
   head: () => ({ meta: [{ title: "Admin Users — AxoraBD" }] }),
@@ -79,7 +80,7 @@ function UsersPage() {
 
   const setStatus = async (id: string, status: "active" | "banned" | "inactive") => {
     const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
-    if (error) toast.error(error.message); else toast.success(`User ${status}`);
+    if (error) toast.error(friendlyError(error)); else toast.success(`User ${status}`);
   };
 
   const openEdit = (r: any) => {
@@ -92,7 +93,7 @@ function UsersPage() {
     const { error } = await supabase.from("profiles")
       .update({ balance: form.balance, trust_score: form.trust_score })
       .eq("id", edit.id);
-    if (error) toast.error(error.message);
+    if (error) toast.error(friendlyError(error));
     else { toast.success("User updated"); setEdit(null); }
   };
 
@@ -251,7 +252,7 @@ function UsersPage() {
                   setDeleteRow(null);
                   load();
                 } catch (err: any) {
-                  toast.error(err?.message ?? "Failed to delete user");
+                  toast.error(friendlyError(err, "Failed to delete user"));
                 } finally {
                   setDeleting(false);
                 }

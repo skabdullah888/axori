@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { ListSkeleton } from "@/components/section-loader";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
@@ -116,7 +117,7 @@ function WithdrawPage() {
       status: "pending",
     });
     setBusy(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     toast.success("Withdrawal request submitted.");
     setForm({ method: "", receiver_number: "", amount: "" });
     setCheck(null);

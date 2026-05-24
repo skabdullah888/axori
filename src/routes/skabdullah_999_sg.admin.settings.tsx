@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
 import { Settings2, Wallet, Plus, Trash2, CreditCard } from "lucide-react";
 
@@ -73,7 +74,7 @@ function SettingsPage() {
     };
     const { error } = await supabase.from("settings").update(payload).eq("id", row.id);
     setSaving(false);
-    if (error) toast.error(error.message); else toast.success("Settings saved");
+    if (error) toast.error(friendlyError(error)); else toast.success("Settings saved");
   };
 
   const addMethod = async () => {
@@ -88,7 +89,7 @@ function SettingsPage() {
       active: true,
     });
     setAddingMethod(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(friendlyError(error)); return; }
     toast.success("Payment method added");
     setNewMethod({ name: "", receiver_number: "", instructions: "" });
     loadMethods();
@@ -96,13 +97,13 @@ function SettingsPage() {
 
   const updateMethod = async (id: string, patch: any) => {
     const { error } = await supabase.from("payment_methods").update(patch).eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Updated"); loadMethods(); }
+    if (error) toast.error(friendlyError(error)); else { toast.success("Updated"); loadMethods(); }
   };
 
   const deleteMethod = async (id: string) => {
     if (!confirm("Delete this payment method?")) return;
     const { error } = await supabase.from("payment_methods").delete().eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Deleted"); loadMethods(); }
+    if (error) toast.error(friendlyError(error)); else { toast.success("Deleted"); loadMethods(); }
   };
 
   return (

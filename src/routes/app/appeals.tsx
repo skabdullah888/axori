@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { fmtDate } from "@/lib/admin-utils";
 import { ListSkeleton } from "@/components/section-loader";
+import { friendlyError } from "@/lib/friendly-error";
 
 type Search = { submissionId?: string };
 export const Route = createFileRoute("/app/appeals")({
@@ -64,7 +65,7 @@ function AppealsPage() {
     const { error } = await supabase.from("appeals").insert({
       user_id: session.user.id, submission_id: form.submission_id, reason: form.reason, status: "pending",
     });
-    if (error) { toast.error(error.message); setBusy(false); return; }
+    if (error) { toast.error(friendlyError(error)); setBusy(false); return; }
     toast.success("Appeal submitted to admin");
     setOpen(false); setForm({ submission_id: "", reason: "" }); setBusy(false);
   };
