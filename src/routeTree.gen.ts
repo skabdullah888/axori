@@ -41,6 +41,7 @@ import { Route as Skabdullah_999_sgAdminLoginRouteImport } from './routes/skabdu
 import { Route as Skabdullah_999_sgAdminDashboardRouteImport } from './routes/skabdullah_999_sg.admin.dashboard'
 import { Route as Skabdullah_999_sgAdminAppealsRouteImport } from './routes/skabdullah_999_sg.admin.appeals'
 import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const SubmissionsRoute = SubmissionsRouteImport.update({
   id: '/submissions',
@@ -212,6 +213,12 @@ const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
   path: '/$taskId',
   getParentRoute: () => AppTasksRoute,
 } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -280,6 +288,7 @@ export interface FileRoutesByTo {
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -315,6 +324,7 @@ export interface FileRoutesById {
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -351,6 +361,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/settings'
     | '/skabdullah_999_sg/admin/tasks'
     | '/skabdullah_999_sg/admin/users'
+    | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/settings'
     | '/skabdullah_999_sg/admin/tasks'
     | '/skabdullah_999_sg/admin/users'
+    | '/lovable/email/queue/process'
   id:
     | '__root__'
     | '/'
@@ -419,6 +431,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/settings'
     | '/skabdullah_999_sg/admin/tasks'
     | '/skabdullah_999_sg/admin/users'
+    | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -441,6 +454,7 @@ export interface RootRouteChildren {
   Skabdullah_999_sgAdminSettingsRoute: typeof Skabdullah_999_sgAdminSettingsRoute
   Skabdullah_999_sgAdminTasksRoute: typeof Skabdullah_999_sgAdminTasksRoute
   Skabdullah_999_sgAdminUsersRoute: typeof Skabdullah_999_sgAdminUsersRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -669,6 +683,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTasksTaskIdRouteImport
       parentRoute: typeof AppTasksRoute
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -738,6 +759,7 @@ const rootRouteChildren: RootRouteChildren = {
   Skabdullah_999_sgAdminSettingsRoute: Skabdullah_999_sgAdminSettingsRoute,
   Skabdullah_999_sgAdminTasksRoute: Skabdullah_999_sgAdminTasksRoute,
   Skabdullah_999_sgAdminUsersRoute: Skabdullah_999_sgAdminUsersRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
