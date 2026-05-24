@@ -484,6 +484,7 @@ function PublishPage() {
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
+      </AlertDialog>
       <SubmissionDetailDialog
         sub={viewSub}
         task={viewSub ? tasks.find(t => t.id === viewSub.task_id) : null}
