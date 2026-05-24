@@ -52,7 +52,7 @@ export function TutorialButton({ sectionKey, label = "Watch tutorial" }: { secti
     })();
   }, [sectionKey]);
 
-  if (!loaded || !data?.video_url) return null;
+  if (!loaded || !data?.video_url?.trim()) return null;
   const embed = toEmbedUrl(data.video_url);
 
   return (
