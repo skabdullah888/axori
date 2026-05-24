@@ -68,6 +68,7 @@ function SettingsPage() {
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
       withdrawals_enabled: form.withdrawals_enabled,
       minimum_task_publish_amount: form.minimum_task_publish_amount,
+      minimum_task_total_amount: form.minimum_task_total_amount,
       updated_at: new Date().toISOString(),
     };
     const { error } = await supabase.from("settings").update(payload).eq("id", row.id);
