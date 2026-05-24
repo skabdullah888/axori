@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ListSkeleton } from "@/components/section-loader";
+import { TutorialButton } from "@/components/tutorial-button";
 
 export const Route = createFileRoute("/app/referrals")({
   head: () => ({ meta: [{ title: "Referrals — AxoraBD" }] }),
@@ -62,6 +63,7 @@ function ReferralsPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="referrals" /></div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (

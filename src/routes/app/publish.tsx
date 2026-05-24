@@ -19,6 +19,7 @@ import { RejectDialog } from "@/components/reject-dialog";
 import { ProofThumb } from "@/components/proof-image";
 import { Linkified } from "@/lib/linkify";
 import { friendlyError } from "@/lib/friendly-error";
+import { TutorialButton } from "@/components/tutorial-button";
 
 const PUBLISHER_REJECT_PRESETS = [
   "Proof is invalid or fake",
@@ -223,6 +224,7 @@ function PublishPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="publish" /></div>
       <div className="relative">
         <Tabs defaultValue="create">
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mb-6">

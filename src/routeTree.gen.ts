@@ -31,6 +31,7 @@ import { Route as AppDepositRouteImport } from './routes/app/deposit'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAppealsRouteImport } from './routes/app/appeals'
 import { Route as Skabdullah_999_sgAdminUsersRouteImport } from './routes/skabdullah_999_sg.admin.users'
+import { Route as Skabdullah_999_sgAdminTutorialsRouteImport } from './routes/skabdullah_999_sg.admin.tutorials'
 import { Route as Skabdullah_999_sgAdminTasksRouteImport } from './routes/skabdullah_999_sg.admin.tasks'
 import { Route as Skabdullah_999_sgAdminSettingsRouteImport } from './routes/skabdullah_999_sg.admin.settings'
 import { Route as Skabdullah_999_sgAdminSecurityLogsRouteImport } from './routes/skabdullah_999_sg.admin.security-logs'
@@ -154,6 +155,12 @@ const Skabdullah_999_sgAdminUsersRoute =
     path: '/skabdullah_999_sg/admin/users',
     getParentRoute: () => rootRouteImport,
   } as any)
+const Skabdullah_999_sgAdminTutorialsRoute =
+  Skabdullah_999_sgAdminTutorialsRouteImport.update({
+    id: '/skabdullah_999_sg/admin/tutorials',
+    path: '/skabdullah_999_sg/admin/tutorials',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const Skabdullah_999_sgAdminTasksRoute =
   Skabdullah_999_sgAdminTasksRouteImport.update({
     id: '/skabdullah_999_sg/admin/tasks',
@@ -252,6 +259,7 @@ export interface FileRoutesByFullPath {
   '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
+  '/skabdullah_999_sg/admin/tutorials': typeof Skabdullah_999_sgAdminTutorialsRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -287,6 +295,7 @@ export interface FileRoutesByTo {
   '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
+  '/skabdullah_999_sg/admin/tutorials': typeof Skabdullah_999_sgAdminTutorialsRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -323,6 +332,7 @@ export interface FileRoutesById {
   '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
+  '/skabdullah_999_sg/admin/tutorials': typeof Skabdullah_999_sgAdminTutorialsRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
@@ -360,6 +370,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/security-logs'
     | '/skabdullah_999_sg/admin/settings'
     | '/skabdullah_999_sg/admin/tasks'
+    | '/skabdullah_999_sg/admin/tutorials'
     | '/skabdullah_999_sg/admin/users'
     | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
@@ -395,6 +406,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/security-logs'
     | '/skabdullah_999_sg/admin/settings'
     | '/skabdullah_999_sg/admin/tasks'
+    | '/skabdullah_999_sg/admin/tutorials'
     | '/skabdullah_999_sg/admin/users'
     | '/lovable/email/queue/process'
   id:
@@ -430,6 +442,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/security-logs'
     | '/skabdullah_999_sg/admin/settings'
     | '/skabdullah_999_sg/admin/tasks'
+    | '/skabdullah_999_sg/admin/tutorials'
     | '/skabdullah_999_sg/admin/users'
     | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
@@ -453,6 +466,7 @@ export interface RootRouteChildren {
   Skabdullah_999_sgAdminSecurityLogsRoute: typeof Skabdullah_999_sgAdminSecurityLogsRoute
   Skabdullah_999_sgAdminSettingsRoute: typeof Skabdullah_999_sgAdminSettingsRoute
   Skabdullah_999_sgAdminTasksRoute: typeof Skabdullah_999_sgAdminTasksRoute
+  Skabdullah_999_sgAdminTutorialsRoute: typeof Skabdullah_999_sgAdminTutorialsRoute
   Skabdullah_999_sgAdminUsersRoute: typeof Skabdullah_999_sgAdminUsersRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
 }
@@ -613,6 +627,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Skabdullah_999_sgAdminUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/skabdullah_999_sg/admin/tutorials': {
+      id: '/skabdullah_999_sg/admin/tutorials'
+      path: '/skabdullah_999_sg/admin/tutorials'
+      fullPath: '/skabdullah_999_sg/admin/tutorials'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminTutorialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/skabdullah_999_sg/admin/tasks': {
       id: '/skabdullah_999_sg/admin/tasks'
       path: '/skabdullah_999_sg/admin/tasks'
@@ -758,6 +779,7 @@ const rootRouteChildren: RootRouteChildren = {
     Skabdullah_999_sgAdminSecurityLogsRoute,
   Skabdullah_999_sgAdminSettingsRoute: Skabdullah_999_sgAdminSettingsRoute,
   Skabdullah_999_sgAdminTasksRoute: Skabdullah_999_sgAdminTasksRoute,
+  Skabdullah_999_sgAdminTutorialsRoute: Skabdullah_999_sgAdminTutorialsRoute,
   Skabdullah_999_sgAdminUsersRoute: Skabdullah_999_sgAdminUsersRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
 }

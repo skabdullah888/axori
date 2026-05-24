@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, Gavel, Wallet, Users, Building2,
-  ListTodo, Bell, Settings as SettingsIcon, ShieldAlert, LogOut,
+  ListTodo, Bell, Settings as SettingsIcon, ShieldAlert, LogOut, Video,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,7 @@ const items = [
   { to: `${BASE}/tasks`, label: "Tasks", icon: ListTodo, types: ["task_published", "submission_new"] },
   { to: `${BASE}/notifications`, label: "Notifications", icon: Bell, types: ["*"] },
   { to: `${BASE}/settings`, label: "Settings", icon: SettingsIcon, types: [] as string[] },
+  { to: `${BASE}/tutorials`, label: "Tutorial Videos", icon: Video, types: [] as string[] },
   { to: `${BASE}/security-logs`, label: "Security Logs", icon: ShieldAlert, types: [] as string[] },
 ];
 
