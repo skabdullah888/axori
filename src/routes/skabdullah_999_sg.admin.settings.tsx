@@ -163,6 +163,17 @@ function SettingsPage() {
               />
             </div>
             <Separator className="my-5" />
+            <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
+              <div>
+                <Label className="text-sm font-medium">Allow withdrawals</Label>
+                <p className="text-xs text-muted-foreground mt-1">When off, users cannot submit new withdrawal requests.</p>
+              </div>
+              <Switch
+                checked={form.withdrawals_enabled}
+                onCheckedChange={(v) => setForm((f) => ({ ...f, withdrawals_enabled: v }))}
+              />
+            </div>
+            <Separator className="my-5" />
             <div className="flex justify-end">
               <Button onClick={save} disabled={saving}>
                 {saving ? "Saving…" : "Save changes"}
