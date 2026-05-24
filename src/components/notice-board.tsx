@@ -40,7 +40,17 @@ export function NoticeBoard() {
     return () => { supabase.removeChannel(ch); };
   }, []);
 
-  if (loading || notices.length === 0) return null;
+  if (loading) return (
+    <Card className="mb-6 border-border/60 bg-card/60">
+      <CardContent className="p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Megaphone className="h-4 w-4 text-primary" />
+          <h3 className="text-sm font-semibold uppercase tracking-wider">Notice Board</h3>
+        </div>
+        <div className="h-16 rounded-lg bg-muted/40 animate-pulse" />
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Card className="mb-6 border-border/60 bg-card/60">
@@ -49,21 +59,25 @@ export function NoticeBoard() {
           <Megaphone className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-semibold uppercase tracking-wider">Notice Board</h3>
         </div>
-        <div className="space-y-2">
-          {notices.map((n) => {
-            const s = typeStyles[n.type] ?? typeStyles.info;
-            const Icon = s.icon;
-            return (
-              <div key={n.id} className={cn("flex items-start gap-3 rounded-lg border p-3", s.cls)}>
-                <Icon className="h-4 w-4 mt-0.5 shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-foreground text-sm">{n.title}</p>
-                  <Linkified text={n.body} className="text-sm text-muted-foreground mt-0.5 whitespace-pre-wrap break-words block" />
+        {notices.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No active notices right now.</p>
+        ) : (
+          <div className="space-y-2">
+            {notices.map((n) => {
+              const s = typeStyles[n.type] ?? typeStyles.info;
+              const Icon = s.icon;
+              return (
+                <div key={n.id} className={cn("flex items-start gap-3 rounded-lg border p-3", s.cls)}>
+                  <Icon className="h-4 w-4 mt-0.5 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-foreground text-sm">{n.title}</p>
+                    <Linkified text={n.body} className="text-sm text-muted-foreground mt-0.5 whitespace-pre-wrap break-words block" />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
