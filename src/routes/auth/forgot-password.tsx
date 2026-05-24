@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/auth/forgot-password")({
   head: () => ({ meta: [{ title: "Forgot Password — AxoraBD" }] }),
@@ -24,7 +25,7 @@ function ForgotPage() {
       redirectTo: `${window.location.origin}/auth/reset-password`,
     });
     setBusy(false);
-    if (error) { setError(error.message); return; }
+    if (error) { setError(friendlyError(error)); return; }
     setSent(true);
   };
 
