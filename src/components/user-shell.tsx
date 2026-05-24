@@ -11,18 +11,18 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 const items = [
-  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/app/tasks", label: "Browse Tasks", icon: ListTodo },
-  { to: "/app/submissions", label: "My Submissions", icon: FileCheck },
-  { to: "/app/appeals", label: "Appeals", icon: Gavel },
-  { to: "/app/wallet", label: "Wallet", icon: Wallet },
-  { to: "/app/deposit", label: "Deposit", icon: ArrowDownToLine },
-  { to: "/app/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
-  { to: "/app/publish", label: "Publish Task", icon: Megaphone },
-  { to: "/app/referrals", label: "Referrals", icon: Users2 },
-  { to: "/app/notifications", label: "Notifications", icon: Bell },
-  { to: "/app/profile", label: "Profile", icon: User },
-  { to: "/app/settings", label: "Settings", icon: SettingsIcon },
+  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
+  { to: "/app/tasks", label: "Browse Tasks", icon: ListTodo, types: [] as string[] },
+  { to: "/app/submissions", label: "My Submissions", icon: FileCheck, types: ["submission_approved", "submission_rejected"] },
+  { to: "/app/appeals", label: "Appeals", icon: Gavel, types: ["appeal_approved", "appeal_rejected", "appeal_response"] },
+  { to: "/app/wallet", label: "Wallet", icon: Wallet, types: ["deposit_approved", "deposit_rejected", "withdrawal_approved", "withdrawal_rejected", "activation_approved", "activation_rejected"] },
+  { to: "/app/deposit", label: "Deposit", icon: ArrowDownToLine, types: ["deposit_approved", "deposit_rejected"] },
+  { to: "/app/withdraw", label: "Withdraw", icon: ArrowUpFromLine, types: ["withdrawal_approved", "withdrawal_rejected"] },
+  { to: "/app/publish", label: "Publish Task", icon: Megaphone, types: ["submission_new", "task_published"] },
+  { to: "/app/referrals", label: "Referrals", icon: Users2, types: ["referral_joined", "referral_bonus"] },
+  { to: "/app/notifications", label: "Notifications", icon: Bell, types: ["*"] },
+  { to: "/app/profile", label: "Profile", icon: User, types: ["account_status_changed"] },
+  { to: "/app/settings", label: "Settings", icon: SettingsIcon, types: [] as string[] },
 ] as const;
 
 type Profile = {
