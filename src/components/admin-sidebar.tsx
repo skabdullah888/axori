@@ -9,29 +9,34 @@ import { cn } from "@/lib/utils";
 
 const BASE = "/skabdullah_999_sg/admin";
 const items = [
-  { to: `${BASE}/dashboard`, label: "Dashboard", icon: LayoutDashboard },
-  { to: `${BASE}/appeals`, label: "Appeals Center", icon: Gavel },
-  { to: `${BASE}/payments`, label: "Payments", icon: Wallet },
-  { to: `${BASE}/users`, label: "Users", icon: Users },
-  { to: `${BASE}/publishers`, label: "Publishers", icon: Building2 },
-  { to: `${BASE}/tasks`, label: "Tasks", icon: ListTodo },
-  { to: `${BASE}/notifications`, label: "Notifications", icon: Bell },
-  { to: `${BASE}/settings`, label: "Settings", icon: SettingsIcon },
-  { to: `${BASE}/security-logs`, label: "Security Logs", icon: ShieldAlert },
+  { to: `${BASE}/dashboard`, label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
+  { to: `${BASE}/appeals`, label: "Appeals Center", icon: Gavel, types: ["appeal_new"] },
+  { to: `${BASE}/payments`, label: "Payments", icon: Wallet, types: ["activation_request", "deposit_request", "withdrawal_request"] },
+  { to: `${BASE}/users`, label: "Users", icon: Users, types: [] as string[] },
+  { to: `${BASE}/publishers`, label: "Publishers", icon: Building2, types: [] as string[] },
+  { to: `${BASE}/tasks`, label: "Tasks", icon: ListTodo, types: ["task_published", "submission_new"] },
+  { to: `${BASE}/notifications`, label: "Notifications", icon: Bell, types: ["*"] },
+  { to: `${BASE}/settings`, label: "Settings", icon: SettingsIcon, types: [] as string[] },
+  { to: `${BASE}/security-logs`, label: "Security Logs", icon: ShieldAlert, types: [] as string[] },
 ] as const;
 
 export function AdminSidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   const navigate = useNavigate();
   const [unread, setUnread] = useState(0);
+  const [unreadByType, setUnreadByType] = useState<Record<string, number>>({});
 
   const loadUnread = async () => {
-    const { count } = await supabase
+    const { data } = await supabase
       .from("notifications")
-      .select("id", { count: "exact", head: true })
+      .select("type")
       .eq("admin_targeted", true)
       .eq("read", false);
-    setUnread(count ?? 0);
+    const rows = (data as { type: string }[] | null) ?? [];
+    const map: Record<string, number> = {};
+    for (const r of rows) map[r.type] = (map[r.type] ?? 0) + 1;
+    setUnreadByType(map);
+    setUnread(rows.length);
   };
 
   useEffect(() => {
@@ -42,16 +47,26 @@ export function AdminSidebar() {
     return () => { supabase.removeChannel(ch); };
   }, []);
 
-  // Reset badge when visiting notifications page
+  // Mark relevant notifications as read when visiting matching section
   useEffect(() => {
-    if (path === `${BASE}/notifications` && unread > 0) {
-      supabase.from("notifications")
-        .update({ read: true })
-        .eq("admin_targeted", true)
-        .eq("read", false)
-        .then(() => loadUnread());
+    const it = items.find((i) => path === i.to || path.startsWith(i.to + "/"));
+    if (!it) return;
+    const isNotifPage = it.types.includes("*");
+    if (isNotifPage) {
+      if (unread > 0) {
+        supabase.from("notifications").update({ read: true })
+          .eq("admin_targeted", true).eq("read", false).then(() => loadUnread());
+      }
+      return;
     }
-  }, [path]);
+    if (it.types.length === 0) return;
+    const hasUnread = it.types.some((t) => (unreadByType[t] ?? 0) > 0);
+    if (!hasUnread) return;
+    supabase.from("notifications").update({ read: true })
+      .eq("admin_targeted", true).eq("read", false)
+      .in("type", it.types as unknown as string[]).then(() => loadUnread());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, unreadByType, unread]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -68,7 +83,9 @@ export function AdminSidebar() {
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
-          const showBadge = it.to === `${BASE}/notifications` && unread > 0;
+          const count = it.types.includes("*")
+            ? unread
+            : it.types.reduce((sum, t) => sum + (unreadByType[t] ?? 0), 0);
           return (
             <Link
               key={it.to}
@@ -82,9 +99,9 @@ export function AdminSidebar() {
             >
               <Icon className="h-4 w-4" />
               <span className="flex-1">{it.label}</span>
-              {showBadge && (
+              {count > 0 && (
                 <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold">
-                  {unread > 99 ? "99+" : unread}
+                  {count > 99 ? "99+" : count}
                 </span>
               )}
             </Link>
