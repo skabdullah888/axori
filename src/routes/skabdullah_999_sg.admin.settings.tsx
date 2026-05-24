@@ -20,7 +20,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true,
+    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0,
   });
   const [saving, setSaving] = useState(false);
   const [methods, setMethods] = useState<any[]>([]);
