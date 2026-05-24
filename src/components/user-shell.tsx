@@ -11,19 +11,19 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 const items = [
-  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/app/tasks", label: "Browse Tasks", icon: ListTodo },
-  { to: "/app/submissions", label: "My Submissions", icon: FileCheck },
-  { to: "/app/appeals", label: "Appeals", icon: Gavel },
-  { to: "/app/wallet", label: "Wallet", icon: Wallet },
-  { to: "/app/deposit", label: "Deposit", icon: ArrowDownToLine },
-  { to: "/app/withdraw", label: "Withdraw", icon: ArrowUpFromLine },
-  { to: "/app/publish", label: "Publish Task", icon: Megaphone },
-  { to: "/app/referrals", label: "Referrals", icon: Users2 },
-  { to: "/app/notifications", label: "Notifications", icon: Bell },
-  { to: "/app/profile", label: "Profile", icon: User },
-  { to: "/app/settings", label: "Settings", icon: SettingsIcon },
-] as const;
+  { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
+  { to: "/app/tasks", label: "Browse Tasks", icon: ListTodo, types: [] as string[] },
+  { to: "/app/submissions", label: "My Submissions", icon: FileCheck, types: ["submission_approved", "submission_rejected"] },
+  { to: "/app/appeals", label: "Appeals", icon: Gavel, types: ["appeal_approved", "appeal_rejected", "appeal_response"] },
+  { to: "/app/wallet", label: "Wallet", icon: Wallet, types: ["deposit_approved", "deposit_rejected", "withdrawal_approved", "withdrawal_rejected", "activation_approved", "activation_rejected"] },
+  { to: "/app/deposit", label: "Deposit", icon: ArrowDownToLine, types: ["deposit_approved", "deposit_rejected"] },
+  { to: "/app/withdraw", label: "Withdraw", icon: ArrowUpFromLine, types: ["withdrawal_approved", "withdrawal_rejected"] },
+  { to: "/app/publish", label: "Publish Task", icon: Megaphone, types: ["submission_new", "task_published"] },
+  { to: "/app/referrals", label: "Referrals", icon: Users2, types: ["referral_joined", "referral_bonus"] },
+  { to: "/app/notifications", label: "Notifications", icon: Bell, types: ["*"] },
+  { to: "/app/profile", label: "Profile", icon: User, types: ["account_status_changed"] },
+  { to: "/app/settings", label: "Settings", icon: SettingsIcon, types: [] as string[] },
+];
 
 type Profile = {
   id: string; user_id: string; username: string; email: string | null;
@@ -37,6 +37,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const path = useRouterState({ select: (r) => r.location.pathname });
   const [profile, setProfile] = useState<Profile | null>(null);
   const [unread, setUnread] = useState(0);
+  const [unreadByType, setUnreadByType] = useState<Record<string, number>>({});
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -77,10 +78,14 @@ export function UserShell({ title, children }: { title: string; children: ReactN
 
   const loadUnread = async () => {
     if (!session?.user) return;
-    const { count } = await supabase
-      .from("notifications").select("id", { count: "exact", head: true })
+    const { data } = await supabase
+      .from("notifications").select("type")
       .eq("user_id", session.user.id).eq("read", false);
-    setUnread(count ?? 0);
+    const rows = (data as { type: string }[] | null) ?? [];
+    const map: Record<string, number> = {};
+    for (const r of rows) map[r.type] = (map[r.type] ?? 0) + 1;
+    setUnreadByType(map);
+    setUnread(rows.length);
   };
 
   useEffect(() => {
@@ -95,12 +100,25 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   }, [session?.user?.id]);
 
   useEffect(() => {
-    if (path === "/app/notifications" && unread > 0 && session?.user) {
-      supabase.from("notifications").update({ read: true })
-        .eq("user_id", session.user.id).eq("read", false).then(() => loadUnread());
+    if (!session?.user) return;
+    const it = items.find((i) => path === i.to || path.startsWith(i.to + "/"));
+    if (!it) return;
+    const isNotifPage = it.types.includes("*");
+    if (isNotifPage) {
+      if (unread > 0) {
+        supabase.from("notifications").update({ read: true })
+          .eq("user_id", session.user.id).eq("read", false).then(() => loadUnread());
+      }
+      return;
     }
+    if (it.types.length === 0) return;
+    const hasUnread = it.types.some((t) => (unreadByType[t] ?? 0) > 0);
+    if (!hasUnread) return;
+    supabase.from("notifications").update({ read: true })
+      .eq("user_id", session.user.id).eq("read", false)
+      .in("type", it.types as string[]).then(() => loadUnread());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  }, [path, unreadByType, unread]);
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -137,7 +155,9 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         {items.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
-          const showBadge = it.to === "/app/notifications" && unread > 0;
+          const count = it.types.includes("*")
+            ? unread
+            : it.types.reduce((sum, t) => sum + (unreadByType[t] ?? 0), 0);
           return (
             <Link key={it.to} to={it.to} onClick={() => setMobileOpen(false)}
               className={cn(
@@ -148,9 +168,9 @@ export function UserShell({ title, children }: { title: string; children: ReactN
               )}>
               <Icon className="h-4 w-4" />
               <span className="flex-1">{it.label}</span>
-              {showBadge && (
+              {count > 0 && (
                 <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold">
-                  {unread > 99 ? "99+" : unread}
+                  {count > 99 ? "99+" : count}
                 </span>
               )}
             </Link>
