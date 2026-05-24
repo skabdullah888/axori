@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { fmtDate, fmtMoney } from "@/lib/admin-utils";
 import { ProofThumb } from "@/components/proof-image";
 import { ListSkeleton } from "@/components/section-loader";
+import { TutorialButton } from "@/components/tutorial-button";
 
 export const Route = createFileRoute("/app/submissions")({
   head: () => ({ meta: [{ title: "My Submissions — AxoraBD" }] }),
@@ -52,6 +53,7 @@ function SubmissionsPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="submissions" /></div>
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="mb-4">
           <TabsTrigger value="pending">Pending ({rows.filter((r) => r.status === "pending").length})</TabsTrigger>

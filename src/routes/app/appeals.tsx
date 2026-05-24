@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { fmtDate } from "@/lib/admin-utils";
 import { ListSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
+import { TutorialButton } from "@/components/tutorial-button";
 
 type Search = { submissionId?: string };
 export const Route = createFileRoute("/app/appeals")({
@@ -75,6 +76,7 @@ function AppealsPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="appeals" /></div>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2"><Gavel className="h-5 w-5 text-primary" /> Your Appeals</CardTitle>

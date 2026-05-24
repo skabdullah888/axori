@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { CheckCircle2, XCircle } from "lucide-react";
 import { ListSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
+import { TutorialButton } from "@/components/tutorial-button";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
@@ -126,6 +127,7 @@ function WithdrawPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="withdraw" /></div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="relative overflow-hidden">
           <CardHeader>

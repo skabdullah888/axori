@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ListSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
+import { TutorialButton } from "@/components/tutorial-button";
 
 export const Route = createFileRoute("/app/deposit")({
   head: () => ({ meta: [{ title: "Deposit — AxoraBD" }] }),
@@ -79,6 +80,7 @@ function DepositPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="deposit" /></div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>

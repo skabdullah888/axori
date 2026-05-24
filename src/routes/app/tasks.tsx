@@ -18,6 +18,7 @@ import { Paginator } from "@/components/paginator";
 import { Linkified } from "@/lib/linkify";
 import { CardGridSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
+import { TutorialButton } from "@/components/tutorial-button";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
@@ -123,6 +124,7 @@ function TasksPage() {
 
   return (
     <>
+      <div className="mb-4 flex justify-end"><TutorialButton sectionKey="tasks" /></div>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
       <div className="relative">
         {!isActive && (
