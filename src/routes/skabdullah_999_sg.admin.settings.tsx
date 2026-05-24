@@ -41,6 +41,7 @@ function SettingsPage() {
         minimum_tasks_for_withdrawal: Number((data as any).minimum_tasks_for_withdrawal ?? 0),
         withdrawals_enabled: (data as any).withdrawals_enabled ?? true,
         minimum_task_publish_amount: Number((data as any).minimum_task_publish_amount ?? 0),
+        minimum_task_total_amount: Number((data as any).minimum_task_total_amount ?? 0),
       });
     }
   };
