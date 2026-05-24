@@ -38,13 +38,15 @@ function NotificationsPage() {
   const [items, setItems] = useState<Notif[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const tracked = new Set(TRACKED_TYPES);
+
   const load = async () => {
     if (!session?.user) return;
     const { data } = await supabase.from("notifications").select("*")
       .eq("user_id", session.user.id).eq("admin_targeted", false)
-      .not("type", "in", `(${TRACKED_TYPES.map((t) => `"${t}"`).join(",")})`)
-      .order("created_at", { ascending: false }).limit(200);
-    setItems((data as Notif[]) ?? []);
+      .order("created_at", { ascending: false }).limit(500);
+    const filtered = ((data as Notif[]) ?? []).filter((n) => !tracked.has(n.type));
+    setItems(filtered);
     setLoading(false);
   };
 
@@ -60,9 +62,9 @@ function NotificationsPage() {
 
   const markAll = async () => {
     if (!session?.user) return;
-    const { error } = await supabase.from("notifications").update({ read: true })
-      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false)
-      .not("type", "in", `(${TRACKED_TYPES.map((t) => `"${t}"`).join(",")})`);
+    const ids = items.filter((i) => !i.read).map((i) => i.id);
+    if (ids.length === 0) { toast.success("All marked as read"); return; }
+    const { error } = await supabase.from("notifications").update({ read: true }).in("id", ids);
     if (error) toast.error(friendlyError(error)); else { toast.success("All marked as read"); load(); }
   };
 
