@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle } from "lucide-react";
+import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle, User, ChevronRight } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -15,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { RejectDialog } from "@/components/reject-dialog";
+import { ProofThumb } from "@/components/proof-image";
+import { Linkified } from "@/lib/linkify";
 
 const PUBLISHER_REJECT_PRESETS = [
   "Proof is invalid or fake",
@@ -58,6 +61,7 @@ function PublishPage() {
   });
   const [rejectSub, setRejectSub] = useState<any | null>(null);
   const [cancelTask, setCancelTask] = useState<any | null>(null);
+  const [viewSub, setViewSub] = useState<any | null>(null);
 
   async function confirmCancelTask() {
     if (!cancelTask) return;
@@ -379,17 +383,22 @@ function PublishPage() {
                 {pendingSubs.map((s) => {
                   const task = tasks.find(t => t.id === s.task_id);
                   return (
-                    <Card key={s.id}>
+                    <Card key={s.id}
+                      onClick={() => setViewSub({ ...s, _reward: Number(task?.reward ?? 0) })}
+                      className="cursor-pointer hover:border-primary/40 transition-colors">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-                          <div>
-                            <p className="font-semibold text-sm">{s.tasks?.title ?? task?.title}</p>
+                          <div className="min-w-0">
+                            <p className="font-semibold text-sm truncate">{s.tasks?.title ?? task?.title}</p>
                             <p className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleString()}</p>
                           </div>
-                          <Badge className="bg-warning/20 text-warning border-warning/30">Pending</Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge className="bg-warning/20 text-warning border-warning/30">Pending</Badge>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
                         </div>
-                        {s.proof_text && <p className="text-sm bg-accent/40 p-3 rounded mb-3 whitespace-pre-wrap">{s.proof_text}</p>}
-                        <div className="flex gap-2">
+                        {s.proof_text && <p className="text-xs bg-accent/40 p-2 rounded mb-3 whitespace-pre-wrap line-clamp-2">{s.proof_text}</p>}
+                        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                           <Button size="sm" onClick={() => reviewSub(s.id, true, s.task_id, s.user_id, Number(task?.reward ?? 0))}
                             className="bg-success text-success-foreground hover:bg-success/90">
                             <CheckCircle2 className="h-4 w-4" /> Approve & Pay
@@ -476,6 +485,131 @@ function PublishPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      <SubmissionDetailDialog
+        sub={viewSub}
+        task={viewSub ? tasks.find(t => t.id === viewSub.task_id) : null}
+        onClose={() => setViewSub(null)}
+        onApprove={() => { if (viewSub) { reviewSub(viewSub.id, true, viewSub.task_id, viewSub.user_id, viewSub._reward); setViewSub(null); } }}
+        onReject={() => { if (viewSub) { setRejectSub(viewSub); setViewSub(null); } }}
+      />
     </>
+  );
+}
+
+function SubmissionDetailDialog({ sub, task, onClose, onApprove, onReject }: {
+  sub: any | null; task: any | null; onClose: () => void; onApprove: () => void; onReject: () => void;
+}) {
+  const [proofs, setProofs] = useState<any[]>([]);
+  const [submitter, setSubmitter] = useState<any | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!sub) { setProofs([]); setSubmitter(null); return; }
+    let cancelled = false;
+    setLoading(true);
+    (async () => {
+      const [p, u] = await Promise.all([
+        supabase.from("task_submission_proofs").select("*").eq("submission_id", sub.id),
+        supabase.from("profiles").select("username, avatar_url, full_name, trust_score").eq("user_id", sub.user_id).maybeSingle(),
+      ]);
+      if (cancelled) return;
+      setProofs(p.data ?? []);
+      setSubmitter(u.data);
+      setLoading(false);
+    })();
+    return () => { cancelled = true; };
+  }, [sub?.id]);
+
+  if (!sub) return null;
+  const proofFields: any[] = Array.isArray(task?.proof_fields) ? task.proof_fields : [];
+
+  return (
+    <Dialog open={!!sub} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-lg pr-6">{task?.title ?? sub.tasks?.title ?? "Submission"}</DialogTitle>
+          <DialogDescription>
+            Submitted {new Date(sub.created_at).toLocaleString()}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-accent/40 border border-border">
+          <div className="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center overflow-hidden">
+            {submitter?.avatar_url ? (
+              <img src={submitter.avatar_url} alt="" className="h-full w-full object-cover" />
+            ) : <User className="h-5 w-5 text-primary" />}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-sm truncate">@{submitter?.username ?? "user"}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {submitter?.full_name ?? "—"} · Trust {submitter?.trust_score ?? "—"}
+            </p>
+          </div>
+          <Badge className="bg-warning/20 text-warning border-warning/30">Pending</Badge>
+        </div>
+
+        {task?.instructions && (
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Task instructions</p>
+            <div className="text-xs p-3 rounded-lg bg-muted/40 border border-border max-h-32 overflow-y-auto">
+              <Linkified text={task.instructions} className="block" />
+            </div>
+          </div>
+        )}
+
+        {proofFields.length > 0 && (
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">Required proof</p>
+            <ul className="text-xs space-y-1">
+              {proofFields.map((f) => (
+                <li key={f.id} className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-[10px] capitalize">{f.type}</Badge>
+                  <span>{f.label}{f.required && <span className="text-destructive ml-0.5">*</span>}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">User's submission</p>
+          {sub.proof_text ? (
+            <div className="text-sm p-3 rounded-lg bg-accent/40 border border-border whitespace-pre-wrap">
+              <Linkified text={sub.proof_text} className="block" />
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground italic">No text proof provided.</p>
+          )}
+        </div>
+
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
+            Screenshots ({proofs.length})
+          </p>
+          {loading ? (
+            <div className="h-32 rounded-lg bg-muted animate-pulse" />
+          ) : proofs.length === 0 ? (
+            <p className="text-xs text-muted-foreground italic">No screenshots uploaded.</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              {proofs.map((p) => (
+                <ProofThumb key={p.id} src={p.image_url}
+                  className="w-full h-40 object-cover rounded-lg border border-border hover:opacity-90 transition" />
+              ))}
+            </div>
+          )}
+          <p className="text-[10px] text-muted-foreground mt-1">Tap any image to open full size.</p>
+        </div>
+
+        <div className="flex gap-2 pt-2 sticky bottom-0 bg-background pb-1">
+          <Button onClick={onApprove} className="flex-1 bg-success text-success-foreground hover:bg-success/90">
+            <CheckCircle2 className="h-4 w-4" /> Approve & Pay ৳{Number(sub._reward ?? 0).toFixed(2)}
+          </Button>
+          <Button onClick={onReject} variant="destructive" className="flex-1">
+            <XCircle className="h-4 w-4" /> Reject
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
