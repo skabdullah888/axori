@@ -38,13 +38,133 @@ function NotificationsPage() {
         <TabsList>
           <TabsTrigger value="admin"><Bell className="h-4 w-4 mr-1" />Admin Inbox</TabsTrigger>
           <TabsTrigger value="compose"><Send className="h-4 w-4 mr-1" />Send Notification</TabsTrigger>
+          <TabsTrigger value="notice"><Megaphone className="h-4 w-4 mr-1" />Notice Board</TabsTrigger>
           <TabsTrigger value="history">Sent History</TabsTrigger>
         </TabsList>
         <TabsContent value="admin"><AdminInbox /></TabsContent>
         <TabsContent value="compose"><ComposePanel /></TabsContent>
+        <TabsContent value="notice"><NoticeBoardPanel /></TabsContent>
         <TabsContent value="history"><HistoryPanel /></TabsContent>
       </Tabs>
     </AdminShell>
+  );
+}
+
+function NoticeBoardPanel() {
+  const [rows, setRows] = useState<any[]>([]);
+  const [edit, setEdit] = useState<any | null>(null);
+  const [creating, setCreating] = useState(false);
+
+  const load = async () => {
+    const { data } = await supabase.from("notice_board").select("*")
+      .order("created_at", { ascending: false }).limit(200);
+    setRows(data ?? []);
+  };
+
+  useEffect(() => {
+    load();
+    const ch = supabase.channel("notice-admin-rt")
+      .on("postgres_changes", { event: "*", schema: "public", table: "notice_board" }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, []);
+
+  const openNew = () => { setEdit({ title: "", body: "", type: "info", active: true }); setCreating(true); };
+  const openEdit = (r: any) => { setEdit({ ...r }); setCreating(false); };
+
+  const save = async () => {
+    if (!edit?.title?.trim() || !edit?.body?.trim()) { toast.error("Title and body required"); return; }
+    if (creating) {
+      const { data: u } = await supabase.auth.getUser();
+      const { error } = await supabase.from("notice_board").insert({
+        title: edit.title, body: edit.body, type: edit.type, active: edit.active, created_by: u.user?.id ?? null,
+      });
+      if (error) return toast.error(error.message);
+      toast.success("Notice posted");
+    } else {
+      const { error } = await supabase.from("notice_board").update({
+        title: edit.title, body: edit.body, type: edit.type, active: edit.active,
+      }).eq("id", edit.id);
+      if (error) return toast.error(error.message);
+      toast.success("Updated");
+    }
+    setEdit(null);
+  };
+
+  const toggleActive = async (r: any) => {
+    await supabase.from("notice_board").update({ active: !r.active }).eq("id", r.id);
+  };
+  const del = async (id: string) => {
+    if (!confirm("Delete this notice?")) return;
+    await supabase.from("notice_board").delete().eq("id", id);
+    toast.success("Deleted");
+  };
+
+  return (
+    <div className="mt-4">
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-sm text-muted-foreground">Notices appear on every user's dashboard.</p>
+        <Button onClick={openNew}><Plus className="h-4 w-4 mr-1" />New Notice</Button>
+      </div>
+      <Card><CardContent className="p-0">
+        {rows.length === 0 ? <EmptyState message="No notices yet." /> : (
+          <div className="divide-y divide-border">
+            {rows.map(r => (
+              <div key={r.id} className={`p-4 flex items-start gap-4 ${r.active ? "" : "opacity-60"}`}>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{r.title}</span>
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground">{r.type}</span>
+                    {!r.active && <span className="text-[10px] uppercase font-semibold text-muted-foreground">HIDDEN</span>}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{r.body}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{fmtDate(r.created_at)}</div>
+                </div>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="secondary" onClick={() => toggleActive(r)}>
+                    {r.active ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                  <Button size="sm" variant="secondary" onClick={() => openEdit(r)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => del(r.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent></Card>
+
+      <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{creating ? "New notice" : "Edit notice"}</DialogTitle></DialogHeader>
+          {edit && (
+            <div className="space-y-3">
+              <div><Label>Title</Label><Input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} /></div>
+              <div>
+                <Label>Type</Label>
+                <div className="flex gap-2 mt-1 flex-wrap">
+                  {["info", "success", "warning", "error"].map(t => (
+                    <Button key={t} size="sm" variant={edit.type === t ? "default" : "secondary"} onClick={() => setEdit({ ...edit, type: t })}>{t}</Button>
+                  ))}
+                </div>
+              </div>
+              <div><Label>Body</Label><Textarea rows={5} value={edit.body} onChange={(e) => setEdit({ ...edit, body: e.target.value })} /></div>
+              <div className="flex items-center gap-2">
+                <Switch checked={!!edit.active} onCheckedChange={(v) => setEdit({ ...edit, active: v })} />
+                <Label>Active (visible to users)</Label>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setEdit(null)}>Cancel</Button>
+            <Button onClick={save}>{creating ? "Post" : "Save"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
 
