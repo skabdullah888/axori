@@ -103,17 +103,16 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     if (!session?.user) return;
     const it = items.find((i) => path === i.to || path.startsWith(i.to + "/"));
     if (!it) return;
+    const trackedTypes = items.flatMap((i) => (i.types.includes("*") ? [] : i.types));
     const isNotifPage = it.types.includes("*");
     if (isNotifPage) {
-      const trackedTypes = items.flatMap((i) => (i.types.includes("*") ? [] : i.types));
-      const generalUnread = Object.entries(unreadByType)
-        .filter(([t]) => !trackedTypes.includes(t))
-        .reduce((s, [, n]) => s + n, 0);
-      if (generalUnread > 0) {
+      const untrackedUnread = Object.entries(unreadByType)
+        .filter(([t, n]) => !trackedTypes.includes(t) && n > 0)
+        .map(([t]) => t);
+      if (untrackedUnread.length > 0) {
         supabase.from("notifications").update({ read: true })
           .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false)
-          .not("type", "in", `(${trackedTypes.map((t) => `"${t}"`).join(",")})`)
-          .then(() => loadUnread());
+          .in("type", untrackedUnread).then(() => loadUnread());
       }
       return;
     }
