@@ -163,6 +163,12 @@ function SettingsPage() {
                 value={form.minimum_tasks_for_withdrawal}
                 onChange={(v) => setForm(f => ({ ...f, minimum_tasks_for_withdrawal: v }))}
               />
+              <Field
+                label="Minimum balance to publish task (৳)"
+                hint="User must have at least this much balance to create a new task. Set to 0 to disable."
+                value={form.minimum_task_publish_amount}
+                onChange={(v) => setForm(f => ({ ...f, minimum_task_publish_amount: v }))}
+              />
             </div>
             <Separator className="my-5" />
             <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
