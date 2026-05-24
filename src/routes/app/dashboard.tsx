@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ListSkeleton } from "@/components/section-loader";
+import { NoticeBoard } from "@/components/notice-board";
 
 export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — AxoraBD" }] }),
@@ -52,7 +53,7 @@ function DashboardPage() {
       supabase.from("task_submissions").select("id", { count: "exact", head: true }).eq("user_id", uid).eq("status", "approved"),
       supabase.from("tasks").select("id", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("referral_earnings").select("amount").eq("referrer_id", uid).eq("status", "approved"),
-      supabase.from("notifications").select("*").eq("user_id", uid).order("created_at", { ascending: false }).limit(5),
+      supabase.from("notifications").select("*").eq("user_id", uid).eq("admin_targeted", false).order("created_at", { ascending: false }).limit(5),
     ]);
     setStats({
       totalEarn: (earn.data ?? []).reduce((s, r) => s + Number(r.amount), 0),
@@ -78,6 +79,7 @@ function DashboardPage() {
 
   return (
     <>
+      <NoticeBoard />
       {loading ? (
         <div className="mb-6 p-6 rounded-2xl border border-border/60 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-2">

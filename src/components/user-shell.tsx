@@ -80,7 +80,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     if (!session?.user) return;
     const { data } = await supabase
       .from("notifications").select("type")
-      .eq("user_id", session.user.id).eq("read", false);
+      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false);
     const rows = (data as { type: string }[] | null) ?? [];
     const map: Record<string, number> = {};
     for (const r of rows) map[r.type] = (map[r.type] ?? 0) + 1;
@@ -107,7 +107,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     if (isNotifPage) {
       if (unread > 0) {
         supabase.from("notifications").update({ read: true })
-          .eq("user_id", session.user.id).eq("read", false).then(() => loadUnread());
+          .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false).then(() => loadUnread());
       }
       return;
     }
@@ -115,7 +115,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     const hasUnread = it.types.some((t) => (unreadByType[t] ?? 0) > 0);
     if (!hasUnread) return;
     supabase.from("notifications").update({ read: true })
-      .eq("user_id", session.user.id).eq("read", false)
+      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false)
       .in("type", it.types as string[]).then(() => loadUnread());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path, unreadByType, unread]);
