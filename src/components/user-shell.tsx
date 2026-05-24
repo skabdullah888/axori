@@ -80,7 +80,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     if (!session?.user) return;
     const { data } = await supabase
       .from("notifications").select("type")
-      .eq("user_id", session.user.id).eq("read", false);
+      .eq("user_id", session.user.id).eq("read", false).eq("admin_targeted", false);
     const rows = (data as { type: string }[] | null) ?? [];
     const map: Record<string, number> = {};
     for (const r of rows) map[r.type] = (map[r.type] ?? 0) + 1;
