@@ -719,6 +719,7 @@ export type Database = {
         Args: { p_reason?: string; p_task_id: string }
         Returns: undefined
       }
+      auto_approve_stale_submissions: { Args: never; Returns: number }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
