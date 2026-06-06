@@ -67,7 +67,7 @@ const FEATURE_IMGS = [tasksImg, withdrawImg, trustImg];
 const FEATURE_ICONS = [CheckCircle2, Wallet, ShieldCheck];
 
 function LandingPage() {
-  const { theme } = Route.useLoaderData();
+  const { theme } = Route.useLoaderData() as { theme: SiteTheme };
   const h = theme.hero;
 
   return (
