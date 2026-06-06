@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { useSiteTheme } from "@/hooks/use-site-theme";
+import { SiteThemeRoot } from "@/components/site-theme-root";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
@@ -40,6 +42,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [unreadByType, setUnreadByType] = useState<Record<string, number>>({});
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useSiteTheme();
 
   const [profileChecked, setProfileChecked] = useState(false);
   const [profileError, setProfileError] = useState("");
