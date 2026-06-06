@@ -12,7 +12,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check } from "lucide-react";
+import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
   head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
@@ -24,6 +25,8 @@ function SettingsPage() {
   const [form, setForm] = useState({
     activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
   });
+  const [siteTheme, setSiteTheme] = useState<SiteThemeId>("default");
+  const [savingTheme, setSavingTheme] = useState(false);
   const [saving, setSaving] = useState(false);
   const [methods, setMethods] = useState<any[]>([]);
   const [newMethod, setNewMethod] = useState({ name: "", receiver_number: "", instructions: "" });
@@ -45,7 +48,19 @@ function SettingsPage() {
         minimum_task_publish_amount: Number((data as any).minimum_task_publish_amount ?? 0),
         minimum_task_total_amount: Number((data as any).minimum_task_total_amount ?? 0),
       });
+      setSiteTheme((((data as any).site_theme as SiteThemeId | undefined) ?? "default") as SiteThemeId);
     }
+  };
+
+  const saveTheme = async (id: SiteThemeId) => {
+    if (!row) return;
+    const prev = siteTheme;
+    setSiteTheme(id);
+    setSavingTheme(true);
+    const { error } = await supabase.from("settings").update({ site_theme: id, updated_at: new Date().toISOString() }).eq("id", row.id);
+    setSavingTheme(false);
+    if (error) { setSiteTheme(prev); toast.error(friendlyError(error)); }
+    else toast.success("Theme updated");
   };
 
   const loadMethods = async () => {
@@ -115,6 +130,9 @@ function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="payments" className="flex items-center gap-2">
             <Wallet className="h-4 w-4" /> Payment Methods
+          </TabsTrigger>
+          <TabsTrigger value="theme" className="flex items-center gap-2">
+            <Palette className="h-4 w-4" /> Site Theme
           </TabsTrigger>
         </TabsList>
 
@@ -266,6 +284,57 @@ function SettingsPage() {
                   ))}
                 </div>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="theme">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Palette className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Site theme</CardTitle>
+                  <CardDescription>
+                    Choose how the public landing page and user app look and what story they tell. The site name (AxoraBD), all features, tasks, earnings and workflows stay exactly the same — only colors, hero copy, purpose description and SEO meta change. Admin panel is not affected.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {SITE_THEME_LIST.map((t) => {
+                  const active = siteTheme === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      disabled={savingTheme}
+                      onClick={() => saveTheme(t.id as SiteThemeId)}
+                      className={`relative text-left rounded-xl border p-4 transition hover:shadow-md disabled:opacity-60 ${active ? "border-primary ring-2 ring-primary/30 bg-primary/5" : "border-border bg-card/40"}`}
+                    >
+                      {active && (
+                        <div className="absolute top-3 right-3 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                          <Check className="h-3.5 w-3.5" />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 mb-3">
+                        {t.swatch.map((c, i) => (
+                          <span key={i} className="h-6 w-6 rounded-full border border-border" style={{ background: c }} />
+                        ))}
+                      </div>
+                      <div className="font-semibold">{t.label}</div>
+                      <p className="text-xs text-muted-foreground mt-1">{t.tagline}</p>
+                      <Separator className="my-3" />
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Hero</div>
+                      <div className="text-sm font-medium leading-snug">{t.hero.titlePrefix} <span className="text-primary">{t.hero.titleHighlight}</span></div>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{t.hero.subtitle}</p>
+                    </button>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

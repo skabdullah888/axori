@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { useSiteTheme } from "@/hooks/use-site-theme";
+import { SiteThemeRoot } from "@/components/site-theme-root";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
@@ -40,6 +42,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [unreadByType, setUnreadByType] = useState<Record<string, number>>({});
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useSiteTheme();
 
   const [profileChecked, setProfileChecked] = useState(false);
   const [profileError, setProfileError] = useState("");
@@ -151,7 +154,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
           </div>
           <div>
             <div className="text-lg font-bold tracking-tight text-foreground">AxoraBD</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Earn tasks</div>
+            <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{theme.appTagline}</div>
           </div>
         </div>
         <button className="lg:hidden text-muted-foreground" onClick={() => setMobileOpen(false)}><X className="h-5 w-5" /></button>
@@ -191,7 +194,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const isActive = profile?.status === "active";
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <SiteThemeRoot theme={theme} className="min-h-screen bg-background text-foreground">
       {Sidebar}
       {mobileOpen && <div className="fixed inset-0 bg-black/60 z-30 lg:hidden" onClick={() => setMobileOpen(false)} />}
       <div className="lg:ml-64">
@@ -245,7 +248,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         </header>
         <main className="p-4 lg:p-6 animate-in fade-in duration-300">{children}</main>
       </div>
-    </div>
+    </SiteThemeRoot>
   );
 }
 

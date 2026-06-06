@@ -481,6 +481,7 @@ export type Database = {
           minimum_withdrawal: number
           publisher_task_tax: number
           referral_bonus: number
+          site_theme: string
           updated_at: string
           withdrawal_fee: number
           withdrawals_enabled: boolean
@@ -499,6 +500,7 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          site_theme?: string
           updated_at?: string
           withdrawal_fee?: number
           withdrawals_enabled?: boolean
@@ -517,6 +519,7 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          site_theme?: string
           updated_at?: string
           withdrawal_fee?: number
           withdrawals_enabled?: boolean
@@ -738,6 +741,7 @@ export type Database = {
           username: string
         }[]
       }
+      get_site_theme: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
