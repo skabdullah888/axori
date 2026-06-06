@@ -248,7 +248,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         </header>
         <main className="p-4 lg:p-6 animate-in fade-in duration-300">{children}</main>
       </div>
-    </div>
+    </SiteThemeRoot>
   );
 }
 
