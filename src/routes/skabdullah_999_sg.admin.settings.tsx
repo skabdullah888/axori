@@ -48,7 +48,19 @@ function SettingsPage() {
         minimum_task_publish_amount: Number((data as any).minimum_task_publish_amount ?? 0),
         minimum_task_total_amount: Number((data as any).minimum_task_total_amount ?? 0),
       });
+      setSiteTheme((((data as any).site_theme as SiteThemeId | undefined) ?? "default") as SiteThemeId);
     }
+  };
+
+  const saveTheme = async (id: SiteThemeId) => {
+    if (!row) return;
+    const prev = siteTheme;
+    setSiteTheme(id);
+    setSavingTheme(true);
+    const { error } = await supabase.from("settings").update({ site_theme: id, updated_at: new Date().toISOString() }).eq("id", row.id);
+    setSavingTheme(false);
+    if (error) { setSiteTheme(prev); toast.error(friendlyError(error)); }
+    else toast.success("Theme updated");
   };
 
   const loadMethods = async () => {
