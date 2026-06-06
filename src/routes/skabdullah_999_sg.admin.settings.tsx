@@ -131,6 +131,9 @@ function SettingsPage() {
           <TabsTrigger value="payments" className="flex items-center gap-2">
             <Wallet className="h-4 w-4" /> Payment Methods
           </TabsTrigger>
+          <TabsTrigger value="theme" className="flex items-center gap-2">
+            <Palette className="h-4 w-4" /> Site Theme
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="fees">
