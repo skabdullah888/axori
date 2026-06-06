@@ -287,6 +287,57 @@ function SettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="theme">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Palette className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Site theme</CardTitle>
+                  <CardDescription>
+                    Choose how the public landing page and user app look and what story they tell. The site name (AxoraBD), all features, tasks, earnings and workflows stay exactly the same — only colors, hero copy, purpose description and SEO meta change. Admin panel is not affected.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {SITE_THEME_LIST.map((t) => {
+                  const active = siteTheme === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      disabled={savingTheme}
+                      onClick={() => saveTheme(t.id as SiteThemeId)}
+                      className={`relative text-left rounded-xl border p-4 transition hover:shadow-md disabled:opacity-60 ${active ? "border-primary ring-2 ring-primary/30 bg-primary/5" : "border-border bg-card/40"}`}
+                    >
+                      {active && (
+                        <div className="absolute top-3 right-3 h-6 w-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                          <Check className="h-3.5 w-3.5" />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 mb-3">
+                        {t.swatch.map((c, i) => (
+                          <span key={i} className="h-6 w-6 rounded-full border border-border" style={{ background: c }} />
+                        ))}
+                      </div>
+                      <div className="font-semibold">{t.label}</div>
+                      <p className="text-xs text-muted-foreground mt-1">{t.tagline}</p>
+                      <Separator className="my-3" />
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Hero</div>
+                      <div className="text-sm font-medium leading-snug">{t.hero.titlePrefix} <span className="text-primary">{t.hero.titleHighlight}</span></div>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{t.hero.subtitle}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </AdminShell>
   );
