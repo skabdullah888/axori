@@ -12,7 +12,8 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check } from "lucide-react";
+import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
   head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
@@ -24,6 +25,8 @@ function SettingsPage() {
   const [form, setForm] = useState({
     activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
   });
+  const [siteTheme, setSiteTheme] = useState<SiteThemeId>("default");
+  const [savingTheme, setSavingTheme] = useState(false);
   const [saving, setSaving] = useState(false);
   const [methods, setMethods] = useState<any[]>([]);
   const [newMethod, setNewMethod] = useState({ name: "", receiver_number: "", instructions: "" });
