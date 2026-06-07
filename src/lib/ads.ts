@@ -27,6 +27,12 @@ export type AdsConfig = {
   provider: AdProvider;
   client: string; // AdSense publisher id (ca-pub-XXXX)
   slots: Partial<Record<AdPlacement, AdSlotConfig>>;
+  /** Raw contents to serve at /ads.txt (AdSense ads.txt snippet). */
+  adsTxt: string;
+  /** google-site-verification meta tag (full tag or just the content value). */
+  verificationMeta: string;
+  /** Arbitrary <script>/HTML to inject into <head> on every page (AdSense code snippet, etc). */
+  headScript: string;
 };
 
 export const AD_PLACEMENTS: { id: AdPlacement; label: string; hint: string }[] = [
