@@ -32,6 +32,8 @@ function SettingsPage() {
   const [methods, setMethods] = useState<any[]>([]);
   const [newMethod, setNewMethod] = useState({ name: "", receiver_number: "", instructions: "" });
   const [addingMethod, setAddingMethod] = useState(false);
+  const [adsCfg, setAdsCfg] = useState<AdsConfig>(emptyAdsConfig());
+  const [savingAds, setSavingAds] = useState(false);
 
   const loadSettings = async () => {
     const { data } = await supabase.from("settings").select("*").limit(1).maybeSingle();
