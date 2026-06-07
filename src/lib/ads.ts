@@ -22,6 +22,9 @@ export type AdSlotConfig = {
   code: string; // raw HTML/script snippet for Adsterra / Monetag
 };
 
+/** A sitewide ad unit's saved state (Popunder, Social Bar, etc). */
+export type AdExtraScript = { enabled: boolean; code: string };
+
 export type AdsConfig = {
   enabled: boolean;
   provider: AdProvider;
@@ -33,6 +36,12 @@ export type AdsConfig = {
   verificationMeta: string;
   /** Arbitrary <script>/HTML to inject into <head> on every page (AdSense code snippet, etc). */
   headScript: string;
+  /**
+   * Sitewide / multi-format ad units keyed by `${provider}_${unitId}` (see
+   * AD_EXTRA_CATALOG). Snippet is injected sitewide; URL-only entries
+   * (smartlink / direct link) are stored but not auto-injected.
+   */
+  extraScripts: Record<string, AdExtraScript>;
 };
 
 export const AD_PLACEMENTS: { id: AdPlacement; label: string; hint: string }[] = [
