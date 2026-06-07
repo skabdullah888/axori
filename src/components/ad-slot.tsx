@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useAdsConfig } from "@/hooks/use-ads-config";
-import type { AdPlacement } from "@/lib/ads";
+import { isPlacementActive, type AdPlacement } from "@/lib/ads";
 
 declare global {
   interface Window {
@@ -8,13 +8,12 @@ declare global {
   }
 }
 
-let scriptLoadedFor: string | null = null;
+let adsenseScriptLoadedFor: string | null = null;
 
 function ensureAdsenseScript(client: string) {
   if (typeof window === "undefined" || !client) return;
-  if (scriptLoadedFor === client) return;
-  // Remove any previous script if client changed
-  if (scriptLoadedFor && scriptLoadedFor !== client) {
+  if (adsenseScriptLoadedFor === client) return;
+  if (adsenseScriptLoadedFor && adsenseScriptLoadedFor !== client) {
     document
       .querySelectorAll('script[data-axora-adsense="1"]')
       .forEach((el) => el.parentNode?.removeChild(el));
@@ -25,15 +24,35 @@ function ensureAdsenseScript(client: string) {
   s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(client)}`;
   s.setAttribute("data-axora-adsense", "1");
   document.head.appendChild(s);
-  scriptLoadedFor = client;
+  adsenseScriptLoadedFor = client;
 }
 
 /**
- * Renders a Google AdSense unit for the given placement.
- * Silently renders nothing when ads are disabled globally,
- * the placement is disabled, or the slot/client is not configured.
- *
- * Pure presentational — no business logic, no data fetching beyond config.
+ * Injects a raw HTML/script snippet (used by Adsterra & Monetag).
+ * Re-creates inline <script> tags so they actually execute.
+ */
+function injectSnippet(container: HTMLElement, snippet: string) {
+  container.innerHTML = "";
+  const wrap = document.createElement("div");
+  wrap.innerHTML = snippet;
+  Array.from(wrap.childNodes).forEach((node) => {
+    if (node.nodeName === "SCRIPT") {
+      const old = node as HTMLScriptElement;
+      const fresh = document.createElement("script");
+      Array.from(old.attributes).forEach((a) => fresh.setAttribute(a.name, a.value));
+      if (old.textContent) fresh.textContent = old.textContent;
+      container.appendChild(fresh);
+    } else {
+      container.appendChild(node);
+    }
+  });
+}
+
+/**
+ * Renders an ad unit for the given placement using whichever provider the
+ * admin selected. Renders nothing (and takes no space) when ads are globally
+ * disabled, when the placement is disabled, or when required fields are
+ * missing — so wrapping sections collapse cleanly.
  */
 export function AdSlot({
   placement,
@@ -46,19 +65,22 @@ export function AdSlot({
 }) {
   const cfg = useAdsConfig();
   const slot = cfg.slots?.[placement];
-  const insRef = useRef<HTMLModElement | null>(null);
-
-  const active = cfg.enabled && !!cfg.client && !!slot?.enabled && !!slot?.slot;
+  const active = isPlacementActive(cfg, placement);
+  const snippetRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!active) return;
-    ensureAdsenseScript(cfg.client);
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      // ignore: adsense already pushed or script not yet ready
+    if (cfg.provider === "adsense") {
+      ensureAdsenseScript(cfg.client);
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch {
+        // already pushed or not yet ready
+      }
+    } else if (snippetRef.current && slot?.code) {
+      injectSnippet(snippetRef.current, slot.code);
     }
-  }, [active, cfg.client, slot?.slot]);
+  }, [active, cfg.provider, cfg.client, slot?.slot, slot?.code]);
 
   if (!active) return null;
 
@@ -67,15 +89,18 @@ export function AdSlot({
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-1">
         Advertisement
       </div>
-      <ins
-        ref={insRef as any}
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client={cfg.client}
-        data-ad-slot={slot!.slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
-      />
+      {cfg.provider === "adsense" ? (
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client={cfg.client}
+          data-ad-slot={slot!.slot}
+          data-ad-format={format}
+          data-full-width-responsive="true"
+        />
+      ) : (
+        <div ref={snippetRef} className="inline-block max-w-full" />
+      )}
     </div>
   );
 }
