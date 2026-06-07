@@ -83,13 +83,13 @@ function SettingsPage() {
   };
 
   const setExtra = (key: string, patch: Partial<{ enabled: boolean; code: string }>) => {
-    setAdsCfg((c) => ({
-      ...c,
-      extraScripts: {
-        ...c.extraScripts,
-        [key]: { enabled: false, code: "", ...(c.extraScripts[key] ?? {}), ...patch },
-      },
-    }));
+    setAdsCfg((c) => {
+      const prev = c.extraScripts[key] ?? { enabled: false, code: "" };
+      return {
+        ...c,
+        extraScripts: { ...c.extraScripts, [key]: { ...prev, ...patch } },
+      };
+    });
   };
 
   const saveTheme = async (id: SiteThemeId) => {
