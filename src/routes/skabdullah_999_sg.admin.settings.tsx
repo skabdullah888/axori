@@ -52,7 +52,28 @@ function SettingsPage() {
         minimum_task_total_amount: Number((data as any).minimum_task_total_amount ?? 0),
       });
       setSiteTheme((((data as any).site_theme as SiteThemeId | undefined) ?? "default") as SiteThemeId);
+      setAdsCfg(parseAdsConfig(data));
     }
+  };
+
+  const saveAds = async () => {
+    if (!row) return;
+    setSavingAds(true);
+    const { error } = await supabase.from("settings").update({
+      ads_enabled: adsCfg.enabled,
+      ads_client: adsCfg.client.trim(),
+      ads_slots: adsCfg.slots,
+      updated_at: new Date().toISOString(),
+    }).eq("id", row.id);
+    setSavingAds(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Ad settings saved");
+  };
+
+  const setSlot = (id: AdPlacement, patch: Partial<{ enabled: boolean; slot: string }>) => {
+    setAdsCfg((c) => ({
+      ...c,
+      slots: { ...c.slots, [id]: { enabled: false, slot: "", ...(c.slots[id] ?? {}), ...patch } },
+    }));
   };
 
   const saveTheme = async (id: SiteThemeId) => {
