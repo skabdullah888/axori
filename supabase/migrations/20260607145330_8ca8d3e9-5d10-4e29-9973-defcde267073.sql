@@ -1,0 +1,1 @@
+ALTER TABLE public.settings ADD COLUMN IF NOT EXISTS ads_extra_scripts jsonb NOT NULL DEFAULT '{}'::jsonb;

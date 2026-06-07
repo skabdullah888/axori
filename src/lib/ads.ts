@@ -165,11 +165,21 @@ export const AD_PROVIDERS: { id: AdProvider; label: string; help: string }[] = [
 ];
 
 export function emptyAdsConfig(): AdsConfig {
-  return { enabled: false, provider: "adsense", client: "", slots: {}, adsTxt: "", verificationMeta: "", headScript: "" };
+  return { enabled: false, provider: "adsense", client: "", slots: {}, adsTxt: "", verificationMeta: "", headScript: "", extraScripts: {} };
 }
 
 export function parseAdsConfig(row: any): AdsConfig {
   const provider = (row?.ads_provider as AdProvider) ?? "adsense";
+  const rawExtras = (row?.ads_extra_scripts ?? {}) as Record<string, any>;
+  const extraScripts: Record<string, AdExtraScript> = {};
+  for (const [k, v] of Object.entries(rawExtras)) {
+    if (v && typeof v === "object") {
+      extraScripts[k] = {
+        enabled: !!(v as any).enabled,
+        code: typeof (v as any).code === "string" ? (v as any).code : "",
+      };
+    }
+  }
   return {
     enabled: !!row?.ads_enabled,
     provider: (["adsense", "adsterra", "monetag"] as const).includes(provider) ? provider : "adsense",
@@ -178,6 +188,7 @@ export function parseAdsConfig(row: any): AdsConfig {
     adsTxt: typeof row?.ads_txt === "string" ? row.ads_txt : "",
     verificationMeta: typeof row?.ads_verification_meta === "string" ? row.ads_verification_meta : "",
     headScript: typeof row?.ads_head_script === "string" ? row.ads_head_script : "",
+    extraScripts,
   };
 }
 
