@@ -14,7 +14,7 @@ import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
 import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
-import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
+import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
@@ -68,6 +68,7 @@ function SettingsPage() {
       ads_txt: adsCfg.adsTxt,
       ads_verification_meta: adsCfg.verificationMeta,
       ads_head_script: adsCfg.headScript,
+      ads_extra_scripts: adsCfg.extraScripts as any,
       updated_at: new Date().toISOString(),
     } as any).eq("id", row.id);
     setSavingAds(false);
@@ -78,6 +79,16 @@ function SettingsPage() {
     setAdsCfg((c) => ({
       ...c,
       slots: { ...c.slots, [id]: { enabled: false, slot: "", code: "", ...(c.slots[id] ?? {}), ...patch } },
+    }));
+  };
+
+  const setExtra = (key: string, patch: Partial<{ enabled: boolean; code: string }>) => {
+    setAdsCfg((c) => ({
+      ...c,
+      extraScripts: {
+        ...c.extraScripts,
+        [key]: { enabled: false, code: "", ...(c.extraScripts[key] ?? {}), ...patch },
+      },
     }));
   };
 
