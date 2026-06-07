@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAdsConfig } from "@/hooks/use-ads-config";
+import { collectActiveExtraSnippets } from "@/lib/ads";
 
 const META_MARK = "data-axora-ads-verify";
 const SCRIPT_MARK = "data-axora-ads-head";
