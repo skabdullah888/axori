@@ -158,6 +158,9 @@ function SettingsPage() {
           <TabsTrigger value="theme" className="flex items-center gap-2">
             <Palette className="h-4 w-4" /> Site Theme
           </TabsTrigger>
+          <TabsTrigger value="ads" className="flex items-center gap-2">
+            <Megaphone className="h-4 w-4" /> Ads
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="fees">
