@@ -43,6 +43,100 @@ export const AD_PLACEMENTS: { id: AdPlacement; label: string; hint: string }[] =
   { id: "landing_mid", label: "Landing — mid section", hint: "Public homepage, between sections." },
 ];
 
+/**
+ * Per-placement guidance for Adsterra & Monetag — tells the admin exactly
+ * which ad unit type/size to create in the provider dashboard and what to
+ * paste into the "Ad code" textarea for this slot.
+ */
+export type AdRecommendation = {
+  unit: string;
+  size: string;
+  paste: string;
+  notes: string[];
+};
+
+export const AD_RECOMMENDATIONS: Record<AdProvider, Partial<Record<AdPlacement, AdRecommendation>>> = {
+  adsense: {},
+  adsterra: {
+    app_top: {
+      unit: "Banner 728×90 (leaderboard)",
+      size: "728×90 (auto-shrinks on mobile)",
+      paste: "Full <script> + container from Adsterra → Websites → axorabd.site → Banner 728x90 → GET CODE.",
+      notes: [
+        "Best for the very top of every app page.",
+        "If you only have one banner unit, use this one — we center it and it scales down.",
+      ],
+    },
+    app_bottom: {
+      unit: "Banner 320×50 (mobile bottom bar)",
+      size: "320×50 or 468×60",
+      paste: "Code from Adsterra → Banner 320x50 → GET CODE.",
+      notes: [
+        "Most users are on mobile — 320×50 fits without pushing content.",
+        "Do NOT paste Popunder / Social Bar / Smartlink here — those are sitewide and belong in Method 1 (head script) above.",
+      ],
+    },
+    tasks_inline: {
+      unit: "Native Banner",
+      size: "Responsive (matches the task grid)",
+      paste: "Code from Adsterra → Native Banner → GET CODE.",
+      notes: [
+        "Native Banner blends in between task cards and earns the most for content grids.",
+        "Banner 300×250 is a fine fallback.",
+      ],
+    },
+    wallet_top: {
+      unit: "Banner 300×250 (medium rectangle)",
+      size: "300×250",
+      paste: "Code from Adsterra → Banner 300x250 → GET CODE.",
+      notes: ["A rectangle reads cleanly above the wallet balance card."],
+    },
+    landing_mid: {
+      unit: "Banner 728×90 or Native Banner",
+      size: "728×90 / responsive",
+      paste: "Code from Adsterra → Banner 728x90 (or Native Banner) → GET CODE.",
+      notes: [
+        "Public homepage gets the most traffic — use your highest-paying display unit here.",
+        "Sitewide units (Popunder, Social Bar, Smartlink, In-Page Push) do NOT go here. Paste those once in Method 1 (head script) above.",
+      ],
+    },
+  },
+  monetag: {
+    app_top: {
+      unit: "Banner 728×90",
+      size: "728×90",
+      paste: "Code from Monetag → Sites → axorabd.site → + AD UNIT → Banner 728×90 → Get Code.",
+      notes: ["Leaderboard at the top of every app page."],
+    },
+    app_bottom: {
+      unit: "Banner 320×50",
+      size: "320×50",
+      paste: "Code from Monetag → Banner 320×50 → Get Code.",
+      notes: ["Mobile-first bottom bar."],
+    },
+    tasks_inline: {
+      unit: "Native Banner",
+      size: "Responsive",
+      paste: "Code from Monetag → Native Banner → Get Code.",
+      notes: ["Blends into the task grid; Banner 300×250 is a fine backup."],
+    },
+    wallet_top: {
+      unit: "Banner 300×250",
+      size: "300×250",
+      paste: "Code from Monetag → Banner 300×250 → Get Code.",
+      notes: ["Medium rectangle reads cleanly above the wallet balance."],
+    },
+    landing_mid: {
+      unit: "Banner 728×90 or Native Banner",
+      size: "728×90 / responsive",
+      paste: "Code from Monetag → Banner 728×90 (or Native Banner) → Get Code.",
+      notes: [
+        "Sitewide units (In-Page Push, OnClick / Popunder, Vignette, Interstitial) belong in Method 1 (head script) above — not in a placement.",
+      ],
+    },
+  },
+};
+
 export const AD_PROVIDERS: { id: AdProvider; label: string; help: string }[] = [
   {
     id: "adsense",
