@@ -199,3 +199,160 @@ export function isPlacementActive(cfg: AdsConfig, placement: AdPlacement): boole
   if (cfg.provider === "adsense") return !!cfg.client && !!s.slot;
   return !!s.code && s.code.trim().length > 0;
 }
+
+/**
+ * Catalog of sitewide / multi-format ad units per provider. The admin UI
+ * renders one toggle + textarea per entry; SiteAdsHead injects every enabled
+ * snippet into <head> on every page. URL-only entries (smartlink) are stored
+ * but not auto-injected — admin wires them to a button/CTA.
+ */
+export type AdExtraCatalogEntry = {
+  id: string;
+  label: string;
+  description: string;
+  placeholder: string;
+  /** "script" = inject into <head>. "url" = store for manual use only. */
+  kind: "script" | "url";
+};
+
+export const AD_EXTRA_CATALOG: Record<AdProvider, AdExtraCatalogEntry[]> = {
+  adsense: [
+    {
+      id: "auto_ads",
+      label: "Auto Ads",
+      description: "AdSense Auto Ads — Google chooses placements automatically. Paste the full <script> block from AdSense → Ads → By site → Get code.",
+      placeholder: `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>`,
+      kind: "script",
+    },
+  ],
+  adsterra: [
+    {
+      id: "popunder",
+      label: "Popunder",
+      description: "Opens a popunder window on the user's first interaction. Paste the full <script> from Adsterra → Popunder → GET CODE.",
+      placeholder: `<script type="text/javascript" src="//pl00000000.profitableratecpm.com/...invoke.js"></script>`,
+      kind: "script",
+    },
+    {
+      id: "social_bar",
+      label: "Social Bar",
+      description: "Floating sticky bar at the top/bottom (mobile & desktop). Paste from Adsterra → Social Bar → GET CODE.",
+      placeholder: `<script src="//pl00000000.profitableratecpm.com/.../invoke.js" data-cfasync="false"></script>`,
+      kind: "script",
+    },
+    {
+      id: "in_page_push",
+      label: "In-Page Push",
+      description: "Push-style notification card inside the page. Paste from Adsterra → In-Page Push → GET CODE.",
+      placeholder: `<script src="//pl00000000.profitableratecpm.com/...inpage.js"></script>`,
+      kind: "script",
+    },
+    {
+      id: "vignette",
+      label: "Vignette Banner",
+      description: "Full-screen banner shown between page navigations. Paste from Adsterra → Vignette Banner → GET CODE.",
+      placeholder: `<script src="//pl00000000.profitableratecpm.com/...vignette.js"></script>`,
+      kind: "script",
+    },
+    {
+      id: "interstitial",
+      label: "Interstitial",
+      description: "Full-screen interstitial ad. Paste the snippet Adsterra gives you.",
+      placeholder: `<script src="//..."></script>`,
+      kind: "script",
+    },
+    {
+      id: "native_sitewide",
+      label: "Native Ads (sitewide auto)",
+      description: "Sitewide native ad loader. Per-page native units are configured in the Placements section below.",
+      placeholder: `<script async data-cfasync="false" src="//pl00000000.profitableratecpm.com/...native.js"></script>`,
+      kind: "script",
+    },
+    {
+      id: "smartlink",
+      label: "Direct Link / Smartlink",
+      description: "A URL — Adsterra auto-redirects to the highest-paying offer. Wire it to a button or share link manually.",
+      placeholder: `https://www.profitableratecpm.com/abcd1234`,
+      kind: "url",
+    },
+  ],
+  monetag: [
+    {
+      id: "onclick_popunder",
+      label: "OnClick (Popunder)",
+      description: "Classic popunder triggered on click. Paste from Monetag → OnClick → Get Code.",
+      placeholder: `<script src="//libtl.com/sdk.js" data-zone="0000000" data-sdk="show_0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "in_page_push",
+      label: "In-Page Push",
+      description: "Push-style notification card inside the page. Paste from Monetag → In-Page Push → Get Code.",
+      placeholder: `<script src="//libtl.com/sdk.js" data-zone="0000000" data-sdk="show_0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "push_notifications",
+      label: "Push Notifications",
+      description: "Browser push subscription prompt. Paste from Monetag → Push Notifications → Get Code.",
+      placeholder: `<script src="//thubanoa.com/1?z=0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "vignette",
+      label: "Vignette Banner",
+      description: "Full-screen banner shown between page navigations.",
+      placeholder: `<script src="//..." data-zone="0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "interstitial",
+      label: "Interstitial",
+      description: "Full-screen interstitial between page views.",
+      placeholder: `<script src="//..." data-zone="0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "multitag",
+      label: "MultiTag (all formats)",
+      description: "One tag that auto-selects the best format (popunder + in-page push + vignette + push). Recommended starter.",
+      placeholder: `<script src="//libtl.com/sdk.js" data-zone="0000000" data-sdk="show_0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "native_sitewide",
+      label: "Native Ads (sitewide auto)",
+      description: "Sitewide native loader. Per-page native units are configured in the Placements section below.",
+      placeholder: `<script src="//..." data-zone="0000000"></script>`,
+      kind: "script",
+    },
+    {
+      id: "smartlink",
+      label: "Direct Link (Smartlink)",
+      description: "A URL — Monetag auto-redirects to the highest-paying offer. Wire it to a button or share link manually.",
+      placeholder: `https://offer.monetag.com/?z=0000000`,
+      kind: "url",
+    },
+  ],
+};
+
+/** Returns all enabled script snippets across all providers. */
+export function collectActiveExtraSnippets(cfg: AdsConfig): string[] {
+  if (!cfg.enabled) return [];
+  const out: string[] = [];
+  const known = new Set<string>();
+  for (const provider of Object.keys(AD_EXTRA_CATALOG) as AdProvider[]) {
+    for (const entry of AD_EXTRA_CATALOG[provider]) {
+      if (entry.kind !== "script") continue;
+      const key = `${provider}_${entry.id}`;
+      known.add(key);
+      const s = cfg.extraScripts[key];
+      if (s?.enabled && s.code.trim()) out.push(s.code);
+    }
+  }
+  // Also allow any unknown / custom keys with code present.
+  for (const [k, v] of Object.entries(cfg.extraScripts)) {
+    if (!known.has(k) && v?.enabled && v.code.trim()) out.push(v.code);
+  }
+  return out;
+}
