@@ -10,23 +10,30 @@ export function useAdsConfig(): AdsConfig {
     const load = async () => {
       const { data } = await supabase
         .from("settings")
-        .select("ads_enabled, ads_client, ads_slots")
+        .select("ads_enabled, ads_provider, ads_client, ads_slots")
         .limit(1)
         .maybeSingle();
       if (!cancelled && data) setCfg(parseAdsConfig(data));
     };
     load();
-    const ch = supabase
-      .channel("ads-config")
+
+    // Use a unique channel name per mount to avoid:
+    // "tried to subscribe multiple times" / "cannot add callbacks after subscribe()"
+    // when the hook is mounted from multiple components or under StrictMode.
+    const channel = supabase
+      .channel(`ads-config-${Math.random().toString(36).slice(2)}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "settings" },
-        (payload) => setCfg(parseAdsConfig(payload.new ?? {})),
+        (payload) => {
+          if (payload.new) setCfg(parseAdsConfig(payload.new));
+        },
       )
       .subscribe();
+
     return () => {
       cancelled = true;
-      supabase.removeChannel(ch);
+      supabase.removeChannel(channel);
     };
   }, []);
 
