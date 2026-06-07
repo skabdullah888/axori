@@ -12,8 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
+import { AD_PLACEMENTS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement } from "@/lib/ads";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
   head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
