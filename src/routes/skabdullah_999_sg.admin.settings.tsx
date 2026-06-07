@@ -376,44 +376,63 @@ function SettingsPage() {
                   <Megaphone className="h-4 w-4" />
                 </div>
                 <div>
-                  <CardTitle>Google AdSense</CardTitle>
+                  <CardTitle>Advertisements</CardTitle>
                   <CardDescription>
-                    Show Google AdSense units across the public landing page and the user app. Admin panel never shows ads. Disable any placement that feels intrusive — ads only render when the master toggle is on, the publisher ID is filled, and the specific placement is enabled with an Ad slot ID.
+                    Pick an ad provider (Google AdSense, Adsterra, or Monetag) and configure where ads appear. The admin panel never shows ads. When the master switch is off, no ads load anywhere and the wrapper sections fully collapse — users never see empty placeholders.
                   </CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
+              <div className="flex items-center justify-between rounded-lg border-2 border-primary/30 bg-primary/5 p-4">
                 <div>
-                  <Label className="text-sm font-medium">Enable ads globally</Label>
-                  <p className="text-xs text-muted-foreground mt-1">Master switch. When off, no ads are shown anywhere — regardless of per-placement settings.</p>
+                  <Label className="text-sm font-semibold">Enable ads globally</Label>
+                  <p className="text-xs text-muted-foreground mt-1">Master switch. When OFF, every ad is hidden — including the sections that contain them.</p>
                 </div>
                 <Switch checked={adsCfg.enabled} onCheckedChange={(v) => setAdsCfg((c) => ({ ...c, enabled: v }))} />
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-sm">AdSense Publisher ID</Label>
-                <Input
-                  placeholder="ca-pub-XXXXXXXXXXXXXXXX"
-                  value={adsCfg.client}
-                  onChange={(e) => setAdsCfg((c) => ({ ...c, client: e.target.value }))}
-                />
+                <Label className="text-sm">Ad provider</Label>
+                <Select value={adsCfg.provider} onValueChange={(v) => setAdsCfg((c) => ({ ...c, provider: v as AdProvider }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {AD_PROVIDERS.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>{p.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <p className="text-xs text-muted-foreground">
-                  Find it in your Google AdSense dashboard → Account → Account information → Publisher ID.
+                  {AD_PROVIDERS.find((p) => p.id === adsCfg.provider)?.help}
                 </p>
               </div>
+
+              {adsCfg.provider === "adsense" && (
+                <div className="space-y-1.5">
+                  <Label className="text-sm">AdSense Publisher ID</Label>
+                  <Input
+                    placeholder="ca-pub-XXXXXXXXXXXXXXXX"
+                    value={adsCfg.client}
+                    onChange={(e) => setAdsCfg((c) => ({ ...c, client: e.target.value }))}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    AdSense → Account → Account information → Publisher ID.
+                  </p>
+                </div>
+              )}
 
               <Separator />
 
               <div>
                 <div className="text-sm font-medium mb-1">Ad placements</div>
                 <p className="text-xs text-muted-foreground mb-3">
-                  For each placement, paste the corresponding Ad slot ID from AdSense → Ads → By ad unit → choose unit → copy <code className="px-1 py-0.5 rounded bg-muted text-[10px]">data-ad-slot</code> value (a long number like <code className="px-1 py-0.5 rounded bg-muted text-[10px]">1234567890</code>).
+                  {adsCfg.provider === "adsense"
+                    ? <>For each placement, paste the Ad slot ID from AdSense → Ads → By ad unit → copy the <code className="px-1 py-0.5 rounded bg-muted text-[10px]">data-ad-slot</code> value (e.g. <code className="px-1 py-0.5 rounded bg-muted text-[10px]">1234567890</code>).</>
+                    : <>Paste the full <code className="px-1 py-0.5 rounded bg-muted text-[10px]">&lt;script&gt;</code> snippet that {AD_PROVIDERS.find(p => p.id === adsCfg.provider)?.label} gives you for each ad unit / zone.</>}
                 </p>
                 <div className="space-y-3">
                   {AD_PLACEMENTS.map((p) => {
-                    const slot = adsCfg.slots[p.id] ?? { enabled: false, slot: "" };
+                    const slot = adsCfg.slots[p.id] ?? { enabled: false, slot: "", code: "" };
                     return (
                       <div key={p.id} className="rounded-lg border border-border bg-card/40 p-4">
                         <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
@@ -426,14 +445,27 @@ function SettingsPage() {
                             <Switch checked={!!slot.enabled} onCheckedChange={(v) => setSlot(p.id, { enabled: v })} />
                           </div>
                         </div>
-                        <div className="space-y-1.5">
-                          <Label className="text-xs">Ad slot ID</Label>
-                          <Input
-                            placeholder="1234567890"
-                            value={slot.slot}
-                            onChange={(e) => setSlot(p.id, { slot: e.target.value.trim() })}
-                          />
-                        </div>
+                        {adsCfg.provider === "adsense" ? (
+                          <div className="space-y-1.5">
+                            <Label className="text-xs">Ad slot ID</Label>
+                            <Input
+                              placeholder="1234567890"
+                              value={slot.slot ?? ""}
+                              onChange={(e) => setSlot(p.id, { slot: e.target.value.trim() })}
+                            />
+                          </div>
+                        ) : (
+                          <div className="space-y-1.5">
+                            <Label className="text-xs">Ad code (HTML / script)</Label>
+                            <Textarea
+                              rows={4}
+                              className="font-mono text-xs"
+                              placeholder={`<script type="text/javascript">...</script>`}
+                              value={slot.code ?? ""}
+                              onChange={(e) => setSlot(p.id, { code: e.target.value })}
+                            />
+                          </div>
+                        )}
                       </div>
                     );
                   })}
