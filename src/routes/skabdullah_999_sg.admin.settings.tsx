@@ -14,7 +14,7 @@ import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
 import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
-import { AD_PLACEMENTS, AD_PROVIDERS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
+import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
