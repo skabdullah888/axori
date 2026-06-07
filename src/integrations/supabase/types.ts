@@ -472,6 +472,7 @@ export type Database = {
           activation_fee: number
           ads_client: string
           ads_enabled: boolean
+          ads_provider: string
           ads_slots: Json
           duplicate_ip_warning_enabled: boolean
           duplicate_ip_warning_message: string
@@ -494,6 +495,7 @@ export type Database = {
           activation_fee?: number
           ads_client?: string
           ads_enabled?: boolean
+          ads_provider?: string
           ads_slots?: Json
           duplicate_ip_warning_enabled?: boolean
           duplicate_ip_warning_message?: string
@@ -516,6 +518,7 @@ export type Database = {
           activation_fee?: number
           ads_client?: string
           ads_enabled?: boolean
+          ads_provider?: string
           ads_slots?: Json
           duplicate_ip_warning_enabled?: boolean
           duplicate_ip_warning_message?: string
