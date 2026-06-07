@@ -94,6 +94,7 @@ function RootComponent() {
   }, [router, queryClient]);
   return (
     <QueryClientProvider client={queryClient}>
+      <SiteAdsHead />
       <Outlet />
       <Sonner />
     </QueryClientProvider>
