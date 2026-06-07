@@ -62,18 +62,19 @@ function SettingsPage() {
     setSavingAds(true);
     const { error } = await supabase.from("settings").update({
       ads_enabled: adsCfg.enabled,
+      ads_provider: adsCfg.provider,
       ads_client: adsCfg.client.trim(),
       ads_slots: adsCfg.slots,
       updated_at: new Date().toISOString(),
-    }).eq("id", row.id);
+    } as any).eq("id", row.id);
     setSavingAds(false);
     if (error) toast.error(friendlyError(error)); else toast.success("Ad settings saved");
   };
 
-  const setSlot = (id: AdPlacement, patch: Partial<{ enabled: boolean; slot: string }>) => {
+  const setSlot = (id: AdPlacement, patch: Partial<{ enabled: boolean; slot: string; code: string }>) => {
     setAdsCfg((c) => ({
       ...c,
-      slots: { ...c.slots, [id]: { enabled: false, slot: "", ...(c.slots[id] ?? {}), ...patch } },
+      slots: { ...c.slots, [id]: { enabled: false, slot: "", code: "", ...(c.slots[id] ?? {}), ...patch } },
     }));
   };
 
