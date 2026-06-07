@@ -7,6 +7,7 @@ import {
 import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
+import { SiteAdsHead } from "@/components/site-ads-head";
 
 function NotFoundComponent() {
   return (
