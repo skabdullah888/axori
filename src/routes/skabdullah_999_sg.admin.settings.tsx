@@ -14,7 +14,7 @@ import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
 import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
-import { AD_PLACEMENTS, AD_PROVIDERS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
+import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
@@ -488,6 +488,7 @@ function SettingsPage() {
                 <div className="space-y-3">
                   {AD_PLACEMENTS.map((p) => {
                     const slot = adsCfg.slots[p.id] ?? { enabled: false, slot: "", code: "" };
+                    const rec = AD_RECOMMENDATIONS[adsCfg.provider]?.[p.id];
                     return (
                       <div key={p.id} className="rounded-lg border border-border bg-card/40 p-4">
                         <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
@@ -500,6 +501,29 @@ function SettingsPage() {
                             <Switch checked={!!slot.enabled} onCheckedChange={(v) => setSlot(p.id, { enabled: v })} />
                           </div>
                         </div>
+
+                        {rec && adsCfg.provider !== "adsense" && (
+                          <div className="mb-3 rounded-md border border-primary/30 bg-primary/5 p-3 space-y-1.5">
+                            <div className="text-[11px] uppercase tracking-wider text-primary/80 font-semibold">
+                              Recommended for this spot
+                            </div>
+                            <div className="text-xs">
+                              <span className="font-semibold">Ad unit:</span> {rec.unit}
+                            </div>
+                            <div className="text-xs">
+                              <span className="font-semibold">Size:</span> {rec.size}
+                            </div>
+                            <div className="text-xs">
+                              <span className="font-semibold">What to paste:</span> {rec.paste}
+                            </div>
+                            {rec.notes.length > 0 && (
+                              <ul className="list-disc pl-4 text-[11px] text-muted-foreground space-y-0.5 mt-1">
+                                {rec.notes.map((n, i) => <li key={i}>{n}</li>)}
+                              </ul>
+                            )}
+                          </div>
+                        )}
+
                         {adsCfg.provider === "adsense" ? (
                           <div className="space-y-1.5">
                             <Label className="text-xs">Ad slot ID</Label>
