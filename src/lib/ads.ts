@@ -62,7 +62,7 @@ export const AD_PROVIDERS: { id: AdProvider; label: string; help: string }[] = [
 ];
 
 export function emptyAdsConfig(): AdsConfig {
-  return { enabled: false, provider: "adsense", client: "", slots: {} };
+  return { enabled: false, provider: "adsense", client: "", slots: {}, adsTxt: "", verificationMeta: "", headScript: "" };
 }
 
 export function parseAdsConfig(row: any): AdsConfig {
@@ -72,6 +72,9 @@ export function parseAdsConfig(row: any): AdsConfig {
     provider: (["adsense", "adsterra", "monetag"] as const).includes(provider) ? provider : "adsense",
     client: typeof row?.ads_client === "string" ? row.ads_client : "",
     slots: (row?.ads_slots ?? {}) as AdsConfig["slots"],
+    adsTxt: typeof row?.ads_txt === "string" ? row.ads_txt : "",
+    verificationMeta: typeof row?.ads_verification_meta === "string" ? row.ads_verification_meta : "",
+    headScript: typeof row?.ads_head_script === "string" ? row.ads_head_script : "",
   };
 }
 
