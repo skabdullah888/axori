@@ -27,6 +27,12 @@ export type AdsConfig = {
   provider: AdProvider;
   client: string; // AdSense publisher id (ca-pub-XXXX)
   slots: Partial<Record<AdPlacement, AdSlotConfig>>;
+  /** Raw contents to serve at /ads.txt (AdSense ads.txt snippet). */
+  adsTxt: string;
+  /** google-site-verification meta tag (full tag or just the content value). */
+  verificationMeta: string;
+  /** Arbitrary <script>/HTML to inject into <head> on every page (AdSense code snippet, etc). */
+  headScript: string;
 };
 
 export const AD_PLACEMENTS: { id: AdPlacement; label: string; hint: string }[] = [
@@ -56,7 +62,7 @@ export const AD_PROVIDERS: { id: AdProvider; label: string; help: string }[] = [
 ];
 
 export function emptyAdsConfig(): AdsConfig {
-  return { enabled: false, provider: "adsense", client: "", slots: {} };
+  return { enabled: false, provider: "adsense", client: "", slots: {}, adsTxt: "", verificationMeta: "", headScript: "" };
 }
 
 export function parseAdsConfig(row: any): AdsConfig {
@@ -66,6 +72,9 @@ export function parseAdsConfig(row: any): AdsConfig {
     provider: (["adsense", "adsterra", "monetag"] as const).includes(provider) ? provider : "adsense",
     client: typeof row?.ads_client === "string" ? row.ads_client : "",
     slots: (row?.ads_slots ?? {}) as AdsConfig["slots"],
+    adsTxt: typeof row?.ads_txt === "string" ? row.ads_txt : "",
+    verificationMeta: typeof row?.ads_verification_meta === "string" ? row.ads_verification_meta : "",
+    headScript: typeof row?.ads_head_script === "string" ? row.ads_head_script : "",
   };
 }
 

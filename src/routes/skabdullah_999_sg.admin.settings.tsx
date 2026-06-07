@@ -65,6 +65,9 @@ function SettingsPage() {
       ads_provider: adsCfg.provider,
       ads_client: adsCfg.client.trim(),
       ads_slots: adsCfg.slots,
+      ads_txt: adsCfg.adsTxt,
+      ads_verification_meta: adsCfg.verificationMeta,
+      ads_head_script: adsCfg.headScript,
       updated_at: new Date().toISOString(),
     } as any).eq("id", row.id);
     setSavingAds(false);
@@ -420,6 +423,58 @@ function SettingsPage() {
                   </p>
                 </div>
               )}
+
+              <Separator />
+
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 space-y-4">
+                <div>
+                  <div className="text-sm font-semibold">Site verification</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    AdSense / Adsterra / Monetag site verification details. Anything you paste here is applied to every page of <code className="px-1 py-0.5 rounded bg-muted text-[10px]">axorabd.site</code> automatically — no code edits needed. Pick whichever method the provider asks for.
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-semibold">Method 1 — AdSense code snippet (head script)</Label>
+                  <Textarea
+                    rows={4}
+                    className="font-mono text-xs"
+                    placeholder={`<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>`}
+                    value={adsCfg.headScript}
+                    onChange={(e) => setAdsCfg((c) => ({ ...c, headScript: e.target.value }))}
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Paste the exact <code className="px-1 py-0.5 rounded bg-muted text-[10px]">&lt;script&gt;</code> AdSense gives you under <em>Verify site ownership → AdSense code snippet</em>. If you only set the Publisher ID above, this snippet is auto-generated.
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-semibold">Method 2 — Ads.txt</Label>
+                  <Textarea
+                    rows={3}
+                    className="font-mono text-xs"
+                    placeholder={`google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0`}
+                    value={adsCfg.adsTxt}
+                    onChange={(e) => setAdsCfg((c) => ({ ...c, adsTxt: e.target.value }))}
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Paste the line AdSense gives you under <em>Ads.txt snippet</em>. After saving, it is served live at <a className="underline" href="/ads.txt" target="_blank" rel="noreferrer">/ads.txt</a>.
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-semibold">Method 3 — Meta tag</Label>
+                  <Input
+                    className="font-mono text-xs"
+                    placeholder={`<meta name="google-site-verification" content="abc123..." />`}
+                    value={adsCfg.verificationMeta}
+                    onChange={(e) => setAdsCfg((c) => ({ ...c, verificationMeta: e.target.value }))}
+                  />
+                  <p className="text-[11px] text-muted-foreground">
+                    Paste the full <code className="px-1 py-0.5 rounded bg-muted text-[10px]">&lt;meta&gt;</code> tag, or just the content value. Used for AdSense <em>Meta tag</em> method and Search Console verification.
+                  </p>
+                </div>
+              </div>
 
               <Separator />
 
