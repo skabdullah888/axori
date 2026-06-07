@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAdsConfig } from "@/hooks/use-ads-config";
+import { collectActiveExtraSnippets } from "@/lib/ads";
 
 const META_MARK = "data-axora-ads-verify";
 const SCRIPT_MARK = "data-axora-ads-head";
@@ -38,31 +39,38 @@ export function SiteAdsHead() {
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.querySelectorAll(`script[${SCRIPT_MARK}="1"]`).forEach((el) => el.remove());
+    document.querySelectorAll(`[${SCRIPT_MARK}="1"]`).forEach((el) => el.remove());
 
-    let snippet = (cfg.headScript ?? "").trim();
-    // If admin didn't paste a snippet but set AdSense Publisher ID, build it.
-    if (!snippet && cfg.provider === "adsense" && cfg.client) {
-      snippet = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${cfg.client}" crossorigin="anonymous"></script>`;
+    const snippets: string[] = [];
+
+    let head = (cfg.headScript ?? "").trim();
+    if (!head && cfg.provider === "adsense" && cfg.client) {
+      head = `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${cfg.client}" crossorigin="anonymous"></script>`;
     }
-    if (!snippet) return;
+    if (head) snippets.push(head);
 
-    const wrap = document.createElement("div");
-    wrap.innerHTML = snippet;
-    Array.from(wrap.childNodes).forEach((node) => {
-      if (node.nodeName === "SCRIPT") {
-        const old = node as HTMLScriptElement;
-        const fresh = document.createElement("script");
-        Array.from(old.attributes).forEach((a) => fresh.setAttribute(a.name, a.value));
-        if (old.textContent) fresh.textContent = old.textContent;
-        fresh.setAttribute(SCRIPT_MARK, "1");
-        document.head.appendChild(fresh);
-      } else if (node.nodeType === 1) {
-        const el = node as HTMLElement;
-        el.setAttribute(SCRIPT_MARK, "1");
-        document.head.appendChild(el);
-      }
-    });
-  }, [cfg.headScript, cfg.provider, cfg.client]);
+    // Sitewide multi-format ad units (popunder, social bar, push, etc.)
+    for (const s of collectActiveExtraSnippets(cfg)) snippets.push(s);
+
+    for (const snippet of snippets) {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = snippet;
+      Array.from(wrap.childNodes).forEach((node) => {
+        if (node.nodeName === "SCRIPT") {
+          const old = node as HTMLScriptElement;
+          const fresh = document.createElement("script");
+          Array.from(old.attributes).forEach((a) => fresh.setAttribute(a.name, a.value));
+          if (old.textContent) fresh.textContent = old.textContent;
+          fresh.setAttribute(SCRIPT_MARK, "1");
+          document.head.appendChild(fresh);
+        } else if (node.nodeType === 1) {
+          const el = node as HTMLElement;
+          el.setAttribute(SCRIPT_MARK, "1");
+          document.head.appendChild(el);
+        }
+      });
+    }
+  }, [cfg.headScript, cfg.provider, cfg.client, cfg.enabled, cfg.extraScripts]);
 
   return null;
 }

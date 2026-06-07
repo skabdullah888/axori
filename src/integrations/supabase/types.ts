@@ -472,6 +472,7 @@ export type Database = {
           activation_fee: number
           ads_client: string
           ads_enabled: boolean
+          ads_extra_scripts: Json
           ads_head_script: string
           ads_provider: string
           ads_slots: Json
@@ -498,6 +499,7 @@ export type Database = {
           activation_fee?: number
           ads_client?: string
           ads_enabled?: boolean
+          ads_extra_scripts?: Json
           ads_head_script?: string
           ads_provider?: string
           ads_slots?: Json
@@ -524,6 +526,7 @@ export type Database = {
           activation_fee?: number
           ads_client?: string
           ads_enabled?: boolean
+          ads_extra_scripts?: Json
           ads_head_script?: string
           ads_provider?: string
           ads_slots?: Json

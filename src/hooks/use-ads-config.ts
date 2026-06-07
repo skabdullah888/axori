@@ -10,7 +10,7 @@ export function useAdsConfig(): AdsConfig {
     const load = async () => {
       const { data } = await supabase
         .from("settings")
-        .select("ads_enabled, ads_provider, ads_client, ads_slots, ads_txt, ads_verification_meta, ads_head_script")
+        .select("ads_enabled, ads_provider, ads_client, ads_slots, ads_txt, ads_verification_meta, ads_head_script, ads_extra_scripts")
         .limit(1)
         .maybeSingle();
       if (!cancelled && data) setCfg(parseAdsConfig(data));
