@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { useSiteTheme } from "@/hooks/use-site-theme";
 import { SiteThemeRoot } from "@/components/site-theme-root";
+import { AdSlot } from "@/components/ad-slot";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
@@ -246,7 +247,11 @@ export function UserShell({ title, children }: { title: string; children: ReactN
             </div>
           </div>
         </header>
-        <main className="p-4 lg:p-6 animate-in fade-in duration-300">{children}</main>
+        <main className="p-4 lg:p-6 animate-in fade-in duration-300">
+          <AdSlot placement="app_top" />
+          {children}
+          <AdSlot placement="app_bottom" />
+        </main>
       </div>
     </SiteThemeRoot>
   );

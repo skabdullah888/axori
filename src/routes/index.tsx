@@ -7,6 +7,7 @@ import tasksImg from "@/assets/feature-tasks.jpg";
 import trustImg from "@/assets/feature-trust.jpg";
 import { getSiteTheme, type SiteTheme } from "@/lib/site-themes";
 import { SiteThemeRoot } from "@/components/site-theme-root";
+import { AdSlot } from "@/components/ad-slot";
 
 const SITE_URL = "https://axorabd.site";
 
@@ -145,6 +146,8 @@ function LandingPage() {
             ))}
           </div>
         </section>
+
+        <section className="container mx-auto px-4"><AdSlot placement="landing_mid" /></section>
 
         {/* Features */}
         <section className="container mx-auto px-4 py-16">

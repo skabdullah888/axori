@@ -12,8 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
+import { AD_PLACEMENTS, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement } from "@/lib/ads";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
   head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
@@ -31,6 +32,8 @@ function SettingsPage() {
   const [methods, setMethods] = useState<any[]>([]);
   const [newMethod, setNewMethod] = useState({ name: "", receiver_number: "", instructions: "" });
   const [addingMethod, setAddingMethod] = useState(false);
+  const [adsCfg, setAdsCfg] = useState<AdsConfig>(emptyAdsConfig());
+  const [savingAds, setSavingAds] = useState(false);
 
   const loadSettings = async () => {
     const { data } = await supabase.from("settings").select("*").limit(1).maybeSingle();
@@ -49,7 +52,28 @@ function SettingsPage() {
         minimum_task_total_amount: Number((data as any).minimum_task_total_amount ?? 0),
       });
       setSiteTheme((((data as any).site_theme as SiteThemeId | undefined) ?? "default") as SiteThemeId);
+      setAdsCfg(parseAdsConfig(data));
     }
+  };
+
+  const saveAds = async () => {
+    if (!row) return;
+    setSavingAds(true);
+    const { error } = await supabase.from("settings").update({
+      ads_enabled: adsCfg.enabled,
+      ads_client: adsCfg.client.trim(),
+      ads_slots: adsCfg.slots,
+      updated_at: new Date().toISOString(),
+    }).eq("id", row.id);
+    setSavingAds(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Ad settings saved");
+  };
+
+  const setSlot = (id: AdPlacement, patch: Partial<{ enabled: boolean; slot: string }>) => {
+    setAdsCfg((c) => ({
+      ...c,
+      slots: { ...c.slots, [id]: { enabled: false, slot: "", ...(c.slots[id] ?? {}), ...patch } },
+    }));
   };
 
   const saveTheme = async (id: SiteThemeId) => {
@@ -133,6 +157,9 @@ function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="theme" className="flex items-center gap-2">
             <Palette className="h-4 w-4" /> Site Theme
+          </TabsTrigger>
+          <TabsTrigger value="ads" className="flex items-center gap-2">
+            <Megaphone className="h-4 w-4" /> Ads
           </TabsTrigger>
         </TabsList>
 
@@ -334,6 +361,88 @@ function SettingsPage() {
                     </button>
                   );
                 })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="ads">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Megaphone className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Google AdSense</CardTitle>
+                  <CardDescription>
+                    Show Google AdSense units across the public landing page and the user app. Admin panel never shows ads. Disable any placement that feels intrusive — ads only render when the master toggle is on, the publisher ID is filled, and the specific placement is enabled with an Ad slot ID.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4">
+                <div>
+                  <Label className="text-sm font-medium">Enable ads globally</Label>
+                  <p className="text-xs text-muted-foreground mt-1">Master switch. When off, no ads are shown anywhere — regardless of per-placement settings.</p>
+                </div>
+                <Switch checked={adsCfg.enabled} onCheckedChange={(v) => setAdsCfg((c) => ({ ...c, enabled: v }))} />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-sm">AdSense Publisher ID</Label>
+                <Input
+                  placeholder="ca-pub-XXXXXXXXXXXXXXXX"
+                  value={adsCfg.client}
+                  onChange={(e) => setAdsCfg((c) => ({ ...c, client: e.target.value }))}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Find it in your Google AdSense dashboard → Account → Account information → Publisher ID.
+                </p>
+              </div>
+
+              <Separator />
+
+              <div>
+                <div className="text-sm font-medium mb-1">Ad placements</div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  For each placement, paste the corresponding Ad slot ID from AdSense → Ads → By ad unit → choose unit → copy <code className="px-1 py-0.5 rounded bg-muted text-[10px]">data-ad-slot</code> value (a long number like <code className="px-1 py-0.5 rounded bg-muted text-[10px]">1234567890</code>).
+                </p>
+                <div className="space-y-3">
+                  {AD_PLACEMENTS.map((p) => {
+                    const slot = adsCfg.slots[p.id] ?? { enabled: false, slot: "" };
+                    return (
+                      <div key={p.id} className="rounded-lg border border-border bg-card/40 p-4">
+                        <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+                          <div className="min-w-0">
+                            <div className="font-semibold text-sm">{p.label}</div>
+                            <p className="text-xs text-muted-foreground mt-0.5">{p.hint}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-muted-foreground">Enabled</span>
+                            <Switch checked={!!slot.enabled} onCheckedChange={(v) => setSlot(p.id, { enabled: v })} />
+                          </div>
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs">Ad slot ID</Label>
+                          <Input
+                            placeholder="1234567890"
+                            value={slot.slot}
+                            onChange={(e) => setSlot(p.id, { slot: e.target.value.trim() })}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <Separator />
+              <div className="flex justify-end">
+                <Button onClick={saveAds} disabled={savingAds}>
+                  {savingAds ? "Saving…" : "Save ad settings"}
+                </Button>
               </div>
             </CardContent>
           </Card>
