@@ -65,6 +65,9 @@ function SettingsPage() {
       ads_provider: adsCfg.provider,
       ads_client: adsCfg.client.trim(),
       ads_slots: adsCfg.slots,
+      ads_txt: adsCfg.adsTxt,
+      ads_verification_meta: adsCfg.verificationMeta,
+      ads_head_script: adsCfg.headScript,
       updated_at: new Date().toISOString(),
     } as any).eq("id", row.id);
     setSavingAds(false);
