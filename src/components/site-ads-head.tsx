@@ -1,9 +1,20 @@
 import { useEffect } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { useAdsConfig } from "@/hooks/use-ads-config";
 import { collectActiveExtraSnippets } from "@/lib/ads";
 
 const META_MARK = "data-axora-ads-verify";
 const SCRIPT_MARK = "data-axora-ads-head";
+
+/** Routes where ads must never appear (admin/auth/internal). */
+function isAdFreeRoute(pathname: string): boolean {
+  return (
+    pathname.startsWith("/skabdullah_999_sg") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/lovable")
+  );
+}
 
 /**
  * Injects AdSense verification artefacts into <head> on every page so the
@@ -18,6 +29,9 @@ const SCRIPT_MARK = "data-axora-ads-head";
  */
 export function SiteAdsHead() {
   const cfg = useAdsConfig();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const adFree = isAdFreeRoute(pathname);
+
 
   // 1. google-site-verification meta tag
   useEffect(() => {
@@ -40,6 +54,7 @@ export function SiteAdsHead() {
     if (typeof document === "undefined") return;
     document.querySelectorAll(`script[${SCRIPT_MARK}="1"]`).forEach((el) => el.remove());
     document.querySelectorAll(`[${SCRIPT_MARK}="1"]`).forEach((el) => el.remove());
+    if (adFree) return;
 
     const snippets: string[] = [];
 
@@ -70,7 +85,7 @@ export function SiteAdsHead() {
         }
       });
     }
-  }, [cfg.headScript, cfg.provider, cfg.client, cfg.enabled, cfg.extraScripts]);
+  }, [cfg.headScript, cfg.provider, cfg.client, cfg.enabled, cfg.extraScripts, adFree]);
 
   return null;
 }
