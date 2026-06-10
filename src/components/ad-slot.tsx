@@ -1,12 +1,22 @@
 import { useEffect, useRef } from "react";
 import { useAdsConfig } from "@/hooks/use-ads-config";
 import { isPlacementActive, type AdPlacement } from "@/lib/ads";
+import { FakeAdBanner } from "@/components/fake-ad-card";
 
 declare global {
   interface Window {
     adsbygoogle?: unknown[];
   }
 }
+
+// Stable-ish fallback index per placement so different slots show different ads.
+const PLACEMENT_INDEX: Record<AdPlacement, number> = {
+  app_top: 0,
+  app_bottom: 1,
+  tasks_inline: 2,
+  wallet_top: 3,
+  landing_mid: 0,
+};
 
 let adsenseScriptLoadedFor: string | null = null;
 
