@@ -29,6 +29,9 @@ function isAdFreeRoute(pathname: string): boolean {
  */
 export function SiteAdsHead() {
   const cfg = useAdsConfig();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const adFree = isAdFreeRoute(pathname);
+
 
   // 1. google-site-verification meta tag
   useEffect(() => {
