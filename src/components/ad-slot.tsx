@@ -92,7 +92,21 @@ export function AdSlot({
     }
   }, [active, cfg.provider, cfg.client, slot?.slot, slot?.code]);
 
-  if (!active) return null;
+  // Global kill-switch: ads fully disabled → render nothing (and take no space).
+  if (!cfg.enabled) return null;
+
+  // Ads enabled but this placement isn't configured yet → show a house/fake ad
+  // so the slot is never empty.
+  if (!active) {
+    return (
+      <div className={`my-4 w-full ${className}`}>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-1 text-center">
+          Advertisement
+        </div>
+        <FakeAdBanner index={PLACEMENT_INDEX[placement] ?? 0} />
+      </div>
+    );
+  }
 
   return (
     <div className={`my-4 w-full overflow-hidden text-center ${className}`}>
