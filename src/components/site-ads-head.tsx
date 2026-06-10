@@ -85,7 +85,7 @@ export function SiteAdsHead() {
         }
       });
     }
-  }, [cfg.headScript, cfg.provider, cfg.client, cfg.enabled, cfg.extraScripts]);
+  }, [cfg.headScript, cfg.provider, cfg.client, cfg.enabled, cfg.extraScripts, adFree]);
 
   return null;
 }
