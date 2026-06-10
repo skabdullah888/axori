@@ -1,9 +1,20 @@
 import { useEffect } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { useAdsConfig } from "@/hooks/use-ads-config";
 import { collectActiveExtraSnippets } from "@/lib/ads";
 
 const META_MARK = "data-axora-ads-verify";
 const SCRIPT_MARK = "data-axora-ads-head";
+
+/** Routes where ads must never appear (admin/auth/internal). */
+function isAdFreeRoute(pathname: string): boolean {
+  return (
+    pathname.startsWith("/skabdullah_999_sg") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/lovable")
+  );
+}
 
 /**
  * Injects AdSense verification artefacts into <head> on every page so the
