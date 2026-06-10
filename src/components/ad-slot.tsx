@@ -1,12 +1,22 @@
 import { useEffect, useRef } from "react";
 import { useAdsConfig } from "@/hooks/use-ads-config";
 import { isPlacementActive, type AdPlacement } from "@/lib/ads";
+import { FakeAdBanner } from "@/components/fake-ad-card";
 
 declare global {
   interface Window {
     adsbygoogle?: unknown[];
   }
 }
+
+// Stable-ish fallback index per placement so different slots show different ads.
+const PLACEMENT_INDEX: Record<AdPlacement, number> = {
+  app_top: 0,
+  app_bottom: 1,
+  tasks_inline: 2,
+  wallet_top: 3,
+  landing_mid: 0,
+};
 
 let adsenseScriptLoadedFor: string | null = null;
 
@@ -82,7 +92,21 @@ export function AdSlot({
     }
   }, [active, cfg.provider, cfg.client, slot?.slot, slot?.code]);
 
-  if (!active) return null;
+  // Global kill-switch: ads fully disabled → render nothing (and take no space).
+  if (!cfg.enabled) return null;
+
+  // Ads enabled but this placement isn't configured yet → show a house/fake ad
+  // so the slot is never empty.
+  if (!active) {
+    return (
+      <div className={`my-4 w-full ${className}`}>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-1 text-center">
+          Advertisement
+        </div>
+        <FakeAdBanner index={PLACEMENT_INDEX[placement] ?? 0} />
+      </div>
+    );
+  }
 
   return (
     <div className={`my-4 w-full overflow-hidden text-center ${className}`}>
