@@ -54,6 +54,7 @@ export function SiteAdsHead() {
     if (typeof document === "undefined") return;
     document.querySelectorAll(`script[${SCRIPT_MARK}="1"]`).forEach((el) => el.remove());
     document.querySelectorAll(`[${SCRIPT_MARK}="1"]`).forEach((el) => el.remove());
+    if (adFree) return;
 
     const snippets: string[] = [];
 
