@@ -667,6 +667,7 @@ export type Database = {
           proof_type: string | null
           publisher_id: string | null
           reward: number
+          show_publisher: boolean
           status: string
           title: string
           total_slots: number
@@ -686,6 +687,7 @@ export type Database = {
           proof_type?: string | null
           publisher_id?: string | null
           reward?: number
+          show_publisher?: boolean
           status?: string
           title: string
           total_slots?: number
@@ -705,6 +707,7 @@ export type Database = {
           proof_type?: string | null
           publisher_id?: string | null
           reward?: number
+          show_publisher?: boolean
           status?: string
           title?: string
           total_slots?: number

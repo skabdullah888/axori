@@ -101,7 +101,7 @@ function TaskDetailPage() {
               <div>
                 <Badge variant="outline" className="text-[10px] uppercase mb-2">{task.category ?? "general"}</Badge>
                 <h1 className="text-2xl font-bold">{task.title}</h1>
-                <p className="text-sm text-muted-foreground mt-1">by @{task.publisher?.username ?? "—"}</p>
+                <p className="text-sm text-muted-foreground mt-1">{(task as any).show_publisher === false ? "by Anonymous publisher" : `by @${task.publisher?.username ?? "—"}`}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground uppercase">Reward</p>

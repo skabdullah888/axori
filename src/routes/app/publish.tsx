@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { RejectDialog } from "@/components/reject-dialog";
 import { ProofThumb } from "@/components/proof-image";
@@ -61,6 +62,7 @@ function PublishPage() {
     title: "", description: "", instructions: "", category: "general",
     reward: "", total_slots: "1",
   });
+  const [showPublisher, setShowPublisher] = useState(true);
   const [rejectSub, setRejectSub] = useState<any | null>(null);
   const [cancelTask, setCancelTask] = useState<any | null>(null);
   const [viewSub, setViewSub] = useState<any | null>(null);
@@ -163,9 +165,15 @@ function PublishPage() {
       });
       if (error || !newTaskId) { toast.error(friendlyError(error, "Failed to publish")); setBusy(false); return; }
 
+      // Persist publisher visibility preference on the freshly-created task.
+      if (!showPublisher) {
+        await (supabase as any).from("tasks").update({ show_publisher: false }).eq("id", newTaskId);
+      }
+
       toast.success("Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
+      setShowPublisher(true);
       setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
     } catch (err: any) {
       toast.error(friendlyError(err, "Failed to publish"));
@@ -330,6 +338,21 @@ function PublishPage() {
                       ))}
                     </div>
                   </div>
+
+                  {/* Publisher visibility toggle */}
+                  <div className="flex items-start justify-between gap-3 p-3 rounded-lg bg-accent/30 border border-border">
+                    <div className="min-w-0">
+                      <Label htmlFor="show-publisher" className="text-sm">Show my profile on this task</Label>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {showPublisher
+                          ? `Workers will see @${(profile as any)?.username ?? "your username"} on the task card.`
+                          : "Your identity will be hidden. The task will appear as Anonymous."}
+                      </p>
+                    </div>
+                    <Switch id="show-publisher" checked={showPublisher} onCheckedChange={setShowPublisher} />
+                  </div>
+
+
 
 
                   <div className="rounded-xl bg-accent/40 border border-border p-4 space-y-1 text-sm">
