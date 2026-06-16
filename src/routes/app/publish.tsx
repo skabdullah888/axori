@@ -339,6 +339,21 @@ function PublishPage() {
                     </div>
                   </div>
 
+                  {/* Publisher visibility toggle */}
+                  <div className="flex items-start justify-between gap-3 p-3 rounded-lg bg-accent/30 border border-border">
+                    <div className="min-w-0">
+                      <Label htmlFor="show-publisher" className="text-sm">Show my profile on this task</Label>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {showPublisher
+                          ? `Workers will see @${(profile as any)?.username ?? "your username"} on the task card.`
+                          : "Your identity will be hidden. The task will appear as Anonymous."}
+                      </p>
+                    </div>
+                    <Switch id="show-publisher" checked={showPublisher} onCheckedChange={setShowPublisher} />
+                  </div>
+
+
+
 
                   <div className="rounded-xl bg-accent/40 border border-border p-4 space-y-1 text-sm">
                     <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>৳{subtotal.toFixed(2)}</span></div>
