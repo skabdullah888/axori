@@ -61,6 +61,7 @@ function PublishPage() {
     title: "", description: "", instructions: "", category: "general",
     reward: "", total_slots: "1",
   });
+  const [showPublisher, setShowPublisher] = useState(true);
   const [rejectSub, setRejectSub] = useState<any | null>(null);
   const [cancelTask, setCancelTask] = useState<any | null>(null);
   const [viewSub, setViewSub] = useState<any | null>(null);
@@ -163,9 +164,15 @@ function PublishPage() {
       });
       if (error || !newTaskId) { toast.error(friendlyError(error, "Failed to publish")); setBusy(false); return; }
 
+      // Persist publisher visibility preference on the freshly-created task.
+      if (!showPublisher) {
+        await (supabase as any).from("tasks").update({ show_publisher: false }).eq("id", newTaskId);
+      }
+
       toast.success("Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
+      setShowPublisher(true);
       setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
     } catch (err: any) {
       toast.error(friendlyError(err, "Failed to publish"));
