@@ -20,7 +20,6 @@ import { CardGridSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
 import { TutorialButton } from "@/components/tutorial-button";
 import { AdSlot } from "@/components/ad-slot";
-import { FakeAdCard } from "@/components/fake-ad-card";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
