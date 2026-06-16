@@ -200,7 +200,7 @@ function TasksPage() {
                     <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{t.description}</p>
                     <div className="flex items-center justify-between text-xs text-muted-foreground">
                       <span className="flex items-center gap-1"><Users2 className="h-3 w-3" /> {remaining}/{t.total_slots}</span>
-                      <span className="truncate ml-2">@{t.publisher?.username ?? "—"}</span>
+                      <span className="truncate ml-2">{(t as any).show_publisher === false ? "Anonymous" : `@${t.publisher?.username ?? "—"}`}</span>
                     </div>
                     {submitted && <Badge className="mt-2 bg-success/20 text-success border-success/30 text-[10px]">Submitted</Badge>}
                   </CardContent>
@@ -233,7 +233,7 @@ function TasksPage() {
                   <Badge className="bg-success/20 text-success border-success/30 text-[10px]">{selected.status}</Badge>
                 </div>
                 <DialogTitle className="text-xl">{selected.title}</DialogTitle>
-                <DialogDescription>by @{selected.publisher?.username ?? "—"}</DialogDescription>
+                <DialogDescription>{(selected as any).show_publisher === false ? "by Anonymous publisher" : `by @${selected.publisher?.username ?? "—"}`}</DialogDescription>
               </DialogHeader>
 
               <div className="grid grid-cols-3 gap-3 text-sm">
