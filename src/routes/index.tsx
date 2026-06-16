@@ -82,6 +82,7 @@ function LandingPage() {
               <span className="text-lg font-bold">AxoraBD</span>
             </div>
             <nav className="flex items-center gap-2">
+              <Link to="/about" className="px-3 py-2 text-sm font-medium hover:text-primary">About</Link>
               <Link to="/auth/login" className="px-3 py-2 text-sm font-medium hover:text-primary">Login</Link>
               <Link to="/auth/register" className="px-4 py-2 text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:opacity-90 transition">
                 Sign Up
@@ -221,6 +222,7 @@ function LandingPage() {
               <span>© {new Date().getFullYear()} AxoraBD · axorabd.site</span>
             </div>
             <div className="flex gap-4">
+              <Link to="/about">About</Link>
               <Link to="/auth/login">Login</Link>
               <Link to="/auth/register">Sign Up</Link>
             </div>

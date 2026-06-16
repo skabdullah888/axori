@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
@@ -70,6 +71,11 @@ const AppRoute = AppRouteImport.update({
 const AdsDottxtRoute = AdsDottxtRouteImport.update({
   id: '/ads.txt',
   path: '/ads.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -247,6 +253,7 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/app': typeof AppRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
@@ -286,6 +293,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/app': typeof AppRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
@@ -326,6 +334,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/app': typeof AppRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
@@ -367,6 +376,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/ads.txt'
     | '/app'
     | '/robots.txt'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/ads.txt'
     | '/app'
     | '/robots.txt'
@@ -445,6 +456,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/ads.txt'
     | '/app'
     | '/robots.txt'
@@ -485,6 +497,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdsDottxtRoute: typeof AdsDottxtRoute
   AppRoute: typeof AppRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
@@ -545,6 +558,13 @@ declare module '@tanstack/react-router' {
       path: '/ads.txt'
       fullPath: '/ads.txt'
       preLoaderRoute: typeof AdsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -820,6 +840,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdsDottxtRoute: AdsDottxtRoute,
   AppRoute: AppRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
@@ -849,13 +870,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
