@@ -20,7 +20,6 @@ import { CardGridSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
 import { TutorialButton } from "@/components/tutorial-button";
 import { AdSlot } from "@/components/ad-slot";
-import { FakeAdCard } from "@/components/fake-ad-card";
 
 const PAGE_SIZE = 12;
 function shuffle<T>(arr: T[]): T[] {
@@ -176,10 +175,10 @@ function TasksPage() {
         ) : (
           <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {paged.flatMap((t, idx) => {
+            {paged.map((t) => {
               const submitted = mine.has(t.id);
               const remaining = t.total_slots - t.completed_slots;
-              const nodes = [
+              return (
                 <Card key={t.id} onClick={() => openDetails(t)}
                   className="group overflow-hidden cursor-pointer border-border/60 hover:border-primary/40 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5">
                   <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/30 overflow-hidden flex items-center justify-center">
@@ -204,13 +203,8 @@ function TasksPage() {
                     </div>
                     {submitted && <Badge className="mt-2 bg-success/20 text-success border-success/30 text-[10px]">Submitted</Badge>}
                   </CardContent>
-                </Card>,
-              ];
-              // Inject a fake sponsored card after every 3rd task tile.
-              if ((idx + 1) % 3 === 0) {
-                nodes.push(<FakeAdCard key={`fake-${idx}`} index={idx} />);
-              }
-              return nodes;
+                </Card>
+              );
             })}
           </div>
           <AdSlot placement="tasks_inline" />
