@@ -478,6 +478,7 @@ export type Database = {
           ads_slots: Json
           ads_txt: string
           ads_verification_meta: string
+          contact_email: string | null
           duplicate_ip_warning_enabled: boolean
           duplicate_ip_warning_message: string
           duplicate_ip_warning_title: string
@@ -490,6 +491,14 @@ export type Database = {
           publisher_task_tax: number
           referral_bonus: number
           site_theme: string
+          social_facebook: string | null
+          social_instagram: string | null
+          social_linkedin: string | null
+          social_telegram: string | null
+          social_tiktok: string | null
+          social_twitter: string | null
+          social_whatsapp: string | null
+          social_youtube: string | null
           updated_at: string
           withdrawal_fee: number
           withdrawals_enabled: boolean
@@ -505,6 +514,7 @@ export type Database = {
           ads_slots?: Json
           ads_txt?: string
           ads_verification_meta?: string
+          contact_email?: string | null
           duplicate_ip_warning_enabled?: boolean
           duplicate_ip_warning_message?: string
           duplicate_ip_warning_title?: string
@@ -517,6 +527,14 @@ export type Database = {
           publisher_task_tax?: number
           referral_bonus?: number
           site_theme?: string
+          social_facebook?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_telegram?: string | null
+          social_tiktok?: string | null
+          social_twitter?: string | null
+          social_whatsapp?: string | null
+          social_youtube?: string | null
           updated_at?: string
           withdrawal_fee?: number
           withdrawals_enabled?: boolean
@@ -532,6 +550,7 @@ export type Database = {
           ads_slots?: Json
           ads_txt?: string
           ads_verification_meta?: string
+          contact_email?: string | null
           duplicate_ip_warning_enabled?: boolean
           duplicate_ip_warning_message?: string
           duplicate_ip_warning_title?: string
@@ -544,6 +563,14 @@ export type Database = {
           publisher_task_tax?: number
           referral_bonus?: number
           site_theme?: string
+          social_facebook?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_telegram?: string | null
+          social_tiktok?: string | null
+          social_twitter?: string | null
+          social_whatsapp?: string | null
+          social_youtube?: string | null
           updated_at?: string
           withdrawal_fee?: number
           withdrawals_enabled?: boolean
