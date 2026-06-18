@@ -58,6 +58,7 @@ function AboutPage() {
 
   const activeSocials = SOCIAL_DEFS.filter((s) => (socials[s.key] ?? "").trim().length > 0);
 
+  return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b">
