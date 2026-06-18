@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2 } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2, Image as ImageIcon } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -40,6 +40,20 @@ function SettingsPage() {
     social_telegram: "", social_whatsapp: "", social_tiktok: "", social_linkedin: "", contact_email: "",
   });
   const [savingSocial, setSavingSocial] = useState(false);
+  const [siteLogoUrl, setSiteLogoUrl] = useState("");
+  const [savingLogo, setSavingLogo] = useState(false);
+
+  const saveLogo = async () => {
+    if (!row) return;
+    setSavingLogo(true);
+    const { error } = await supabase.from("settings").update({
+      site_logo_url: siteLogoUrl.trim() || null,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingLogo(false);
+    if (error) toast.error(friendlyError(error));
+    else { toast.success("Logo saved. Refresh to see it everywhere."); }
+  };
 
   const saveSocial = async () => {
     if (!row) return;
@@ -82,6 +96,7 @@ function SettingsPage() {
         social_linkedin: d.social_linkedin ?? "",
         contact_email: d.contact_email ?? "",
       });
+      setSiteLogoUrl(d.site_logo_url ?? "");
     }
   };
 
@@ -207,6 +222,9 @@ function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="social" className="flex items-center gap-2">
             <Share2 className="h-4 w-4" /> Social
+          </TabsTrigger>
+          <TabsTrigger value="branding" className="flex items-center gap-2">
+            <ImageIcon className="h-4 w-4" /> Branding
           </TabsTrigger>
         </TabsList>
 
@@ -695,6 +713,43 @@ function SettingsPage() {
               <div className="flex justify-end pt-2">
                 <Button onClick={saveSocial} disabled={savingSocial}>
                   {savingSocial ? "Saving…" : "Save social links"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="branding">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <ImageIcon className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Site logo</CardTitle>
+                  <CardDescription>Paste a public image URL. Shown in the site header, app sidebar, and About page. Leave empty to use the default mark.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Logo URL</Label>
+                <Input
+                  placeholder="https://example.com/logo.png"
+                  value={siteLogoUrl}
+                  onChange={(e) => setSiteLogoUrl(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground">Square images (e.g. 128×128 PNG) work best.</p>
+              </div>
+              {siteLogoUrl.trim() && (
+                <div className="flex items-center gap-3 p-3 rounded-lg border bg-card/40">
+                  <img src={siteLogoUrl} alt="Logo preview" className="h-12 w-12 rounded-lg object-cover border" />
+                  <div className="text-xs text-muted-foreground break-all">{siteLogoUrl}</div>
+                </div>
+              )}
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveLogo} disabled={savingLogo}>
+                  {savingLogo ? "Saving…" : "Save logo"}
                 </Button>
               </div>
             </CardContent>

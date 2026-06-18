@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useSiteTheme } from "@/hooks/use-site-theme";
 import { SiteThemeRoot } from "@/components/site-theme-root";
 import { AdSlot } from "@/components/ad-slot";
+import { useSiteLogo } from "@/hooks/use-site-logo";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
@@ -44,6 +45,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useSiteTheme();
+  const siteLogo = useSiteLogo();
 
   const [profileChecked, setProfileChecked] = useState(false);
   const [profileError, setProfileError] = useState("");
@@ -150,9 +152,13 @@ export function UserShell({ title, children }: { title: string; children: ReactN
     )}>
       <div className="px-5 py-5 border-b border-sidebar-border flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-primary/40 flex items-center justify-center shadow-md shadow-primary/30">
-            <Sparkles className="h-4 w-4 text-primary-foreground" />
-          </div>
+          {siteLogo ? (
+            <img src={siteLogo} alt="AxoraBD" className="h-9 w-9 rounded-xl object-cover shadow-md shadow-primary/30" />
+          ) : (
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary to-primary/40 flex items-center justify-center shadow-md shadow-primary/30">
+              <Sparkles className="h-4 w-4 text-primary-foreground" />
+            </div>
+          )}
           <div>
             <div className="text-lg font-bold tracking-tight text-foreground">AxoraBD</div>
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{theme.appTagline}</div>

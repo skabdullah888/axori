@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ShieldCheck, Wallet, Users, CheckCircle2, Sparkles, Mail, Globe, Award, Target, Heart, ArrowRight, Facebook, Youtube, Instagram, Twitter, Send, MessageCircle, Music2, Linkedin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteLogo } from "@/hooks/use-site-logo";
 
 const SITE_URL = "https://axorabd.site";
 
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   const [socials, setSocials] = useState<Record<string, string>>({});
   const [contactEmail, setContactEmail] = useState<string>("");
+  const siteLogo = useSiteLogo();
 
   useEffect(() => {
     supabase
@@ -64,7 +66,11 @@ function AboutPage() {
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
+            {siteLogo ? (
+              <img src={siteLogo} alt="AxoraBD" className="h-9 w-9 rounded-lg object-cover" />
+            ) : (
+              <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
+            )}
             <span className="text-lg font-bold">AxoraBD</span>
           </Link>
           <nav className="flex items-center gap-2">

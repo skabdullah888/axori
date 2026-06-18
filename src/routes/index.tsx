@@ -8,6 +8,7 @@ import trustImg from "@/assets/feature-trust.jpg";
 import { getSiteTheme, type SiteTheme } from "@/lib/site-themes";
 import { SiteThemeRoot } from "@/components/site-theme-root";
 import { AdSlot } from "@/components/ad-slot";
+import { useSiteLogo } from "@/hooks/use-site-logo";
 
 const SITE_URL = "https://axorabd.site";
 
@@ -69,6 +70,7 @@ const FEATURE_ICONS = [CheckCircle2, Wallet, ShieldCheck];
 
 function LandingPage() {
   const { theme } = Route.useLoaderData() as { theme: SiteTheme };
+  const siteLogo = useSiteLogo();
   const h = theme.hero;
 
   return (
@@ -78,7 +80,11 @@ function LandingPage() {
         <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b">
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
+              {siteLogo ? (
+                <img src={siteLogo} alt="AxoraBD" className="h-9 w-9 rounded-lg object-cover" />
+              ) : (
+                <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
+              )}
               <span className="text-lg font-bold">AxoraBD</span>
             </div>
             <nav className="flex items-center gap-2">
