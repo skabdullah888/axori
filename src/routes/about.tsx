@@ -212,8 +212,32 @@ function AboutPage() {
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li><span className="font-semibold">Website:</span> <a href={SITE_URL} className="text-primary hover:underline">axorabd.site</a></li>
+            {contactEmail && (
+              <li><span className="font-semibold">Email:</span> <a href={`mailto:${contactEmail}`} className="text-primary hover:underline">{contactEmail}</a></li>
+            )}
             <li><span className="font-semibold">Support:</span> Available 24/7 through your dashboard</li>
           </ul>
+
+          {activeSocials.length > 0 && (
+            <div className="mt-6">
+              <div className="text-sm font-semibold mb-3">Follow us</div>
+              <div className="flex flex-wrap gap-3">
+                {activeSocials.map(({ key, label, Icon, color }) => (
+                  <a
+                    key={key}
+                    href={socials[key]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    title={label}
+                    className={`w-11 h-11 grid place-items-center rounded-full border bg-background text-muted-foreground transition hover:shadow-md hover:-translate-y-0.5 ${color}`}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
