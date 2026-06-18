@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2 } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -35,6 +35,22 @@ function SettingsPage() {
   const [addingMethod, setAddingMethod] = useState(false);
   const [adsCfg, setAdsCfg] = useState<AdsConfig>(emptyAdsConfig());
   const [savingAds, setSavingAds] = useState(false);
+  const [social, setSocial] = useState({
+    social_facebook: "", social_youtube: "", social_instagram: "", social_twitter: "",
+    social_telegram: "", social_whatsapp: "", social_tiktok: "", social_linkedin: "", contact_email: "",
+  });
+  const [savingSocial, setSavingSocial] = useState(false);
+
+  const saveSocial = async () => {
+    if (!row) return;
+    setSavingSocial(true);
+    const { error } = await supabase.from("settings").update({
+      ...social,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingSocial(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Social links saved");
+  };
 
   const loadSettings = async () => {
     const { data } = await supabase.from("settings").select("*").limit(1).maybeSingle();
@@ -54,6 +70,18 @@ function SettingsPage() {
       });
       setSiteTheme((((data as any).site_theme as SiteThemeId | undefined) ?? "default") as SiteThemeId);
       setAdsCfg(parseAdsConfig(data));
+      const d = data as any;
+      setSocial({
+        social_facebook: d.social_facebook ?? "",
+        social_youtube: d.social_youtube ?? "",
+        social_instagram: d.social_instagram ?? "",
+        social_twitter: d.social_twitter ?? "",
+        social_telegram: d.social_telegram ?? "",
+        social_whatsapp: d.social_whatsapp ?? "",
+        social_tiktok: d.social_tiktok ?? "",
+        social_linkedin: d.social_linkedin ?? "",
+        contact_email: d.contact_email ?? "",
+      });
     }
   };
 
@@ -176,6 +204,9 @@ function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="ads" className="flex items-center gap-2">
             <Megaphone className="h-4 w-4" /> Ads
+          </TabsTrigger>
+          <TabsTrigger value="social" className="flex items-center gap-2">
+            <Share2 className="h-4 w-4" /> Social
           </TabsTrigger>
         </TabsList>
 
