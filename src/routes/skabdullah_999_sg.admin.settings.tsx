@@ -718,6 +718,43 @@ function SettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+        <TabsContent value="branding">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <ImageIcon className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Site logo</CardTitle>
+                  <CardDescription>Paste a public image URL. Shown in the site header, app sidebar, and About page. Leave empty to use the default mark.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Logo URL</Label>
+                <Input
+                  placeholder="https://example.com/logo.png"
+                  value={siteLogoUrl}
+                  onChange={(e) => setSiteLogoUrl(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground">Square images (e.g. 128×128 PNG) work best.</p>
+              </div>
+              {siteLogoUrl.trim() && (
+                <div className="flex items-center gap-3 p-3 rounded-lg border bg-card/40">
+                  <img src={siteLogoUrl} alt="Logo preview" className="h-12 w-12 rounded-lg object-cover border" />
+                  <div className="text-xs text-muted-foreground break-all">{siteLogoUrl}</div>
+                </div>
+              )}
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveLogo} disabled={savingLogo}>
+                  {savingLogo ? "Saving…" : "Save logo"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </AdminShell>
   );
