@@ -1,7 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ShieldCheck, Wallet, Users, CheckCircle2, Sparkles, Mail, Globe, Award, Target, Heart, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ShieldCheck, Wallet, Users, CheckCircle2, Sparkles, Mail, Globe, Award, Target, Heart, ArrowRight, Facebook, Youtube, Instagram, Twitter, Send, MessageCircle, Music2, Linkedin } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const SITE_URL = "https://axorabd.site";
+
+const SOCIAL_DEFS = [
+  { key: "social_facebook", label: "Facebook", Icon: Facebook, color: "hover:text-[#1877F2]" },
+  { key: "social_youtube", label: "YouTube", Icon: Youtube, color: "hover:text-[#FF0000]" },
+  { key: "social_instagram", label: "Instagram", Icon: Instagram, color: "hover:text-[#E1306C]" },
+  { key: "social_twitter", label: "Twitter / X", Icon: Twitter, color: "hover:text-foreground" },
+  { key: "social_telegram", label: "Telegram", Icon: Send, color: "hover:text-[#229ED9]" },
+  { key: "social_whatsapp", label: "WhatsApp", Icon: MessageCircle, color: "hover:text-[#25D366]" },
+  { key: "social_tiktok", label: "TikTok", Icon: Music2, color: "hover:text-foreground" },
+  { key: "social_linkedin", label: "LinkedIn", Icon: Linkedin, color: "hover:text-[#0A66C2]" },
+] as const;
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -17,6 +30,34 @@ export const Route = createFileRoute("/about")({
 });
 
 function AboutPage() {
+  const [socials, setSocials] = useState<Record<string, string>>({});
+  const [contactEmail, setContactEmail] = useState<string>("");
+
+  useEffect(() => {
+    supabase
+      .from("settings")
+      .select("social_facebook,social_youtube,social_instagram,social_twitter,social_telegram,social_whatsapp,social_tiktok,social_linkedin,contact_email")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return;
+        const d = data as any;
+        setSocials({
+          social_facebook: d.social_facebook ?? "",
+          social_youtube: d.social_youtube ?? "",
+          social_instagram: d.social_instagram ?? "",
+          social_twitter: d.social_twitter ?? "",
+          social_telegram: d.social_telegram ?? "",
+          social_whatsapp: d.social_whatsapp ?? "",
+          social_tiktok: d.social_tiktok ?? "",
+          social_linkedin: d.social_linkedin ?? "",
+        });
+        setContactEmail(d.contact_email ?? "");
+      });
+  }, []);
+
+  const activeSocials = SOCIAL_DEFS.filter((s) => (socials[s.key] ?? "").trim().length > 0);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -171,8 +212,32 @@ function AboutPage() {
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li><span className="font-semibold">Website:</span> <a href={SITE_URL} className="text-primary hover:underline">axorabd.site</a></li>
+            {contactEmail && (
+              <li><span className="font-semibold">Email:</span> <a href={`mailto:${contactEmail}`} className="text-primary hover:underline">{contactEmail}</a></li>
+            )}
             <li><span className="font-semibold">Support:</span> Available 24/7 through your dashboard</li>
           </ul>
+
+          {activeSocials.length > 0 && (
+            <div className="mt-6">
+              <div className="text-sm font-semibold mb-3">Follow us</div>
+              <div className="flex flex-wrap gap-3">
+                {activeSocials.map(({ key, label, Icon, color }) => (
+                  <a
+                    key={key}
+                    href={socials[key]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    title={label}
+                    className={`w-11 h-11 grid place-items-center rounded-full border bg-background text-muted-foreground transition hover:shadow-md hover:-translate-y-0.5 ${color}`}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

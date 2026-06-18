@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2 } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -35,6 +35,22 @@ function SettingsPage() {
   const [addingMethod, setAddingMethod] = useState(false);
   const [adsCfg, setAdsCfg] = useState<AdsConfig>(emptyAdsConfig());
   const [savingAds, setSavingAds] = useState(false);
+  const [social, setSocial] = useState({
+    social_facebook: "", social_youtube: "", social_instagram: "", social_twitter: "",
+    social_telegram: "", social_whatsapp: "", social_tiktok: "", social_linkedin: "", contact_email: "",
+  });
+  const [savingSocial, setSavingSocial] = useState(false);
+
+  const saveSocial = async () => {
+    if (!row) return;
+    setSavingSocial(true);
+    const { error } = await supabase.from("settings").update({
+      ...social,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingSocial(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Social links saved");
+  };
 
   const loadSettings = async () => {
     const { data } = await supabase.from("settings").select("*").limit(1).maybeSingle();
@@ -54,6 +70,18 @@ function SettingsPage() {
       });
       setSiteTheme((((data as any).site_theme as SiteThemeId | undefined) ?? "default") as SiteThemeId);
       setAdsCfg(parseAdsConfig(data));
+      const d = data as any;
+      setSocial({
+        social_facebook: d.social_facebook ?? "",
+        social_youtube: d.social_youtube ?? "",
+        social_instagram: d.social_instagram ?? "",
+        social_twitter: d.social_twitter ?? "",
+        social_telegram: d.social_telegram ?? "",
+        social_whatsapp: d.social_whatsapp ?? "",
+        social_tiktok: d.social_tiktok ?? "",
+        social_linkedin: d.social_linkedin ?? "",
+        contact_email: d.contact_email ?? "",
+      });
     }
   };
 
@@ -176,6 +204,9 @@ function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="ads" className="flex items-center gap-2">
             <Megaphone className="h-4 w-4" /> Ads
+          </TabsTrigger>
+          <TabsTrigger value="social" className="flex items-center gap-2">
+            <Share2 className="h-4 w-4" /> Social
           </TabsTrigger>
         </TabsList>
 
@@ -619,6 +650,51 @@ function SettingsPage() {
               <div className="flex justify-end">
                 <Button onClick={saveAds} disabled={savingAds}>
                   {savingAds ? "Saving…" : "Save ad settings"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="social">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Share2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Social media links</CardTitle>
+                  <CardDescription>Links shown on the public About Us page. Leave a field empty to hide that icon.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { k: "social_facebook", label: "Facebook URL", ph: "https://facebook.com/yourpage" },
+                  { k: "social_youtube", label: "YouTube URL", ph: "https://youtube.com/@yourchannel" },
+                  { k: "social_instagram", label: "Instagram URL", ph: "https://instagram.com/yourhandle" },
+                  { k: "social_twitter", label: "Twitter / X URL", ph: "https://x.com/yourhandle" },
+                  { k: "social_telegram", label: "Telegram URL", ph: "https://t.me/yourchannel" },
+                  { k: "social_whatsapp", label: "WhatsApp URL", ph: "https://wa.me/8801XXXXXXXXX" },
+                  { k: "social_tiktok", label: "TikTok URL", ph: "https://tiktok.com/@yourhandle" },
+                  { k: "social_linkedin", label: "LinkedIn URL", ph: "https://linkedin.com/company/your-company" },
+                  { k: "contact_email", label: "Contact Email", ph: "support@axorabd.site" },
+                ].map((f) => (
+                  <div key={f.k} className="space-y-1.5">
+                    <Label className="text-xs">{f.label}</Label>
+                    <Input
+                      placeholder={f.ph}
+                      value={(social as any)[f.k]}
+                      onChange={(e) => setSocial((s) => ({ ...s, [f.k]: e.target.value }))}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveSocial} disabled={savingSocial}>
+                  {savingSocial ? "Saving…" : "Save social links"}
                 </Button>
               </div>
             </CardContent>
