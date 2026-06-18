@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ShieldCheck, Wallet, Users, CheckCircle2, Sparkles, Mail, Globe, Award, Target, Heart, ArrowRight, Facebook, Youtube, Instagram, Twitter, Send, MessageCircle, Music2, Linkedin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteLogo } from "@/hooks/use-site-logo";
 
 const SITE_URL = "https://axorabd.site";
 
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   const [socials, setSocials] = useState<Record<string, string>>({});
   const [contactEmail, setContactEmail] = useState<string>("");
+  const siteLogo = useSiteLogo();
 
   useEffect(() => {
     supabase
