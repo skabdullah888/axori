@@ -490,6 +490,7 @@ export type Database = {
           minimum_withdrawal: number
           publisher_task_tax: number
           referral_bonus: number
+          site_logo_url: string | null
           site_theme: string
           social_facebook: string | null
           social_instagram: string | null
@@ -526,6 +527,7 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          site_logo_url?: string | null
           site_theme?: string
           social_facebook?: string | null
           social_instagram?: string | null
@@ -562,6 +564,7 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          site_logo_url?: string | null
           site_theme?: string
           social_facebook?: string | null
           social_instagram?: string | null
