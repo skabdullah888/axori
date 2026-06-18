@@ -655,6 +655,51 @@ function SettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="social">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Share2 className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Social media links</CardTitle>
+                  <CardDescription>Links shown on the public About Us page. Leave a field empty to hide that icon.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { k: "social_facebook", label: "Facebook URL", ph: "https://facebook.com/yourpage" },
+                  { k: "social_youtube", label: "YouTube URL", ph: "https://youtube.com/@yourchannel" },
+                  { k: "social_instagram", label: "Instagram URL", ph: "https://instagram.com/yourhandle" },
+                  { k: "social_twitter", label: "Twitter / X URL", ph: "https://x.com/yourhandle" },
+                  { k: "social_telegram", label: "Telegram URL", ph: "https://t.me/yourchannel" },
+                  { k: "social_whatsapp", label: "WhatsApp URL", ph: "https://wa.me/8801XXXXXXXXX" },
+                  { k: "social_tiktok", label: "TikTok URL", ph: "https://tiktok.com/@yourhandle" },
+                  { k: "social_linkedin", label: "LinkedIn URL", ph: "https://linkedin.com/company/your-company" },
+                  { k: "contact_email", label: "Contact Email", ph: "support@axorabd.site" },
+                ].map((f) => (
+                  <div key={f.k} className="space-y-1.5">
+                    <Label className="text-xs">{f.label}</Label>
+                    <Input
+                      placeholder={f.ph}
+                      value={(social as any)[f.k]}
+                      onChange={(e) => setSocial((s) => ({ ...s, [f.k]: e.target.value }))}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveSocial} disabled={savingSocial}>
+                  {savingSocial ? "Saving…" : "Save social links"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </AdminShell>
   );
