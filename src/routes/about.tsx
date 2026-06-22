@@ -64,19 +64,19 @@ function AboutPage() {
     <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
+        <div className="container mx-auto px-3 sm:px-4 py-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <Link to="/" className="flex min-w-0 items-center gap-2">
             {siteLogo ? (
-              <img src={siteLogo} alt="AxoraBD" className="h-9 w-9 rounded-lg object-cover" />
+              <img src={siteLogo} alt="AxoraBD" className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-lg object-cover" />
             ) : (
-              <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
             )}
-            <span className="text-lg font-bold">AxoraBD</span>
+            <span className="truncate text-base sm:text-lg font-bold">AxoraBD</span>
           </Link>
-          <nav className="flex items-center gap-2">
-            <Link to="/" className="px-3 py-2 text-sm font-medium hover:text-primary">Home</Link>
-            <Link to="/auth/login" className="px-3 py-2 text-sm font-medium hover:text-primary">Login</Link>
-            <Link to="/auth/register" className="px-4 py-2 text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:opacity-90 transition">
+          <nav className="flex items-center gap-1 sm:gap-2">
+            <Link to="/" className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium hover:text-primary">Home</Link>
+            <Link to="/auth/login" className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium hover:text-primary">Login</Link>
+            <Link to="/auth/register" className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:opacity-90 transition whitespace-nowrap">
               Sign Up
             </Link>
           </nav>
