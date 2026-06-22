@@ -103,21 +103,21 @@ function AboutPage() {
       </section>
 
       {/* Mission / Vision */}
-      <section className="container mx-auto px-4 py-12 grid md:grid-cols-2 gap-6">
-        <article className="p-8 rounded-2xl border bg-card">
+      <section className="container mx-auto px-4 py-10 sm:py-12 grid md:grid-cols-2 gap-6">
+        <article className="p-6 sm:p-8 rounded-2xl border bg-card">
           <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary grid place-items-center mb-4">
             <Target className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">Our Mission</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Our Mission</h2>
           <p className="mt-3 text-muted-foreground">
             To create real online earning opportunities for every Bangladeshi — students, freelancers, and stay-at-home workers — through simple, transparent, and reliable micro-tasks.
           </p>
         </article>
-        <article className="p-8 rounded-2xl border bg-card">
+        <article className="p-6 sm:p-8 rounded-2xl border bg-card">
           <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary grid place-items-center mb-4">
             <Heart className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">Our Vision</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Our Vision</h2>
           <p className="mt-3 text-muted-foreground">
             To become Bangladesh's #1 trusted online income platform — where publishers find quality work done and workers earn fair, timely rewards.
           </p>
