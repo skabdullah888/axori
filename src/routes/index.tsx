@@ -7,7 +7,7 @@ import tasksImg from "@/assets/feature-tasks.jpg";
 import trustImg from "@/assets/feature-trust.jpg";
 import { getSiteTheme, type SiteTheme } from "@/lib/site-themes";
 import { SiteThemeRoot } from "@/components/site-theme-root";
-import { AdSlot } from "@/components/ad-slot";
+
 import { useSiteLogo } from "@/hooks/use-site-logo";
 
 const SITE_URL = "https://axorabd.site";
