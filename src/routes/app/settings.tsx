@@ -210,6 +210,7 @@ function SettingsPage() {
           </CardContent>
         </Card>
 
+        {!withdrawalsHidden && (
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2"><Wallet className="h-4 w-4" /> Payment Settings</CardTitle></CardHeader>
           <CardContent className="space-y-4">
@@ -239,6 +240,7 @@ function SettingsPage() {
             </Button>
           </CardContent>
         </Card>
+        )}
 
         <Card className="border-destructive/30">
           <CardHeader><CardTitle className="flex items-center gap-2 text-destructive"><Shield className="h-4 w-4" /> Account</CardTitle></CardHeader>
