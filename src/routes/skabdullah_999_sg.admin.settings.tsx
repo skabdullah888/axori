@@ -315,12 +315,39 @@ function SettingsPage() {
                   value={form.publisher_task_tax}
                   onChange={(v) => setForm(f => ({ ...f, publisher_task_tax: v }))}
                 />
-                <Field
-                  label="Referral bonus (৳)"
-                  hint="Credited to the referrer when their referred user activates."
-                  value={form.referral_bonus}
-                  onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
-                />
+                <div className="space-y-2 rounded-lg border p-3">
+                  <div className="text-sm font-medium">Referral bonus mode</div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, referral_bonus_type: "fixed" }))}
+                      className={`flex-1 rounded-md border px-3 py-2 text-sm ${form.referral_bonus_type === "fixed" ? "bg-primary text-primary-foreground border-primary" : "bg-background"}`}
+                    >Direct (৳)</button>
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, referral_bonus_type: "percent" }))}
+                      className={`flex-1 rounded-md border px-3 py-2 text-sm ${form.referral_bonus_type === "percent" ? "bg-primary text-primary-foreground border-primary" : "bg-background"}`}
+                    >Percent (%)</button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Choose one: a fixed taka amount per referral, OR a percentage of the referred user's activation amount.
+                  </p>
+                </div>
+                {form.referral_bonus_type === "fixed" ? (
+                  <Field
+                    label="Referral bonus (৳)"
+                    hint="Credited to the referrer when their referred user activates."
+                    value={form.referral_bonus}
+                    onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
+                  />
+                ) : (
+                  <Field
+                    label="Referral bonus (%)"
+                    hint="Percentage of the referred user's activation amount, credited to the referrer on activation."
+                    value={form.referral_bonus_percent}
+                    onChange={(v) => setForm(f => ({ ...f, referral_bonus_percent: v }))}
+                  />
+                )}
                 <Field
                   label="Minimum referrals to withdraw"
                   hint="User must have referred at least this many people before they can request a withdrawal. Set to 0 to disable."
