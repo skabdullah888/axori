@@ -236,12 +236,14 @@ function LandingPage() {
             <p className="mt-3 text-muted-foreground">Get started in 3 simple steps.</p>
           </div>
           <div className="mt-10 grid md:grid-cols-3 gap-6">
-            {theme.steps.map((s) => (
-              <div key={s.n} className="relative p-6 rounded-2xl border bg-card">
-                <div className="text-5xl font-extrabold text-primary/20 absolute top-3 right-4">{s.n}</div>
-                <h3 className="text-xl font-bold">{s.t}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
-              </div>
+            {theme.steps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 120} direction="up">
+                <div className="relative h-full p-6 rounded-2xl border bg-card hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 transition-all">
+                  <div className="text-5xl font-extrabold text-primary/20 absolute top-3 right-4">{s.n}</div>
+                  <h3 className="text-xl font-bold">{s.t}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </section>
