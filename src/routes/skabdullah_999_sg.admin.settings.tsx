@@ -799,6 +799,76 @@ function SettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+        <TabsContent value="bonus">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Gift className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Signup bonus</CardTitle>
+                  <CardDescription>From the chosen date/time, the first N users will automatically receive the bonus when they create an account.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <Label className="text-sm">Enable signup bonus</Label>
+                  <p className="text-xs text-muted-foreground">Turn off to stop granting bonuses immediately.</p>
+                </div>
+                <Switch
+                  checked={bonus.signup_bonus_enabled}
+                  onCheckedChange={(v) => setBonus((s) => ({ ...s, signup_bonus_enabled: v }))}
+                />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Bonus amount (৳)</Label>
+                  <Input
+                    type="number" step="0.01" min="0"
+                    value={bonus.signup_bonus_amount}
+                    onChange={(e) => setBonus((s) => ({ ...s, signup_bonus_amount: Number(e.target.value) }))}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Max users to receive</Label>
+                  <Input
+                    type="number" step="1" min="0"
+                    value={bonus.signup_bonus_max_users}
+                    onChange={(e) => setBonus((s) => ({ ...s, signup_bonus_max_users: Number(e.target.value) }))}
+                  />
+                  <p className="text-xs text-muted-foreground">First this many qualifying signups get the bonus.</p>
+                </div>
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label className="text-sm">Start date & time</Label>
+                  <Input
+                    type="datetime-local"
+                    value={bonus.signup_bonus_start_at}
+                    onChange={(e) => setBonus((s) => ({ ...s, signup_bonus_start_at: e.target.value }))}
+                  />
+                  <p className="text-xs text-muted-foreground">Signups at or after this time qualify. Leave empty to start immediately.</p>
+                </div>
+              </div>
+              <div className="rounded-lg border bg-card/40 p-3 flex items-center justify-between flex-wrap gap-2">
+                <div className="text-sm">
+                  <span className="text-muted-foreground">Granted so far: </span>
+                  <span className="font-semibold">{bonusGranted}</span>
+                  {bonus.signup_bonus_max_users > 0 && (
+                    <span className="text-muted-foreground"> / {bonus.signup_bonus_max_users}</span>
+                  )}
+                </div>
+                <Button size="sm" variant="ghost" onClick={resetBonusCounter}>Reset counter</Button>
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveBonus} disabled={savingBonus}>
+                  {savingBonus ? "Saving…" : "Save signup bonus"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </AdminShell>
   );
