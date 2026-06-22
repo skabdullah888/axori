@@ -91,16 +91,18 @@ function WalletPage() {
             <div className="text-3xl font-bold">{fmt(available)}</div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs uppercase tracking-wider text-muted-foreground">Held</span>
-              <Clock className="h-4 w-4 text-warning" />
-            </div>
-            <div className="text-3xl font-bold">{fmt(held)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Pending withdrawals</p>
-          </CardContent>
-        </Card>
+        {!withdrawalsHidden && (
+          <Card>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Held</span>
+                <Clock className="h-4 w-4 text-warning" />
+              </div>
+              <div className="text-3xl font-bold">{fmt(held)}</div>
+              <p className="text-xs text-muted-foreground mt-1">Pending withdrawals</p>
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-2">
