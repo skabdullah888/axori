@@ -205,32 +205,60 @@ function WalletPage() {
   );
 }
 
+function txMeta(type: string) {
+  switch (type) {
+    case "deposit":
+      return { icon: ArrowDownLeft, color: "text-success", bg: "bg-success/15", sign: "+" };
+    case "earning":
+      return { icon: TrendingUp, color: "text-primary", bg: "bg-primary/15", sign: "+" };
+    case "withdrawal":
+      return { icon: ArrowUpRight, color: "text-warning", bg: "bg-warning/15", sign: "−" };
+    case "activation":
+      return { icon: Sparkles, color: "text-blue-500", bg: "bg-blue-500/15", sign: "−" };
+    default:
+      return { icon: WalletIcon, color: "text-muted-foreground", bg: "bg-muted", sign: "" };
+  }
+}
+
 function TxTable({ rows }: { rows: any[] }) {
-  if (!rows.length) return <p className="text-sm text-muted-foreground py-8 text-center">No transactions yet.</p>;
+  if (!rows.length) {
+    return (
+      <div className="py-12 text-center">
+        <div className="mx-auto h-14 w-14 rounded-full bg-muted/50 flex items-center justify-center mb-3">
+          <Inbox className="h-7 w-7 text-muted-foreground" />
+        </div>
+        <p className="font-medium">No transactions yet</p>
+        <p className="text-xs text-muted-foreground mt-1">Your deposits, withdrawals and earnings will show up here.</p>
+      </div>
+    );
+  }
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Date</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead>Reference</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-          <TableHead>Status</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rows.map((r) => (
-          <TableRow key={r.id}>
-            <TableCell className="text-xs text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</TableCell>
-            <TableCell className="capitalize">{r.type}</TableCell>
-            <TableCell>{r.method ?? "—"}</TableCell>
-            <TableCell className="font-mono text-xs">{r.trnx_id ?? r.reference ?? "—"}</TableCell>
-            <TableCell className="text-right font-semibold">{fmt(r.amount)}</TableCell>
-            <TableCell><Badge variant="outline" className={statusVariant(r.status)}>{r.status}</Badge></TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <ul className="divide-y divide-border">
+      {rows.map((r) => {
+        const meta = txMeta(r.type);
+        const Icon = meta.icon;
+        const isNegative = meta.sign === "−";
+        return (
+          <li key={r.id} className="flex items-center gap-3 py-3">
+            <div className={`h-10 w-10 shrink-0 rounded-xl flex items-center justify-center ${meta.bg}`}>
+              <Icon className={`h-5 w-5 ${meta.color}`} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <p className="font-medium capitalize truncate">{r.type}</p>
+                <Badge variant="outline" className={`${statusVariant(r.status)} text-[10px]`}>{r.status}</Badge>
+              </div>
+              <p className="text-xs text-muted-foreground truncate">
+                {new Date(r.created_at).toLocaleDateString()} · {r.method ?? "—"}
+                {(r.trnx_id || r.reference) && ` · ${r.trnx_id ?? r.reference}`}
+              </p>
+            </div>
+            <div className={`text-right font-bold tabular-nums shrink-0 ${isNegative ? "text-warning" : "text-success"}`}>
+              {meta.sign}{fmt(r.amount).replace("৳", "৳")}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
