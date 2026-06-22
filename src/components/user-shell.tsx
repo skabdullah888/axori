@@ -13,6 +13,7 @@ import { useSiteTheme } from "@/hooks/use-site-theme";
 import { SiteThemeRoot } from "@/components/site-theme-root";
 import { AdSlot } from "@/components/ad-slot";
 import { useSiteLogo } from "@/hooks/use-site-logo";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
