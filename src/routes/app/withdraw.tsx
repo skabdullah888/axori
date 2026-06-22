@@ -127,6 +127,18 @@ function WithdrawPage() {
   };
 
 
+  if (withdrawalsHidden) {
+    return (
+      <div className="max-w-md mx-auto mt-16 text-center space-y-3">
+        <div className="mx-auto h-14 w-14 rounded-full bg-muted flex items-center justify-center">
+          <AlertCircle className="h-7 w-7 text-muted-foreground" />
+        </div>
+        <h2 className="text-xl font-semibold">Withdrawals unavailable</h2>
+        <p className="text-sm text-muted-foreground">This feature is currently turned off. Please check back later.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="mb-4 flex justify-end"><TutorialButton sectionKey="withdraw" /></div>
