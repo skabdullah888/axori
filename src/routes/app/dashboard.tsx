@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ListSkeleton } from "@/components/section-loader";
 import { NoticeBoard } from "@/components/notice-board";
+import { DailyCheckinCard } from "@/components/daily-checkin-card";
 
 export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — AxoraBD" }] }),
