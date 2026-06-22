@@ -89,14 +89,14 @@ function AboutPage() {
           <div className="absolute top-0 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
           <div className="absolute top-40 -right-32 w-96 h-96 rounded-full bg-accent/40 blur-3xl" />
         </div>
-        <div className="container mx-auto px-4 py-16 md:py-24 text-center max-w-3xl">
+        <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 text-center max-w-3xl">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" /> About Us
           </span>
-          <h1 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight">
+          <h1 className="mt-4 text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight">
             We are <span className="text-primary">AxoraBD</span>
           </h1>
-          <p className="mt-5 text-lg text-muted-foreground">
+          <p className="mt-5 text-base sm:text-lg text-muted-foreground">
             Bangladesh's trusted micro-task & earning platform — empowering thousands to earn from home with simple online tasks.
           </p>
         </div>
