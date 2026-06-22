@@ -14,6 +14,7 @@ import { SiteThemeRoot } from "@/components/site-theme-root";
 import { AdSlot } from "@/components/ad-slot";
 import { useSiteLogo } from "@/hooks/use-site-logo";
 import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
+import { BottomNav } from "@/components/bottom-nav";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
@@ -256,12 +257,13 @@ export function UserShell({ title, children }: { title: string; children: ReactN
             </div>
           </div>
         </header>
-        <main className="p-4 lg:p-6 animate-in fade-in duration-300">
+        <main className="p-4 lg:p-6 pb-24 lg:pb-6 animate-in fade-in duration-300">
           <AdSlot placement="app_top" />
           {children}
           <AdSlot placement="app_bottom" />
         </main>
       </div>
+      <BottomNav unread={unread} />
     </SiteThemeRoot>
   );
 }
