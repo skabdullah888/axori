@@ -17,6 +17,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { ListSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
 import { TutorialButton } from "@/components/tutorial-button";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
