@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteAdsHead } from "@/components/site-ads-head";
+import { TopProgressBar } from "@/components/top-progress-bar";
 
 function NotFoundComponent() {
   return (
@@ -95,6 +96,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SiteAdsHead />
+      <TopProgressBar />
       <Outlet />
       <Sonner />
     </QueryClientProvider>
