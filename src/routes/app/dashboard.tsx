@@ -62,13 +62,15 @@ function DashboardPage() {
   const load = async () => {
     if (!session?.user) return;
     const uid = session.user.id;
-    const [earn, pend, done, act, ref, notif] = await Promise.all([
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [earn, pend, done, act, ref, notif, earnSeries7] = await Promise.all([
       supabase.from("payments").select("amount").eq("user_id", uid).eq("status", "approved").eq("type", "earning"),
       supabase.from("task_submissions").select("id", { count: "exact", head: true }).eq("user_id", uid).eq("status", "pending"),
       supabase.from("task_submissions").select("id", { count: "exact", head: true }).eq("user_id", uid).eq("status", "approved"),
       supabase.from("tasks").select("id", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("referral_earnings").select("amount").eq("referrer_id", uid).eq("status", "approved"),
       supabase.from("notifications").select("*").eq("user_id", uid).eq("admin_targeted", false).order("created_at", { ascending: false }).limit(5),
+      supabase.from("payments").select("amount, created_at").eq("user_id", uid).eq("status", "approved").eq("type", "earning").gte("created_at", sevenDaysAgo),
     ]);
     setStats({
       totalEarn: (earn.data ?? []).reduce((s, r) => s + Number(r.amount), 0),
@@ -78,6 +80,18 @@ function DashboardPage() {
       refEarn: (ref.data ?? []).reduce((s, r) => s + Number(r.amount), 0),
     });
     setActivity(notif.data ?? []);
+
+    // Build 7-day daily totals sparkline
+    const buckets = Array(7).fill(0) as number[];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    for (const row of (earnSeries7.data ?? []) as any[]) {
+      const d = new Date(row.created_at);
+      d.setHours(0, 0, 0, 0);
+      const diff = Math.floor((today.getTime() - d.getTime()) / (24 * 60 * 60 * 1000));
+      if (diff >= 0 && diff < 7) buckets[6 - diff] += Number(row.amount) || 0;
+    }
+    setEarnSeries(buckets);
     setStatsLoading(false);
   };
 
