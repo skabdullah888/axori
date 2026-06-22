@@ -64,19 +64,19 @@ function AboutPage() {
     <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
+        <div className="container mx-auto px-3 sm:px-4 py-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <Link to="/" className="flex min-w-0 items-center gap-2">
             {siteLogo ? (
-              <img src={siteLogo} alt="AxoraBD" className="h-9 w-9 rounded-lg object-cover" />
+              <img src={siteLogo} alt="AxoraBD" className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-lg object-cover" />
             ) : (
-              <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-lg bg-primary text-primary-foreground grid place-items-center font-bold">A</div>
             )}
-            <span className="text-lg font-bold">AxoraBD</span>
+            <span className="truncate text-base sm:text-lg font-bold">AxoraBD</span>
           </Link>
-          <nav className="flex items-center gap-2">
-            <Link to="/" className="px-3 py-2 text-sm font-medium hover:text-primary">Home</Link>
-            <Link to="/auth/login" className="px-3 py-2 text-sm font-medium hover:text-primary">Login</Link>
-            <Link to="/auth/register" className="px-4 py-2 text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:opacity-90 transition">
+          <nav className="flex items-center gap-1 sm:gap-2">
+            <Link to="/" className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium hover:text-primary">Home</Link>
+            <Link to="/auth/login" className="px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium hover:text-primary">Login</Link>
+            <Link to="/auth/register" className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:opacity-90 transition whitespace-nowrap">
               Sign Up
             </Link>
           </nav>
@@ -89,35 +89,35 @@ function AboutPage() {
           <div className="absolute top-0 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
           <div className="absolute top-40 -right-32 w-96 h-96 rounded-full bg-accent/40 blur-3xl" />
         </div>
-        <div className="container mx-auto px-4 py-16 md:py-24 text-center max-w-3xl">
+        <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 text-center max-w-3xl">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5" /> About Us
           </span>
-          <h1 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight">
+          <h1 className="mt-4 text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight">
             We are <span className="text-primary">AxoraBD</span>
           </h1>
-          <p className="mt-5 text-lg text-muted-foreground">
+          <p className="mt-5 text-base sm:text-lg text-muted-foreground">
             Bangladesh's trusted micro-task & earning platform — empowering thousands to earn from home with simple online tasks.
           </p>
         </div>
       </section>
 
       {/* Mission / Vision */}
-      <section className="container mx-auto px-4 py-12 grid md:grid-cols-2 gap-6">
-        <article className="p-8 rounded-2xl border bg-card">
+      <section className="container mx-auto px-4 py-10 sm:py-12 grid md:grid-cols-2 gap-6">
+        <article className="p-6 sm:p-8 rounded-2xl border bg-card">
           <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary grid place-items-center mb-4">
             <Target className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">Our Mission</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Our Mission</h2>
           <p className="mt-3 text-muted-foreground">
             To create real online earning opportunities for every Bangladeshi — students, freelancers, and stay-at-home workers — through simple, transparent, and reliable micro-tasks.
           </p>
         </article>
-        <article className="p-8 rounded-2xl border bg-card">
+        <article className="p-6 sm:p-8 rounded-2xl border bg-card">
           <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary grid place-items-center mb-4">
             <Heart className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold">Our Vision</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Our Vision</h2>
           <p className="mt-3 text-muted-foreground">
             To become Bangladesh's #1 trusted online income platform — where publishers find quality work done and workers earn fair, timely rewards.
           </p>
@@ -126,7 +126,7 @@ function AboutPage() {
 
       {/* Story */}
       <section className="container mx-auto px-4 py-12 max-w-3xl">
-        <h2 className="text-3xl font-bold">Our Story</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold">Our Story</h2>
         <div className="mt-4 space-y-4 text-muted-foreground leading-relaxed">
           <p>
             AxoraBD was founded with one simple goal: to make online earning accessible for everyone in Bangladesh. We saw thousands of people looking for legitimate ways to earn from home but struggling with scams, late payments, and unreliable platforms.
@@ -143,7 +143,7 @@ function AboutPage() {
       {/* Features */}
       <section className="container mx-auto px-4 py-16">
         <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold">What we offer</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">What we offer</h2>
           <p className="mt-3 text-muted-foreground">Everything you need to earn or get work done online.</p>
         </div>
         <div className="mt-10 grid md:grid-cols-3 gap-6">
@@ -189,7 +189,7 @@ function AboutPage() {
       {/* Values */}
       <section className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-bold">Our core values</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">Our core values</h2>
           <p className="mt-3 text-muted-foreground">The principles that guide everything we do.</p>
         </div>
         <div className="mt-10 grid md:grid-cols-2 gap-6">
@@ -208,9 +208,9 @@ function AboutPage() {
       </section>
 
       {/* Contact */}
-      <section className="container mx-auto px-4 py-12 max-w-3xl">
-        <div className="p-8 rounded-2xl border bg-card">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
+      <section className="container mx-auto px-4 py-10 sm:py-12 max-w-3xl">
+        <div className="p-6 sm:p-8 rounded-2xl border bg-card">
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             <Mail className="w-6 h-6 text-primary" /> Get in touch
           </h2>
           <p className="mt-3 text-muted-foreground">
@@ -248,13 +248,13 @@ function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="relative rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-10 md:p-16 text-center overflow-hidden">
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="relative rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6 sm:p-10 md:p-16 text-center overflow-hidden">
           <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10" />
           <div className="absolute -bottom-16 -left-12 w-56 h-56 rounded-full bg-white/10" />
-          <h2 className="text-3xl md:text-5xl font-extrabold">Ready to start earning?</h2>
-          <p className="mt-3 text-lg opacity-90 max-w-xl mx-auto">Join thousands of Bangladeshis already earning on AxoraBD.</p>
-          <Link to="/auth/register" className="inline-flex items-center gap-2 mt-6 px-8 py-3 rounded-md bg-background text-foreground font-bold hover:opacity-90 transition">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold">Ready to start earning?</h2>
+          <p className="mt-3 text-base sm:text-lg opacity-90 max-w-xl mx-auto">Join thousands of Bangladeshis already earning on AxoraBD.</p>
+          <Link to="/auth/register" className="inline-flex items-center gap-2 mt-6 px-6 sm:px-8 py-3 rounded-md bg-background text-foreground font-bold hover:opacity-90 transition">
             Create Free Account <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
