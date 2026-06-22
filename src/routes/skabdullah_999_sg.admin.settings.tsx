@@ -48,6 +48,13 @@ function SettingsPage() {
     signup_bonus_max_users: 0,
     signup_bonus_start_at: "" as string,
   });
+  const [checkin, setCheckin] = useState({
+    daily_checkin_enabled: false,
+    daily_checkin_amount: 0,
+    daily_checkin_streak_days: 7,
+    daily_checkin_streak_bonus: 0,
+  });
+  const [savingCheckin, setSavingCheckin] = useState(false);
   const [bonusGranted, setBonusGranted] = useState(0);
   const [savingBonus, setSavingBonus] = useState(false);
 
