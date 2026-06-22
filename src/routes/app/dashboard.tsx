@@ -126,10 +126,10 @@ function DashboardPage() {
         <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-white/[0.02]" />
           <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Welcome back,</p>
-              <h2 className="text-2xl font-bold mt-1">{profile?.username ?? "—"}</h2>
-              <div className="flex items-center gap-2 mt-2">
+            <div className="min-w-0">
+              <p className="text-sm text-muted-foreground">{greetingFor()},</p>
+              <h2 className="text-2xl font-bold mt-1 truncate">👋 {profile?.username ?? "—"}</h2>
+              <div className="flex flex-wrap items-center gap-2 mt-2">
                 <Badge variant="outline" className={isActive ? "border-success/40 text-success" : "border-warning/40 text-warning"}>
                   {isActive ? "✓ Account Active" : "⚠ Account Inactive"}
                 </Badge>
@@ -138,11 +138,15 @@ function DashboardPage() {
                 )}
               </div>
             </div>
-            <div className="text-right">
+            <div className="text-right shrink-0">
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Available Balance</p>
-              <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mt-1">
-                ৳{Number(profile?.balance ?? 0).toFixed(2)}
+              <p className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mt-1 tabular-nums">
+                ৳<AnimatedCounter value={Number(profile?.balance ?? 0)} decimals={2} />
               </p>
+              <div className="mt-2 flex items-center justify-end gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">7-day earnings</span>
+                <Sparkline data={earnSeries.length ? earnSeries : [0, 0, 0, 0, 0, 0, 0]} width={90} height={28} />
+              </div>
             </div>
           </div>
         </div>
