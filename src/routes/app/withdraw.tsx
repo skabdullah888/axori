@@ -35,6 +35,7 @@ function WithdrawPage() {
   const [busy, setBusy] = useState(false);
   const [check, setCheck] = useState<null | { refs: number; minRefs: number; tasks: number; minTasks: number }>(null);
   const [loading, setLoading] = useState(true);
+  const withdrawalsHidden = useWithdrawalsHidden();
 
 
   const reload = async () => {
