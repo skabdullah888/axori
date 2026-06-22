@@ -126,7 +126,7 @@ function AboutPage() {
 
       {/* Story */}
       <section className="container mx-auto px-4 py-12 max-w-3xl">
-        <h2 className="text-3xl font-bold">Our Story</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold">Our Story</h2>
         <div className="mt-4 space-y-4 text-muted-foreground leading-relaxed">
           <p>
             AxoraBD was founded with one simple goal: to make online earning accessible for everyone in Bangladesh. We saw thousands of people looking for legitimate ways to earn from home but struggling with scams, late payments, and unreliable platforms.
