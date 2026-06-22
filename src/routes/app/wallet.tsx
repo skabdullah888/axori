@@ -143,10 +143,12 @@ function WalletPage() {
             <TabsList>
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="deposit">Deposits</TabsTrigger>
-              <TabsTrigger value="withdrawal">Withdrawals</TabsTrigger>
+              {!withdrawalsHidden && <TabsTrigger value="withdrawal">Withdrawals</TabsTrigger>}
               <TabsTrigger value="activation">Activation</TabsTrigger>
             </TabsList>
-            {["all", "deposit", "withdrawal", "activation"].map((t) => (
+            {(["all", "deposit", "withdrawal", "activation"] as const)
+              .filter((t) => !(withdrawalsHidden && t === "withdrawal"))
+              .map((t) => (
               <TabsContent key={t} value={t} className="mt-4">
                 {loading ? (
                   <div className="space-y-2 py-2">
@@ -155,7 +157,7 @@ function WalletPage() {
                     ))}
                   </div>
                 ) : (
-                  <TxTable rows={t === "all" ? payments : filterByType(t)} />
+                  <TxTable rows={t === "all" ? (withdrawalsHidden ? payments.filter((p) => p.type !== "withdrawal") : payments) : filterByType(t)} />
                 )}
               </TabsContent>
             ))}
