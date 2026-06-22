@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Wallet as WalletIcon, ArrowDownToLine, ArrowUpFromLine, Clock, TrendingUp } from "lucide-react";
+import {
+  Wallet as WalletIcon, ArrowDownToLine, ArrowUpFromLine, Clock, TrendingUp,
+  Sparkles, ArrowDownLeft, ArrowUpRight, Zap, Inbox,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
@@ -8,11 +11,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TutorialButton } from "@/components/tutorial-button";
 import { AdSlot } from "@/components/ad-slot";
 import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
+import { AnimatedCounter } from "@/components/animated-counter";
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({ meta: [{ title: "Wallet — AxoraBD" }] }),
