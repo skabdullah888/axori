@@ -25,7 +25,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, referral_bonus_type: "fixed" as "fixed" | "percent", referral_bonus_percent: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
+    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, referral_bonus_type: "fixed" as "fixed" | "percent", referral_bonus_percent: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, withdrawals_hidden: false, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
   });
   const [siteTheme, setSiteTheme] = useState<SiteThemeId>("default");
   const [savingTheme, setSavingTheme] = useState(false);
