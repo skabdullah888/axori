@@ -1,14 +1,16 @@
 import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, Wallet, Users, Sparkles, ShieldCheck, Smartphone, ArrowRight, Star } from "lucide-react";
+import { CheckCircle2, Wallet, Users, Sparkles, ShieldCheck, Smartphone, ArrowRight, Star, Quote } from "lucide-react";
 import heroImg from "@/assets/hero-earning.jpg";
 import withdrawImg from "@/assets/feature-withdraw.jpg";
 import tasksImg from "@/assets/feature-tasks.jpg";
 import trustImg from "@/assets/feature-trust.jpg";
 import { getSiteTheme, type SiteTheme } from "@/lib/site-themes";
 import { SiteThemeRoot } from "@/components/site-theme-root";
-
 import { useSiteLogo } from "@/hooks/use-site-logo";
+import { Reveal } from "@/components/reveal";
+import { AnimatedCounter } from "@/components/animated-counter";
+import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 
 const SITE_URL = "https://axorabd.site";
 
