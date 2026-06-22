@@ -34,6 +34,7 @@ function WalletPage() {
   const [pendingEarnings, setPendingEarnings] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
   const [loading, setLoading] = useState(true);
+  const withdrawalsHidden = useWithdrawalsHidden();
 
   const reload = async () => {
     if (!session?.user) return;
