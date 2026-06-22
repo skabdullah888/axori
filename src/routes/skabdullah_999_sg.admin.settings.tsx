@@ -267,6 +267,9 @@ function SettingsPage() {
           <TabsTrigger value="branding" className="flex items-center gap-2">
             <ImageIcon className="h-4 w-4" /> Branding
           </TabsTrigger>
+          <TabsTrigger value="bonus" className="flex items-center gap-2">
+            <Gift className="h-4 w-4" /> Signup Bonus
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="fees">
