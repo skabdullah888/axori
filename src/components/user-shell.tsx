@@ -170,11 +170,11 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         <button className="lg:hidden text-muted-foreground" onClick={() => setMobileOpen(false)}><X className="h-5 w-5" /></button>
       </div>
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
-        {items.map((it) => {
+        {visibleItems.map((it) => {
           const active = path === it.to || path.startsWith(it.to + "/");
           const Icon = it.icon;
           const trackedTypes = new Set(
-            items.flatMap((i) => (i.types.includes("*") ? [] : i.types))
+            visibleItems.flatMap((i) => (i.types.includes("*") ? [] : i.types))
           );
           const count = it.types.includes("*")
             ? Object.entries(unreadByType).reduce((s, [t, n]) => s + (trackedTypes.has(t) ? 0 : n), 0)
