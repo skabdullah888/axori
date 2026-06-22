@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { TutorialButton } from "@/components/tutorial-button";
 import { AdSlot } from "@/components/ad-slot";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({ meta: [{ title: "Wallet — AxoraBD" }] }),
@@ -33,6 +34,7 @@ function WalletPage() {
   const [pendingEarnings, setPendingEarnings] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
   const [loading, setLoading] = useState(true);
+  const withdrawalsHidden = useWithdrawalsHidden();
 
   const reload = async () => {
     if (!session?.user) return;
@@ -89,16 +91,18 @@ function WalletPage() {
             <div className="text-3xl font-bold">{fmt(available)}</div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs uppercase tracking-wider text-muted-foreground">Held</span>
-              <Clock className="h-4 w-4 text-warning" />
-            </div>
-            <div className="text-3xl font-bold">{fmt(held)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Pending withdrawals</p>
-          </CardContent>
-        </Card>
+        {!withdrawalsHidden && (
+          <Card>
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Held</span>
+                <Clock className="h-4 w-4 text-warning" />
+              </div>
+              <div className="text-3xl font-bold">{fmt(held)}</div>
+              <p className="text-xs text-muted-foreground mt-1">Pending withdrawals</p>
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-2">
@@ -126,9 +130,11 @@ function WalletPage() {
         <Button asChild className="bg-gradient-to-r from-primary to-primary/80">
           <Link to="/app/deposit"><ArrowDownToLine className="h-4 w-4" /> Deposit</Link>
         </Button>
-        <Button asChild variant="outline">
-          <Link to="/app/withdraw"><ArrowUpFromLine className="h-4 w-4" /> Withdraw</Link>
-        </Button>
+        {!withdrawalsHidden && (
+          <Button asChild variant="outline">
+            <Link to="/app/withdraw"><ArrowUpFromLine className="h-4 w-4" /> Withdraw</Link>
+          </Button>
+        )}
       </div>
 
       <Card>
@@ -137,10 +143,12 @@ function WalletPage() {
             <TabsList>
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="deposit">Deposits</TabsTrigger>
-              <TabsTrigger value="withdrawal">Withdrawals</TabsTrigger>
+              {!withdrawalsHidden && <TabsTrigger value="withdrawal">Withdrawals</TabsTrigger>}
               <TabsTrigger value="activation">Activation</TabsTrigger>
             </TabsList>
-            {["all", "deposit", "withdrawal", "activation"].map((t) => (
+            {(["all", "deposit", "withdrawal", "activation"] as const)
+              .filter((t) => !(withdrawalsHidden && t === "withdrawal"))
+              .map((t) => (
               <TabsContent key={t} value={t} className="mt-4">
                 {loading ? (
                   <div className="space-y-2 py-2">
@@ -149,7 +157,7 @@ function WalletPage() {
                     ))}
                   </div>
                 ) : (
-                  <TxTable rows={t === "all" ? payments : filterByType(t)} />
+                  <TxTable rows={t === "all" ? (withdrawalsHidden ? payments.filter((p) => p.type !== "withdrawal") : payments) : filterByType(t)} />
                 )}
               </TabsContent>
             ))}

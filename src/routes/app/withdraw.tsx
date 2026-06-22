@@ -17,6 +17,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { ListSkeleton } from "@/components/section-loader";
 import { friendlyError } from "@/lib/friendly-error";
 import { TutorialButton } from "@/components/tutorial-button";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 
 export const Route = createFileRoute("/app/withdraw")({
   head: () => ({ meta: [{ title: "Withdraw — AxoraBD" }] }),
@@ -34,6 +35,7 @@ function WithdrawPage() {
   const [busy, setBusy] = useState(false);
   const [check, setCheck] = useState<null | { refs: number; minRefs: number; tasks: number; minTasks: number }>(null);
   const [loading, setLoading] = useState(true);
+  const withdrawalsHidden = useWithdrawalsHidden();
 
 
   const reload = async () => {
@@ -124,6 +126,18 @@ function WithdrawPage() {
     setCheck(null);
   };
 
+
+  if (withdrawalsHidden) {
+    return (
+      <div className="max-w-md mx-auto mt-16 text-center space-y-3">
+        <div className="mx-auto h-14 w-14 rounded-full bg-muted flex items-center justify-center">
+          <AlertCircle className="h-7 w-7 text-muted-foreground" />
+        </div>
+        <h2 className="text-xl font-semibold">Withdrawals unavailable</h2>
+        <p className="text-sm text-muted-foreground">This feature is currently turned off. Please check back later.</p>
+      </div>
+    );
+  }
 
   return (
     <>

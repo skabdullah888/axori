@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { friendlyError } from "@/lib/friendly-error";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
@@ -25,6 +26,7 @@ function SettingsPage() {
   const { profile, reload } = useProfile();
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
+  const withdrawalsHidden = useWithdrawalsHidden();
 
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
@@ -208,6 +210,7 @@ function SettingsPage() {
           </CardContent>
         </Card>
 
+        {!withdrawalsHidden && (
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2"><Wallet className="h-4 w-4" /> Payment Settings</CardTitle></CardHeader>
           <CardContent className="space-y-4">
@@ -237,6 +240,7 @@ function SettingsPage() {
             </Button>
           </CardContent>
         </Card>
+        )}
 
         <Card className="border-destructive/30">
           <CardHeader><CardTitle className="flex items-center gap-2 text-destructive"><Shield className="h-4 w-4" /> Account</CardTitle></CardHeader>

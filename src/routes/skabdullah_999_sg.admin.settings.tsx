@@ -25,7 +25,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, referral_bonus_type: "fixed" as "fixed" | "percent", referral_bonus_percent: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
+    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, referral_bonus_type: "fixed" as "fixed" | "percent", referral_bonus_percent: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, withdrawals_hidden: false, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
   });
   const [siteTheme, setSiteTheme] = useState<SiteThemeId>("default");
   const [savingTheme, setSavingTheme] = useState(false);
@@ -113,6 +113,7 @@ function SettingsPage() {
         minimum_referrals_for_withdrawal: Number((data as any).minimum_referrals_for_withdrawal ?? 0),
         minimum_tasks_for_withdrawal: Number((data as any).minimum_tasks_for_withdrawal ?? 0),
         withdrawals_enabled: (data as any).withdrawals_enabled ?? true,
+        withdrawals_hidden: !!(data as any).withdrawals_hidden,
         minimum_task_publish_amount: Number((data as any).minimum_task_publish_amount ?? 0),
         minimum_task_total_amount: Number((data as any).minimum_task_total_amount ?? 0),
       });
@@ -211,6 +212,7 @@ function SettingsPage() {
       minimum_referrals_for_withdrawal: form.minimum_referrals_for_withdrawal,
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
       withdrawals_enabled: form.withdrawals_enabled,
+      withdrawals_hidden: form.withdrawals_hidden,
       minimum_task_publish_amount: form.minimum_task_publish_amount,
       minimum_task_total_amount: form.minimum_task_total_amount,
       updated_at: new Date().toISOString(),
@@ -382,6 +384,16 @@ function SettingsPage() {
                 <Switch
                   checked={form.withdrawals_enabled}
                   onCheckedChange={(v) => setForm((f) => ({ ...f, withdrawals_enabled: v }))}
+                />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4 mt-3">
+                <div>
+                  <Label className="text-sm font-medium">Hide withdrawals from users</Label>
+                  <p className="text-xs text-muted-foreground mt-1">When on, the Withdraw page, sidebar link, Withdraw button, withdrawal history tab, held-balance card and payment-settings card are all hidden from users.</p>
+                </div>
+                <Switch
+                  checked={(form as any).withdrawals_hidden ?? false}
+                  onCheckedChange={(v) => setForm((f: any) => ({ ...f, withdrawals_hidden: v }))}
                 />
               </div>
               <Separator className="my-5" />
