@@ -206,6 +206,8 @@ function SettingsPage() {
       minimum_withdrawal: form.minimum_withdrawal,
       publisher_task_tax: form.publisher_task_tax,
       referral_bonus: form.referral_bonus,
+      referral_bonus_type: form.referral_bonus_type,
+      referral_bonus_percent: form.referral_bonus_percent,
       minimum_referrals_for_withdrawal: form.minimum_referrals_for_withdrawal,
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
       withdrawals_enabled: form.withdrawals_enabled,
