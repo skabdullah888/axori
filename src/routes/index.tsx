@@ -210,18 +210,20 @@ function LandingPage() {
             {theme.features.map((f, i) => {
               const Icon = FEATURE_ICONS[i] ?? CheckCircle2;
               return (
-                <article key={f.title} className="group rounded-2xl border bg-card overflow-hidden hover:shadow-xl hover:-translate-y-1 transition">
-                  <div className="aspect-[4/3] overflow-hidden bg-accent/30">
-                    <img src={FEATURE_IMGS[i] ?? tasksImg} alt={f.title} width={800} height={600} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition" />
-                  </div>
-                  <div className="p-6">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary grid place-items-center mb-3">
-                      <Icon className="w-5 h-5" />
+                <Reveal key={f.title} delay={i * 120}>
+                  <article className="group h-full rounded-2xl border bg-card overflow-hidden hover:shadow-2xl hover:shadow-primary/15 hover:-translate-y-1.5 hover:border-primary/30 transition-all duration-300">
+                    <div className="aspect-[4/3] overflow-hidden bg-accent/30">
+                      <img src={FEATURE_IMGS[i] ?? tasksImg} alt={f.title} width={800} height={600} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
-                    <h3 className="text-xl font-bold">{f.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
-                  </div>
-                </article>
+                    <div className="p-6">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary grid place-items-center mb-3 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <h3 className="text-xl font-bold">{f.title}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
+                    </div>
+                  </article>
+                </Reveal>
               );
             })}
           </div>
