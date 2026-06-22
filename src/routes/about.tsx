@@ -208,9 +208,9 @@ function AboutPage() {
       </section>
 
       {/* Contact */}
-      <section className="container mx-auto px-4 py-12 max-w-3xl">
-        <div className="p-8 rounded-2xl border bg-card">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
+      <section className="container mx-auto px-4 py-10 sm:py-12 max-w-3xl">
+        <div className="p-6 sm:p-8 rounded-2xl border bg-card">
+          <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             <Mail className="w-6 h-6 text-primary" /> Get in touch
           </h2>
           <p className="mt-3 text-muted-foreground">
