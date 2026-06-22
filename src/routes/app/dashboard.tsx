@@ -162,11 +162,11 @@ function DashboardPage() {
           ))
         ) : (
           <>
-            <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} suffix=" ৳" gradient="bg-gradient-to-br from-primary to-primary/60" />
-            <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} suffix=" ৳" gradient="bg-gradient-to-br from-success to-success/60" />
+            <StatCard icon={Wallet} label="Balance" value={Number(profile?.balance ?? 0)} prefix="৳" decimals={2} gradient="bg-gradient-to-br from-primary to-primary/60" />
+            <StatCard icon={TrendingUp} label="Total Earned" value={stats.totalEarn} prefix="৳" decimals={2} gradient="bg-gradient-to-br from-success to-success/60" />
             <StatCard icon={Clock} label="Pending" value={stats.pending} gradient="bg-gradient-to-br from-warning to-warning/60" />
             <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="bg-gradient-to-br from-blue-500 to-blue-700" />
-            <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} suffix=" ৳" gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
+            <StatCard icon={Users2} label="Referral ৳" value={stats.refEarn} prefix="৳" decimals={2} gradient="bg-gradient-to-br from-amber-400 to-amber-600" />
           </>
         )}
       </div>
