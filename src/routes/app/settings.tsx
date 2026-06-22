@@ -26,6 +26,7 @@ function SettingsPage() {
   const { profile, reload } = useProfile();
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
+  const withdrawalsHidden = useWithdrawalsHidden();
 
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
