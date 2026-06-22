@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2, Image as ImageIcon } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2, Image as ImageIcon, Gift } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -42,6 +42,38 @@ function SettingsPage() {
   const [savingSocial, setSavingSocial] = useState(false);
   const [siteLogoUrl, setSiteLogoUrl] = useState("");
   const [savingLogo, setSavingLogo] = useState(false);
+  const [bonus, setBonus] = useState({
+    signup_bonus_enabled: false,
+    signup_bonus_amount: 0,
+    signup_bonus_max_users: 0,
+    signup_bonus_start_at: "" as string,
+  });
+  const [bonusGranted, setBonusGranted] = useState(0);
+  const [savingBonus, setSavingBonus] = useState(false);
+
+  const saveBonus = async () => {
+    if (!row) return;
+    setSavingBonus(true);
+    const { error } = await supabase.from("settings").update({
+      signup_bonus_enabled: bonus.signup_bonus_enabled,
+      signup_bonus_amount: Number(bonus.signup_bonus_amount) || 0,
+      signup_bonus_max_users: Number(bonus.signup_bonus_max_users) || 0,
+      signup_bonus_start_at: bonus.signup_bonus_start_at ? new Date(bonus.signup_bonus_start_at).toISOString() : null,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingBonus(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Signup bonus saved");
+  };
+
+  const resetBonusCounter = async () => {
+    if (!row) return;
+    if (!confirm("Reset the granted counter to 0? New signups will start qualifying again until the cap.")) return;
+    const { error } = await supabase.from("settings").update({
+      signup_bonus_granted_count: 0, updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    if (error) toast.error(friendlyError(error));
+    else { toast.success("Counter reset"); setBonusGranted(0); }
+  };
 
   const saveLogo = async () => {
     if (!row) return;
