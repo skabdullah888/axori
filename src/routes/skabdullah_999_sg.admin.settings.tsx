@@ -82,6 +82,21 @@ function SettingsPage() {
     else { toast.success("Counter reset"); setBonusGranted(0); }
   };
 
+  const saveCheckin = async () => {
+    if (!row) return;
+    setSavingCheckin(true);
+    const { error } = await supabase.from("settings").update({
+      daily_checkin_enabled: checkin.daily_checkin_enabled,
+      daily_checkin_amount: Number(checkin.daily_checkin_amount) || 0,
+      daily_checkin_streak_days: Number(checkin.daily_checkin_streak_days) || 7,
+      daily_checkin_streak_bonus: Number(checkin.daily_checkin_streak_bonus) || 0,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingCheckin(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Daily check-in saved");
+  };
+
+
   const saveLogo = async () => {
     if (!row) return;
     setSavingLogo(true);
