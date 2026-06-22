@@ -138,7 +138,7 @@ function TasksPage() {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row gap-3 mb-5">
+        <div className="flex flex-col md:flex-row gap-3 mb-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search tasks…" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -164,6 +164,29 @@ function TasksPage() {
             </Button>
           )}
         </div>
+
+        {/* Quick category chips */}
+        {categories.length > 1 && (
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 -mx-1 px-1 scrollbar-none">
+            {categories.map((c) => {
+              const active = cat === c;
+              return (
+                <button
+                  key={c}
+                  onClick={() => setCat(c)}
+                  className={
+                    "shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all active:scale-95 " +
+                    (active
+                      ? "bg-gradient-to-r from-primary to-primary/70 text-primary-foreground border-transparent shadow-md shadow-primary/30"
+                      : "bg-card/60 border-border text-muted-foreground hover:text-foreground hover:border-primary/40")
+                  }
+                >
+                  {c === "all" ? "All" : c}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {loading ? (
           <CardGridSkeleton count={6} />
