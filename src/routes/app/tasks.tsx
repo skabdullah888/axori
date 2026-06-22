@@ -201,15 +201,38 @@ function TasksPage() {
             {paged.map((t) => {
               const submitted = mine.has(t.id);
               const remaining = t.total_slots - t.completed_slots;
+              const ageHours = (Date.now() - new Date(t.created_at).getTime()) / 3600000;
+              const isNew = ageHours < 24;
+              const ratio = t.total_slots > 0 ? remaining / t.total_slots : 1;
+              const isHot = Number(t.reward) >= 5 || ratio < 0.3;
+              const isLimited = remaining > 0 && remaining <= 5;
               return (
                 <Card key={t.id} onClick={() => openDetails(t)}
-                  className="group overflow-hidden cursor-pointer border-border/60 hover:border-primary/40 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5">
-                  <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/30 overflow-hidden flex items-center justify-center">
+                  className="group relative overflow-hidden cursor-pointer border-border/60 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20">
+                  <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/30 overflow-hidden flex items-center justify-center relative">
                     {t.banner_url ? (
-                      <img src={t.banner_url} alt={t.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      <img src={t.banner_url} alt={t.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     ) : (
                       <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
                     )}
+                    {/* Floating status badges */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      {isNew && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-500 text-white shadow-lg animate-pulse">
+                          New
+                        </span>
+                      )}
+                      {isHot && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg animate-pulse">
+                          🔥 Hot
+                        </span>
+                      )}
+                      {isLimited && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-warning text-warning-foreground shadow-lg animate-pulse">
+                          Limited
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-2">
