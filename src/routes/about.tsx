@@ -248,13 +248,13 @@ function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="relative rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-10 md:p-16 text-center overflow-hidden">
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="relative rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6 sm:p-10 md:p-16 text-center overflow-hidden">
           <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10" />
           <div className="absolute -bottom-16 -left-12 w-56 h-56 rounded-full bg-white/10" />
-          <h2 className="text-3xl md:text-5xl font-extrabold">Ready to start earning?</h2>
-          <p className="mt-3 text-lg opacity-90 max-w-xl mx-auto">Join thousands of Bangladeshis already earning on AxoraBD.</p>
-          <Link to="/auth/register" className="inline-flex items-center gap-2 mt-6 px-8 py-3 rounded-md bg-background text-foreground font-bold hover:opacity-90 transition">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold">Ready to start earning?</h2>
+          <p className="mt-3 text-base sm:text-lg opacity-90 max-w-xl mx-auto">Join thousands of Bangladeshis already earning on AxoraBD.</p>
+          <Link to="/auth/register" className="inline-flex items-center gap-2 mt-6 px-6 sm:px-8 py-3 rounded-md bg-background text-foreground font-bold hover:opacity-90 transition">
             Create Free Account <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
