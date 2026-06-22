@@ -384,6 +384,16 @@ function SettingsPage() {
                   onCheckedChange={(v) => setForm((f) => ({ ...f, withdrawals_enabled: v }))}
                 />
               </div>
+              <div className="flex items-center justify-between rounded-lg border border-border bg-card/40 p-4 mt-3">
+                <div>
+                  <Label className="text-sm font-medium">Hide withdrawals from users</Label>
+                  <p className="text-xs text-muted-foreground mt-1">When on, the Withdraw page, sidebar link, Withdraw button, withdrawal history tab, held-balance card and payment-settings card are all hidden from users.</p>
+                </div>
+                <Switch
+                  checked={(form as any).withdrawals_hidden ?? false}
+                  onCheckedChange={(v) => setForm((f: any) => ({ ...f, withdrawals_hidden: v }))}
+                />
+              </div>
               <Separator className="my-5" />
               <div className="flex justify-end">
                 <Button onClick={save} disabled={saving}>
