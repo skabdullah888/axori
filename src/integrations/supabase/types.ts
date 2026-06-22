@@ -490,6 +490,8 @@ export type Database = {
           minimum_withdrawal: number
           publisher_task_tax: number
           referral_bonus: number
+          referral_bonus_percent: number
+          referral_bonus_type: string
           signup_bonus_amount: number
           signup_bonus_enabled: boolean
           signup_bonus_granted_count: number
@@ -532,6 +534,8 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          referral_bonus_percent?: number
+          referral_bonus_type?: string
           signup_bonus_amount?: number
           signup_bonus_enabled?: boolean
           signup_bonus_granted_count?: number
@@ -574,6 +578,8 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          referral_bonus_percent?: number
+          referral_bonus_type?: string
           signup_bonus_amount?: number
           signup_bonus_enabled?: boolean
           signup_bonus_granted_count?: number
