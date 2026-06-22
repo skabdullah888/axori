@@ -95,7 +95,9 @@ function ReferralsPage() {
         <CardHeader><CardTitle>Your referral link</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Earn <span className="text-success font-bold">৳{settings?.referral_bonus ?? 1}</span> for each friend who activates their account.
+            {(settings as any)?.referral_bonus_type === "percent"
+              ? <>Earn <span className="text-success font-bold">{Number((settings as any)?.referral_bonus_percent ?? 0)}%</span> of each friend's activation amount when they activate.</>
+              : <>Earn <span className="text-success font-bold">৳{settings?.referral_bonus ?? 1}</span> for each friend who activates their account.</>}
           </p>
           {!isActive ? (
             <div className="rounded-xl border border-warning/30 bg-warning/10 p-6 text-center space-y-3">

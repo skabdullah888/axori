@@ -25,7 +25,7 @@ export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
 function SettingsPage() {
   const [row, setRow] = useState<any>(null);
   const [form, setForm] = useState({
-    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
+    activation_amount: 0, withdrawal_fee: 0, minimum_withdrawal: 0, publisher_task_tax: 0, referral_bonus: 0, referral_bonus_type: "fixed" as "fixed" | "percent", referral_bonus_percent: 0, minimum_referrals_for_withdrawal: 0, minimum_tasks_for_withdrawal: 0, withdrawals_enabled: true, minimum_task_publish_amount: 0, minimum_task_total_amount: 0,
   });
   const [siteTheme, setSiteTheme] = useState<SiteThemeId>("default");
   const [savingTheme, setSavingTheme] = useState(false);
@@ -108,6 +108,8 @@ function SettingsPage() {
         minimum_withdrawal: Number(data.minimum_withdrawal),
         publisher_task_tax: Number(data.publisher_task_tax ?? 0),
         referral_bonus: Number(data.referral_bonus ?? 0),
+        referral_bonus_type: (((data as any).referral_bonus_type ?? "fixed") === "percent" ? "percent" : "fixed"),
+        referral_bonus_percent: Number((data as any).referral_bonus_percent ?? 0),
         minimum_referrals_for_withdrawal: Number((data as any).minimum_referrals_for_withdrawal ?? 0),
         minimum_tasks_for_withdrawal: Number((data as any).minimum_tasks_for_withdrawal ?? 0),
         withdrawals_enabled: (data as any).withdrawals_enabled ?? true,
@@ -204,6 +206,8 @@ function SettingsPage() {
       minimum_withdrawal: form.minimum_withdrawal,
       publisher_task_tax: form.publisher_task_tax,
       referral_bonus: form.referral_bonus,
+      referral_bonus_type: form.referral_bonus_type,
+      referral_bonus_percent: form.referral_bonus_percent,
       minimum_referrals_for_withdrawal: form.minimum_referrals_for_withdrawal,
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
       withdrawals_enabled: form.withdrawals_enabled,
@@ -311,12 +315,39 @@ function SettingsPage() {
                   value={form.publisher_task_tax}
                   onChange={(v) => setForm(f => ({ ...f, publisher_task_tax: v }))}
                 />
-                <Field
-                  label="Referral bonus (৳)"
-                  hint="Credited to the referrer when their referred user activates."
-                  value={form.referral_bonus}
-                  onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
-                />
+                <div className="space-y-2 rounded-lg border p-3">
+                  <div className="text-sm font-medium">Referral bonus mode</div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, referral_bonus_type: "fixed" }))}
+                      className={`flex-1 rounded-md border px-3 py-2 text-sm ${form.referral_bonus_type === "fixed" ? "bg-primary text-primary-foreground border-primary" : "bg-background"}`}
+                    >Direct (৳)</button>
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, referral_bonus_type: "percent" }))}
+                      className={`flex-1 rounded-md border px-3 py-2 text-sm ${form.referral_bonus_type === "percent" ? "bg-primary text-primary-foreground border-primary" : "bg-background"}`}
+                    >Percent (%)</button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Choose one: a fixed taka amount per referral, OR a percentage of the referred user's activation amount.
+                  </p>
+                </div>
+                {form.referral_bonus_type === "fixed" ? (
+                  <Field
+                    label="Referral bonus (৳)"
+                    hint="Credited to the referrer when their referred user activates."
+                    value={form.referral_bonus}
+                    onChange={(v) => setForm(f => ({ ...f, referral_bonus: v }))}
+                  />
+                ) : (
+                  <Field
+                    label="Referral bonus (%)"
+                    hint="Percentage of the referred user's activation amount, credited to the referrer on activation."
+                    value={form.referral_bonus_percent}
+                    onChange={(v) => setForm(f => ({ ...f, referral_bonus_percent: v }))}
+                  />
+                )}
                 <Field
                   label="Minimum referrals to withdraw"
                   hint="User must have referred at least this many people before they can request a withdrawal. Set to 0 to disable."

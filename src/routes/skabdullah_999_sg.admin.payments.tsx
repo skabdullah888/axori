@@ -108,8 +108,12 @@ function PaymentsTable({ type }: { type: PayType }) {
       // Credit referrer bonus if any
       if (row.profile?.referred_by) {
         const { data: settings } = await supabase.from("settings")
-          .select("referral_bonus").limit(1).maybeSingle();
-        const bonus = Number(settings?.referral_bonus ?? 0);
+          .select("referral_bonus, referral_bonus_type, referral_bonus_percent").limit(1).maybeSingle();
+        const s: any = settings ?? {};
+        const mode = s.referral_bonus_type === "percent" ? "percent" : "fixed";
+        const bonus = mode === "percent"
+          ? Number(row.amount ?? 0) * Number(s.referral_bonus_percent ?? 0) / 100
+          : Number(s.referral_bonus ?? 0);
         if (bonus > 0) {
           const { data: refProfile } = await supabase.from("profiles")
             .select("id,balance,user_id").eq("user_id", row.profile.referred_by).maybeSingle();
