@@ -148,6 +148,12 @@ function SettingsPage() {
           : "",
       });
       setBonusGranted(Number(d.signup_bonus_granted_count ?? 0));
+      setCheckin({
+        daily_checkin_enabled: !!d.daily_checkin_enabled,
+        daily_checkin_amount: Number(d.daily_checkin_amount ?? 0),
+        daily_checkin_streak_days: Number(d.daily_checkin_streak_days ?? 7),
+        daily_checkin_streak_bonus: Number(d.daily_checkin_streak_bonus ?? 0),
+      });
     }
   };
 
