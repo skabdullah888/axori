@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { friendlyError } from "@/lib/friendly-error";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/settings")({
