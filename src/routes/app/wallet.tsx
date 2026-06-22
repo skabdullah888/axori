@@ -130,9 +130,11 @@ function WalletPage() {
         <Button asChild className="bg-gradient-to-r from-primary to-primary/80">
           <Link to="/app/deposit"><ArrowDownToLine className="h-4 w-4" /> Deposit</Link>
         </Button>
-        <Button asChild variant="outline">
-          <Link to="/app/withdraw"><ArrowUpFromLine className="h-4 w-4" /> Withdraw</Link>
-        </Button>
+        {!withdrawalsHidden && (
+          <Button asChild variant="outline">
+            <Link to="/app/withdraw"><ArrowUpFromLine className="h-4 w-4" /> Withdraw</Link>
+          </Button>
+        )}
       </div>
 
       <Card>
