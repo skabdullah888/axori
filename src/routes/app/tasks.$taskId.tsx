@@ -26,7 +26,7 @@ function TaskDetailPage() {
   const { taskId } = Route.useParams();
   const { session } = useAuth();
   const { isActive } = useProfile();
-  const navigate = useNavigate();
+  
   const [task, setTask] = useState<any>(null);
   const [existing, setExisting] = useState<any>(null);
   const [files, setFiles] = useState<File[]>([]);
