@@ -74,57 +74,91 @@ function WalletPage() {
     <>
       <div className="mb-4 flex justify-end"><TutorialButton sectionKey="wallet" /></div>
       <AdSlot placement="wallet_top" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+      {/* Premium credit-card style balance */}
+      {loading ? (
+        <Skeleton className="h-44 w-full rounded-2xl mb-6" />
+      ) : (
+        <div className="relative mb-6 rounded-2xl overflow-hidden border border-primary/30 bg-gradient-to-br from-primary via-primary/80 to-primary/40 text-primary-foreground shadow-2xl shadow-primary/30">
+          <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white/20 blur-3xl" />
+          <div className="absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_50%)]" />
+          <div className="relative p-6">
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] opacity-80">AxoraBD Wallet</p>
+                <p className="text-[10px] opacity-70 mt-1">Available Balance</p>
+              </div>
+              <div className="h-10 w-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+                <Sparkles className="h-5 w-5" />
+              </div>
+            </div>
+            <div className="mb-6">
+              <p className="text-4xl sm:text-5xl font-extrabold tracking-tight tabular-nums">
+                ৳<AnimatedCounter value={available} decimals={2} />
+              </p>
+            </div>
+            <div className="flex items-end justify-between gap-4">
+              <div className="text-xs opacity-80 font-mono tracking-widest truncate">
+                •••• {(session?.user?.id ?? "").slice(-4).toUpperCase() || "USER"}
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] opacity-70 uppercase tracking-wider">Total Earned</p>
+                <p className="text-lg font-bold tabular-nums">{fmt(totalEarned)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i}><CardContent className="p-5 space-y-3">
+          Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-4 space-y-2">
               <Skeleton className="h-3 w-20" />
-              <Skeleton className="h-8 w-28" />
+              <Skeleton className="h-7 w-24" />
             </CardContent></Card>
           ))
         ) : (
           <>
-            {/* stat cards */}
-        <Card className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border-primary/30">
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs uppercase tracking-wider text-muted-foreground">Available</span>
-              <WalletIcon className="h-4 w-4 text-primary" />
-            </div>
-            <div className="text-3xl font-bold">{fmt(available)}</div>
-          </CardContent>
-        </Card>
-        {!withdrawalsHidden && (
-          <Card>
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">Held</span>
-                <Clock className="h-4 w-4 text-warning" />
-              </div>
-              <div className="text-3xl font-bold">{fmt(held)}</div>
-              <p className="text-xs text-muted-foreground mt-1">Pending withdrawals</p>
-            </CardContent>
-          </Card>
-        )}
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs uppercase tracking-wider text-muted-foreground">Pending earnings</span>
-              <Clock className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <div className="text-3xl font-bold">{fmt(pendingEarnings)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Awaiting review</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs uppercase tracking-wider text-muted-foreground">Total earned</span>
-              <TrendingUp className="h-4 w-4 text-success" />
-            </div>
-            <div className="text-3xl font-bold">{fmt(totalEarned)}</div>
-          </CardContent>
-        </Card>
+            {!withdrawalsHidden && (
+              <Card className="border-warning/20">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="h-8 w-8 rounded-lg bg-warning/15 flex items-center justify-center">
+                      <Clock className="h-4 w-4 text-warning" />
+                    </div>
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground">Held</span>
+                  </div>
+                  <div className="text-xl font-bold tabular-nums">{fmt(held)}</div>
+                  <p className="text-[10px] text-muted-foreground">Pending withdrawals</p>
+                </CardContent>
+              </Card>
+            )}
+            <Card className="border-blue-500/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="h-8 w-8 rounded-lg bg-blue-500/15 flex items-center justify-center">
+                    <Zap className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground">Pending</span>
+                </div>
+                <div className="text-xl font-bold tabular-nums">{fmt(pendingEarnings)}</div>
+                <p className="text-[10px] text-muted-foreground">Awaiting review</p>
+              </CardContent>
+            </Card>
+            <Card className="border-success/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="h-8 w-8 rounded-lg bg-success/15 flex items-center justify-center">
+                    <TrendingUp className="h-4 w-4 text-success" />
+                  </div>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground">Earned</span>
+                </div>
+                <div className="text-xl font-bold tabular-nums">{fmt(totalEarned)}</div>
+                <p className="text-[10px] text-muted-foreground">All time</p>
+              </CardContent>
+            </Card>
           </>
         )}
       </div>
