@@ -189,7 +189,7 @@ function AboutPage() {
       {/* Values */}
       <section className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="text-center">
-          <h2 className="text-3xl md:text-4xl font-bold">Our core values</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">Our core values</h2>
           <p className="mt-3 text-muted-foreground">The principles that guide everything we do.</p>
         </div>
         <div className="mt-10 grid md:grid-cols-2 gap-6">
