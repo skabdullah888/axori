@@ -94,6 +94,7 @@ function TaskDetailPage() {
   return (
     <>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
+      <SubmissionSuccessDialog open={successOpen} onOpenChange={setSuccessOpen} reward={Number(task?.reward ?? 0)} />
       <div className="relative max-w-4xl mx-auto">
         <Link to="/app/tasks" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
           <ArrowLeft className="h-4 w-4" /> Back to tasks
