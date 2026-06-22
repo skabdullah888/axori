@@ -12,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { TutorialButton } from "@/components/tutorial-button";
 import { AdSlot } from "@/components/ad-slot";
+import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 
 export const Route = createFileRoute("/app/wallet")({
   head: () => ({ meta: [{ title: "Wallet — AxoraBD" }] }),
