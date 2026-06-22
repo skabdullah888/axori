@@ -510,6 +510,7 @@ export type Database = {
           updated_at: string
           withdrawal_fee: number
           withdrawals_enabled: boolean
+          withdrawals_hidden: boolean
         }
         Insert: {
           activation_amount?: number
@@ -554,6 +555,7 @@ export type Database = {
           updated_at?: string
           withdrawal_fee?: number
           withdrawals_enabled?: boolean
+          withdrawals_hidden?: boolean
         }
         Update: {
           activation_amount?: number
@@ -598,6 +600,7 @@ export type Database = {
           updated_at?: string
           withdrawal_fee?: number
           withdrawals_enabled?: boolean
+          withdrawals_hidden?: boolean
         }
         Relationships: []
       }
