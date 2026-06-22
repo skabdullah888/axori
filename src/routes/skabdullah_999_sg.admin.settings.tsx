@@ -212,6 +212,7 @@ function SettingsPage() {
       minimum_referrals_for_withdrawal: form.minimum_referrals_for_withdrawal,
       minimum_tasks_for_withdrawal: form.minimum_tasks_for_withdrawal,
       withdrawals_enabled: form.withdrawals_enabled,
+      withdrawals_hidden: form.withdrawals_hidden,
       minimum_task_publish_amount: form.minimum_task_publish_amount,
       minimum_task_total_amount: form.minimum_task_total_amount,
       updated_at: new Date().toISOString(),
