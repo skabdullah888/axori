@@ -154,7 +154,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <AdSlot placement="landing_mid" className="container mx-auto px-4" />
+        
 
         {/* Features */}
         <section className="container mx-auto px-4 py-16">
