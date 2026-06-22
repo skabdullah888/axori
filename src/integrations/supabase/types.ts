@@ -490,6 +490,11 @@ export type Database = {
           minimum_withdrawal: number
           publisher_task_tax: number
           referral_bonus: number
+          signup_bonus_amount: number
+          signup_bonus_enabled: boolean
+          signup_bonus_granted_count: number
+          signup_bonus_max_users: number
+          signup_bonus_start_at: string | null
           site_logo_url: string | null
           site_theme: string
           social_facebook: string | null
@@ -527,6 +532,11 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          signup_bonus_amount?: number
+          signup_bonus_enabled?: boolean
+          signup_bonus_granted_count?: number
+          signup_bonus_max_users?: number
+          signup_bonus_start_at?: string | null
           site_logo_url?: string | null
           site_theme?: string
           social_facebook?: string | null
@@ -564,6 +574,11 @@ export type Database = {
           minimum_withdrawal?: number
           publisher_task_tax?: number
           referral_bonus?: number
+          signup_bonus_amount?: number
+          signup_bonus_enabled?: boolean
+          signup_bonus_granted_count?: number
+          signup_bonus_max_users?: number
+          signup_bonus_start_at?: string | null
           site_logo_url?: string | null
           site_theme?: string
           social_facebook?: string | null

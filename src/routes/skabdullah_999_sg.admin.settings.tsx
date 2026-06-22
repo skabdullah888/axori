@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { friendlyError } from "@/lib/friendly-error";
 import { toast } from "sonner";
-import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2, Image as ImageIcon } from "lucide-react";
+import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone, Share2, Image as ImageIcon, Gift } from "lucide-react";
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -42,6 +42,38 @@ function SettingsPage() {
   const [savingSocial, setSavingSocial] = useState(false);
   const [siteLogoUrl, setSiteLogoUrl] = useState("");
   const [savingLogo, setSavingLogo] = useState(false);
+  const [bonus, setBonus] = useState({
+    signup_bonus_enabled: false,
+    signup_bonus_amount: 0,
+    signup_bonus_max_users: 0,
+    signup_bonus_start_at: "" as string,
+  });
+  const [bonusGranted, setBonusGranted] = useState(0);
+  const [savingBonus, setSavingBonus] = useState(false);
+
+  const saveBonus = async () => {
+    if (!row) return;
+    setSavingBonus(true);
+    const { error } = await supabase.from("settings").update({
+      signup_bonus_enabled: bonus.signup_bonus_enabled,
+      signup_bonus_amount: Number(bonus.signup_bonus_amount) || 0,
+      signup_bonus_max_users: Number(bonus.signup_bonus_max_users) || 0,
+      signup_bonus_start_at: bonus.signup_bonus_start_at ? new Date(bonus.signup_bonus_start_at).toISOString() : null,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingBonus(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Signup bonus saved");
+  };
+
+  const resetBonusCounter = async () => {
+    if (!row) return;
+    if (!confirm("Reset the granted counter to 0? New signups will start qualifying again until the cap.")) return;
+    const { error } = await supabase.from("settings").update({
+      signup_bonus_granted_count: 0, updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    if (error) toast.error(friendlyError(error));
+    else { toast.success("Counter reset"); setBonusGranted(0); }
+  };
 
   const saveLogo = async () => {
     if (!row) return;
@@ -97,6 +129,15 @@ function SettingsPage() {
         contact_email: d.contact_email ?? "",
       });
       setSiteLogoUrl(d.site_logo_url ?? "");
+      setBonus({
+        signup_bonus_enabled: !!d.signup_bonus_enabled,
+        signup_bonus_amount: Number(d.signup_bonus_amount ?? 0),
+        signup_bonus_max_users: Number(d.signup_bonus_max_users ?? 0),
+        signup_bonus_start_at: d.signup_bonus_start_at
+          ? new Date(d.signup_bonus_start_at).toISOString().slice(0, 16)
+          : "",
+      });
+      setBonusGranted(Number(d.signup_bonus_granted_count ?? 0));
     }
   };
 
@@ -225,6 +266,9 @@ function SettingsPage() {
           </TabsTrigger>
           <TabsTrigger value="branding" className="flex items-center gap-2">
             <ImageIcon className="h-4 w-4" /> Branding
+          </TabsTrigger>
+          <TabsTrigger value="bonus" className="flex items-center gap-2">
+            <Gift className="h-4 w-4" /> Signup Bonus
           </TabsTrigger>
         </TabsList>
 
@@ -750,6 +794,76 @@ function SettingsPage() {
               <div className="flex justify-end pt-2">
                 <Button onClick={saveLogo} disabled={savingLogo}>
                   {savingLogo ? "Saving…" : "Save logo"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="bonus">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
+                  <Gift className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Signup bonus</CardTitle>
+                  <CardDescription>From the chosen date/time, the first N users will automatically receive the bonus when they create an account.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <Label className="text-sm">Enable signup bonus</Label>
+                  <p className="text-xs text-muted-foreground">Turn off to stop granting bonuses immediately.</p>
+                </div>
+                <Switch
+                  checked={bonus.signup_bonus_enabled}
+                  onCheckedChange={(v) => setBonus((s) => ({ ...s, signup_bonus_enabled: v }))}
+                />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Bonus amount (৳)</Label>
+                  <Input
+                    type="number" step="0.01" min="0"
+                    value={bonus.signup_bonus_amount}
+                    onChange={(e) => setBonus((s) => ({ ...s, signup_bonus_amount: Number(e.target.value) }))}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Max users to receive</Label>
+                  <Input
+                    type="number" step="1" min="0"
+                    value={bonus.signup_bonus_max_users}
+                    onChange={(e) => setBonus((s) => ({ ...s, signup_bonus_max_users: Number(e.target.value) }))}
+                  />
+                  <p className="text-xs text-muted-foreground">First this many qualifying signups get the bonus.</p>
+                </div>
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label className="text-sm">Start date & time</Label>
+                  <Input
+                    type="datetime-local"
+                    value={bonus.signup_bonus_start_at}
+                    onChange={(e) => setBonus((s) => ({ ...s, signup_bonus_start_at: e.target.value }))}
+                  />
+                  <p className="text-xs text-muted-foreground">Signups at or after this time qualify. Leave empty to start immediately.</p>
+                </div>
+              </div>
+              <div className="rounded-lg border bg-card/40 p-3 flex items-center justify-between flex-wrap gap-2">
+                <div className="text-sm">
+                  <span className="text-muted-foreground">Granted so far: </span>
+                  <span className="font-semibold">{bonusGranted}</span>
+                  {bonus.signup_bonus_max_users > 0 && (
+                    <span className="text-muted-foreground"> / {bonus.signup_bonus_max_users}</span>
+                  )}
+                </div>
+                <Button size="sm" variant="ghost" onClick={resetBonusCounter}>Reset counter</Button>
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveBonus} disabled={savingBonus}>
+                  {savingBonus ? "Saving…" : "Save signup bonus"}
                 </Button>
               </div>
             </CardContent>
