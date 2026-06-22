@@ -1,14 +1,16 @@
 import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, Wallet, Users, Sparkles, ShieldCheck, Smartphone, ArrowRight, Star } from "lucide-react";
+import { CheckCircle2, Wallet, Users, Sparkles, ShieldCheck, Smartphone, ArrowRight, Star, Quote } from "lucide-react";
 import heroImg from "@/assets/hero-earning.jpg";
 import withdrawImg from "@/assets/feature-withdraw.jpg";
 import tasksImg from "@/assets/feature-tasks.jpg";
 import trustImg from "@/assets/feature-trust.jpg";
 import { getSiteTheme, type SiteTheme } from "@/lib/site-themes";
 import { SiteThemeRoot } from "@/components/site-theme-root";
-
 import { useSiteLogo } from "@/hooks/use-site-logo";
+import { Reveal } from "@/components/reveal";
+import { AnimatedCounter } from "@/components/animated-counter";
+import { TestimonialsCarousel } from "@/components/testimonials-carousel";
 
 const SITE_URL = "https://axorabd.site";
 
@@ -97,25 +99,28 @@ function LandingPage() {
           </div>
         </header>
 
-        {/* Hero */}
+        {/* Hero — animated gradient mesh */}
         <section className="relative">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-0 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute top-40 -right-32 w-96 h-96 rounded-full bg-accent/40 blur-3xl" />
+          <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            <div className="absolute top-0 -left-32 w-[28rem] h-[28rem] rounded-full bg-primary/25 blur-3xl animated-blob-a" />
+            <div className="absolute top-40 -right-32 w-[30rem] h-[30rem] rounded-full bg-accent/50 blur-3xl animated-blob-b" />
+            <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full bg-primary/10 blur-3xl animated-blob-a" />
           </div>
           <div className="container mx-auto px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold">
+            <Reveal direction="up">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold animate-pulse">
                 <Sparkles className="w-3.5 h-3.5" /> {h.badge}
               </span>
               <h1 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">
                 {h.titlePrefix}{" "}
-                <span className="text-primary">{h.titleHighlight}</span>
+                <span className="bg-gradient-to-r from-primary via-primary/70 to-primary bg-clip-text text-transparent animated-gradient-text">
+                  {h.titleHighlight}
+                </span>
               </h1>
               <p className="mt-5 text-lg text-muted-foreground max-w-xl">{h.subtitle}</p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Link to="/auth/register" className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:opacity-90 transition">
-                  {h.ctaPrimary} <ArrowRight className="w-4 h-4" />
+                <Link to="/auth/register" className="group inline-flex items-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 transition-all">
+                  {h.ctaPrimary} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link to="/auth/login" className="px-6 py-3 rounded-md border font-semibold hover:bg-accent transition">
                   {h.ctaSecondary}
@@ -128,30 +133,68 @@ function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2"><Users className="w-4 h-4" /> 10,000+ users</div>
               </div>
-            </div>
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent rounded-3xl blur-2xl" />
-              <img
-                src={heroImg}
-                alt={`AxoraBD — ${theme.tagline}`}
-                width={1536}
-                height={1024}
-                className="relative rounded-2xl shadow-2xl border w-full h-auto"
-              />
-            </div>
+            </Reveal>
+            <Reveal direction="left" delay={120}>
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-br from-primary/30 to-accent rounded-3xl blur-2xl animate-pulse" />
+                <img
+                  src={heroImg}
+                  alt={`AxoraBD — ${theme.tagline}`}
+                  width={1536}
+                  height={1024}
+                  className="relative rounded-2xl shadow-2xl border w-full h-auto hover:scale-[1.02] transition-transform duration-500"
+                />
+              </div>
+            </Reveal>
           </div>
         </section>
 
-        {/* Stats */}
+        {/* Live Stats with animated counters */}
         <section className="container mx-auto px-4 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {theme.stats.map((s) => (
-              <div key={s.l} className="p-5 rounded-xl bg-card border text-center">
-                <div className="text-2xl md:text-3xl font-extrabold text-primary">{s.v}</div>
-                <div className="text-xs md:text-sm text-muted-foreground mt-1">{s.l}</div>
-              </div>
-            ))}
+            {theme.stats.map((s, idx) => {
+              const match = String(s.v).match(/^([^\d]*)([\d,]+(?:\.\d+)?)(.*)$/);
+              const prefix = match?.[1] ?? "";
+              const num = match ? Number(match[2].replace(/,/g, "")) : NaN;
+              const suffix = match?.[3] ?? "";
+              return (
+                <Reveal key={s.l} delay={idx * 80}>
+                  <div className="p-5 rounded-xl bg-card border text-center hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 transition-all">
+                    <div className="text-2xl md:text-3xl font-extrabold text-primary tabular-nums">
+                      {Number.isFinite(num) ? (
+                        <>
+                          {prefix}
+                          <AnimatedCounter value={num} duration={1400} />
+                          {suffix}
+                        </>
+                      ) : (
+                        s.v
+                      )}
+                    </div>
+                    <div className="text-xs md:text-sm text-muted-foreground mt-1">{s.l}</div>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="container mx-auto px-4 py-16">
+          <Reveal>
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-semibold mb-3">
+                <Quote className="w-3.5 h-3.5" /> Real reviews
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold">
+                Loved by <span className="text-primary">10,000+</span> users
+              </h2>
+              <p className="mt-3 text-muted-foreground">Genuine stories from people earning on AxoraBD every day.</p>
+            </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <TestimonialsCarousel />
+          </Reveal>
         </section>
 
         
@@ -167,18 +210,20 @@ function LandingPage() {
             {theme.features.map((f, i) => {
               const Icon = FEATURE_ICONS[i] ?? CheckCircle2;
               return (
-                <article key={f.title} className="group rounded-2xl border bg-card overflow-hidden hover:shadow-xl hover:-translate-y-1 transition">
-                  <div className="aspect-[4/3] overflow-hidden bg-accent/30">
-                    <img src={FEATURE_IMGS[i] ?? tasksImg} alt={f.title} width={800} height={600} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition" />
-                  </div>
-                  <div className="p-6">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary grid place-items-center mb-3">
-                      <Icon className="w-5 h-5" />
+                <Reveal key={f.title} delay={i * 120}>
+                  <article className="group h-full rounded-2xl border bg-card overflow-hidden hover:shadow-2xl hover:shadow-primary/15 hover:-translate-y-1.5 hover:border-primary/30 transition-all duration-300">
+                    <div className="aspect-[4/3] overflow-hidden bg-accent/30">
+                      <img src={FEATURE_IMGS[i] ?? tasksImg} alt={f.title} width={800} height={600} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
-                    <h3 className="text-xl font-bold">{f.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
-                  </div>
-                </article>
+                    <div className="p-6">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary grid place-items-center mb-3 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <h3 className="text-xl font-bold">{f.title}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground">{f.desc}</p>
+                    </div>
+                  </article>
+                </Reveal>
               );
             })}
           </div>
@@ -191,12 +236,14 @@ function LandingPage() {
             <p className="mt-3 text-muted-foreground">Get started in 3 simple steps.</p>
           </div>
           <div className="mt-10 grid md:grid-cols-3 gap-6">
-            {theme.steps.map((s) => (
-              <div key={s.n} className="relative p-6 rounded-2xl border bg-card">
-                <div className="text-5xl font-extrabold text-primary/20 absolute top-3 right-4">{s.n}</div>
-                <h3 className="text-xl font-bold">{s.t}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
-              </div>
+            {theme.steps.map((s, i) => (
+              <Reveal key={s.n} delay={i * 120} direction="up">
+                <div className="relative h-full p-6 rounded-2xl border bg-card hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 transition-all">
+                  <div className="text-5xl font-extrabold text-primary/20 absolute top-3 right-4">{s.n}</div>
+                  <h3 className="text-xl font-bold">{s.t}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.d}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </section>
