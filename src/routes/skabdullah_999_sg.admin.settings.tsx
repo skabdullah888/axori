@@ -48,6 +48,13 @@ function SettingsPage() {
     signup_bonus_max_users: 0,
     signup_bonus_start_at: "" as string,
   });
+  const [checkin, setCheckin] = useState({
+    daily_checkin_enabled: false,
+    daily_checkin_amount: 0,
+    daily_checkin_streak_days: 7,
+    daily_checkin_streak_bonus: 0,
+  });
+  const [savingCheckin, setSavingCheckin] = useState(false);
   const [bonusGranted, setBonusGranted] = useState(0);
   const [savingBonus, setSavingBonus] = useState(false);
 
@@ -74,6 +81,21 @@ function SettingsPage() {
     if (error) toast.error(friendlyError(error));
     else { toast.success("Counter reset"); setBonusGranted(0); }
   };
+
+  const saveCheckin = async () => {
+    if (!row) return;
+    setSavingCheckin(true);
+    const { error } = await supabase.from("settings").update({
+      daily_checkin_enabled: checkin.daily_checkin_enabled,
+      daily_checkin_amount: Number(checkin.daily_checkin_amount) || 0,
+      daily_checkin_streak_days: Number(checkin.daily_checkin_streak_days) || 7,
+      daily_checkin_streak_bonus: Number(checkin.daily_checkin_streak_bonus) || 0,
+      updated_at: new Date().toISOString(),
+    } as any).eq("id", row.id);
+    setSavingCheckin(false);
+    if (error) toast.error(friendlyError(error)); else toast.success("Daily check-in saved");
+  };
+
 
   const saveLogo = async () => {
     if (!row) return;
@@ -141,6 +163,12 @@ function SettingsPage() {
           : "",
       });
       setBonusGranted(Number(d.signup_bonus_granted_count ?? 0));
+      setCheckin({
+        daily_checkin_enabled: !!d.daily_checkin_enabled,
+        daily_checkin_amount: Number(d.daily_checkin_amount ?? 0),
+        daily_checkin_streak_days: Number(d.daily_checkin_streak_days ?? 7),
+        daily_checkin_streak_bonus: Number(d.daily_checkin_streak_bonus ?? 0),
+      });
     }
   };
 
@@ -907,6 +935,66 @@ function SettingsPage() {
               <div className="flex justify-end pt-2">
                 <Button onClick={saveBonus} disabled={savingBonus}>
                   {savingBonus ? "Saving…" : "Save signup bonus"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mt-6">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-lg bg-amber-500/15 text-amber-600 flex items-center justify-center">
+                  <Gift className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle>Daily check-in bonus</CardTitle>
+                  <CardDescription>Users can claim a bonus once per day. Consecutive-day streaks unlock an extra streak bonus.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <Label className="text-sm">Enable daily check-in</Label>
+                  <p className="text-xs text-muted-foreground">Turn off to hide the daily check-in card from users.</p>
+                </div>
+                <Switch
+                  checked={checkin.daily_checkin_enabled}
+                  onCheckedChange={(v) => setCheckin((s) => ({ ...s, daily_checkin_enabled: v }))}
+                />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Daily amount (৳)</Label>
+                  <Input
+                    type="number" step="0.01" min="0"
+                    value={checkin.daily_checkin_amount}
+                    onChange={(e) => setCheckin((s) => ({ ...s, daily_checkin_amount: Number(e.target.value) }))}
+                  />
+                  <p className="text-xs text-muted-foreground">Credited to balance each day on claim.</p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-sm">Streak target (days)</Label>
+                  <Input
+                    type="number" step="1" min="1"
+                    value={checkin.daily_checkin_streak_days}
+                    onChange={(e) => setCheckin((s) => ({ ...s, daily_checkin_streak_days: Number(e.target.value) }))}
+                  />
+                  <p className="text-xs text-muted-foreground">Number of consecutive days needed to unlock the streak bonus.</p>
+                </div>
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label className="text-sm">Streak bonus (৳)</Label>
+                  <Input
+                    type="number" step="0.01" min="0"
+                    value={checkin.daily_checkin_streak_bonus}
+                    onChange={(e) => setCheckin((s) => ({ ...s, daily_checkin_streak_bonus: Number(e.target.value) }))}
+                  />
+                  <p className="text-xs text-muted-foreground">Extra reward when a user hits the streak target. Streak resets after the bonus.</p>
+                </div>
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button onClick={saveCheckin} disabled={savingCheckin}>
+                  {savingCheckin ? "Saving…" : "Save daily check-in"}
                 </Button>
               </div>
             </CardContent>

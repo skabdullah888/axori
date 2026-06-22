@@ -300,12 +300,14 @@ export type Database = {
           activated_at: string | null
           avatar_url: string | null
           balance: number
+          checkin_streak: number
           created_at: string
           email: string | null
           full_name: string | null
           id: string
           is_publisher: boolean
           last_activation_request_at: string | null
+          last_checkin_at: string | null
           notify_appeals: boolean
           notify_payments: boolean
           notify_tasks: boolean
@@ -326,12 +328,14 @@ export type Database = {
           activated_at?: string | null
           avatar_url?: string | null
           balance?: number
+          checkin_streak?: number
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
           is_publisher?: boolean
           last_activation_request_at?: string | null
+          last_checkin_at?: string | null
           notify_appeals?: boolean
           notify_payments?: boolean
           notify_tasks?: boolean
@@ -352,12 +356,14 @@ export type Database = {
           activated_at?: string | null
           avatar_url?: string | null
           balance?: number
+          checkin_streak?: number
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
           is_publisher?: boolean
           last_activation_request_at?: string | null
+          last_checkin_at?: string | null
           notify_appeals?: boolean
           notify_payments?: boolean
           notify_tasks?: boolean
@@ -479,6 +485,10 @@ export type Database = {
           ads_txt: string
           ads_verification_meta: string
           contact_email: string | null
+          daily_checkin_amount: number
+          daily_checkin_enabled: boolean
+          daily_checkin_streak_bonus: number
+          daily_checkin_streak_days: number
           duplicate_ip_warning_enabled: boolean
           duplicate_ip_warning_message: string
           duplicate_ip_warning_title: string
@@ -524,6 +534,10 @@ export type Database = {
           ads_txt?: string
           ads_verification_meta?: string
           contact_email?: string | null
+          daily_checkin_amount?: number
+          daily_checkin_enabled?: boolean
+          daily_checkin_streak_bonus?: number
+          daily_checkin_streak_days?: number
           duplicate_ip_warning_enabled?: boolean
           duplicate_ip_warning_message?: string
           duplicate_ip_warning_title?: string
@@ -569,6 +583,10 @@ export type Database = {
           ads_txt?: string
           ads_verification_meta?: string
           contact_email?: string | null
+          daily_checkin_amount?: number
+          daily_checkin_enabled?: boolean
+          daily_checkin_streak_bonus?: number
+          daily_checkin_streak_days?: number
           duplicate_ip_warning_enabled?: boolean
           duplicate_ip_warning_message?: string
           duplicate_ip_warning_title?: string
@@ -804,6 +822,7 @@ export type Database = {
         Returns: undefined
       }
       auto_approve_stale_submissions: { Args: never; Returns: number }
+      claim_daily_checkin: { Args: never; Returns: Json }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean

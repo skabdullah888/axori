@@ -1,9 +1,10 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Upload, ArrowLeft, Coins, Users2, Clock, ImageIcon, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
+import { SubmissionSuccessDialog } from "@/components/submission-success-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,13 +26,14 @@ function TaskDetailPage() {
   const { taskId } = Route.useParams();
   const { session } = useAuth();
   const { isActive } = useProfile();
-  const navigate = useNavigate();
+  
   const [task, setTask] = useState<any>(null);
   const [existing, setExisting] = useState<any>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [proofText, setProofText] = useState("");
   const [busy, setBusy] = useState(false);
   const [activationOpen, setActivationOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
 
   const load = async () => {
     const { data: t } = await supabase.from("tasks")
@@ -74,8 +76,10 @@ function TaskDetailPage() {
         if (upErr) throw upErr;
         await supabase.from("task_submission_proofs").insert({ submission_id: sub.id, image_url: path });
       }
-      toast.success("Submission sent! Awaiting publisher review.");
-      navigate({ to: "/app/submissions" });
+      setFiles([]);
+      setProofText("");
+      setSuccessOpen(true);
+      load();
     } catch (err: any) {
       toast.error(friendlyError(err, "Submission failed"));
     } finally { setBusy(false); }
@@ -90,6 +94,7 @@ function TaskDetailPage() {
   return (
     <>
       <ActivationRequiredDialog open={activationOpen} onOpenChange={setActivationOpen} />
+      <SubmissionSuccessDialog open={successOpen} onOpenChange={setSuccessOpen} reward={Number(task?.reward ?? 0)} />
       <div className="relative max-w-4xl mx-auto">
         <Link to="/app/tasks" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
           <ArrowLeft className="h-4 w-4" /> Back to tasks

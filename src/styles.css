@@ -109,3 +109,9 @@
 }
 .animate-slide-in-right { animation: slideInRight 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
 .animate-slide-in-left  { animation: slideInLeft  0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(220px) rotate(540deg); opacity: 0; }
+}
+.animate-confetti { animation: confettiFall linear forwards; }
