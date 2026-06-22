@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Wallet, TrendingUp, Clock, CheckCircle2, ListTodo, Users2 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ListSkeleton } from "@/components/section-loader";
 import { NoticeBoard } from "@/components/notice-board";
 import { DailyCheckinCard } from "@/components/daily-checkin-card";
+import { AnimatedCounter } from "@/components/animated-counter";
+import { Sparkline } from "@/components/sparkline";
 
 export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — AxoraBD" }] }),
@@ -18,23 +20,34 @@ export const Route = createFileRoute("/app/dashboard")({
   component: DashboardPage,
 });
 
-function StatCard({ icon: Icon, label, value, gradient, suffix = "" }: any) {
+function StatCard({ icon: Icon, label, value, gradient, suffix = "", prefix = "", decimals = 0 }: any) {
   return (
-    <Card className="relative overflow-hidden border-border/60 bg-card/80 backdrop-blur transition-all hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5">
+    <Card className="relative overflow-hidden border-border/60 bg-card/80 backdrop-blur transition-all hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-0.5">
       <div className={`absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-3xl ${gradient}`} />
       <CardContent className="p-5 relative">
         <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
-            <p className="text-2xl font-bold mt-2">{suffix}{typeof value === "number" ? value.toLocaleString(undefined, { maximumFractionDigits: 2 }) : value}</p>
+          <div className="min-w-0">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider truncate">{label}</p>
+            <p className="text-2xl font-bold mt-2 tabular-nums">
+              <AnimatedCounter value={Number(value) || 0} prefix={prefix} suffix={suffix} decimals={decimals} />
+            </p>
           </div>
-          <div className={`h-11 w-11 rounded-xl flex items-center justify-center ${gradient}`}>
+          <div className={`h-11 w-11 shrink-0 rounded-xl flex items-center justify-center ${gradient}`}>
             <Icon className="h-5 w-5 text-white" />
           </div>
         </div>
       </CardContent>
     </Card>
   );
+}
+
+function greetingFor(date = new Date()) {
+  const h = date.getHours();
+  if (h < 5) return "Good night";
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  if (h < 21) return "Good evening";
+  return "Good night";
 }
 
 function DashboardPage() {
