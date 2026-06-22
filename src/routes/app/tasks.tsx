@@ -138,7 +138,7 @@ function TasksPage() {
           </div>
         )}
 
-        <div className="flex flex-col md:flex-row gap-3 mb-5">
+        <div className="flex flex-col md:flex-row gap-3 mb-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input className="pl-9" placeholder="Search tasks…" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -165,6 +165,29 @@ function TasksPage() {
           )}
         </div>
 
+        {/* Quick category chips */}
+        {categories.length > 1 && (
+          <div className="flex gap-2 overflow-x-auto pb-2 mb-4 -mx-1 px-1 scrollbar-none">
+            {categories.map((c) => {
+              const active = cat === c;
+              return (
+                <button
+                  key={c}
+                  onClick={() => setCat(c)}
+                  className={
+                    "shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all active:scale-95 " +
+                    (active
+                      ? "bg-gradient-to-r from-primary to-primary/70 text-primary-foreground border-transparent shadow-md shadow-primary/30"
+                      : "bg-card/60 border-border text-muted-foreground hover:text-foreground hover:border-primary/40")
+                  }
+                >
+                  {c === "all" ? "All" : c}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {loading ? (
           <CardGridSkeleton count={6} />
         ) : total === 0 ? (
@@ -178,15 +201,38 @@ function TasksPage() {
             {paged.map((t) => {
               const submitted = mine.has(t.id);
               const remaining = t.total_slots - t.completed_slots;
+              const ageHours = (Date.now() - new Date(t.created_at).getTime()) / 3600000;
+              const isNew = ageHours < 24;
+              const ratio = t.total_slots > 0 ? remaining / t.total_slots : 1;
+              const isHot = Number(t.reward) >= 5 || ratio < 0.3;
+              const isLimited = remaining > 0 && remaining <= 5;
               return (
                 <Card key={t.id} onClick={() => openDetails(t)}
-                  className="group overflow-hidden cursor-pointer border-border/60 hover:border-primary/40 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/5">
-                  <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/30 overflow-hidden flex items-center justify-center">
+                  className="group relative overflow-hidden cursor-pointer border-border/60 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20">
+                  <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/30 overflow-hidden flex items-center justify-center relative">
                     {t.banner_url ? (
-                      <img src={t.banner_url} alt={t.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      <img src={t.banner_url} alt={t.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     ) : (
                       <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
                     )}
+                    {/* Floating status badges */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      {isNew && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-500 text-white shadow-lg animate-pulse">
+                          New
+                        </span>
+                      )}
+                      {isHot && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg animate-pulse">
+                          🔥 Hot
+                        </span>
+                      )}
+                      {isLimited && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-warning text-warning-foreground shadow-lg animate-pulse">
+                          Limited
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-2">
