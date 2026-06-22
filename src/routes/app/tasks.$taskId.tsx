@@ -76,8 +76,10 @@ function TaskDetailPage() {
         if (upErr) throw upErr;
         await supabase.from("task_submission_proofs").insert({ submission_id: sub.id, image_url: path });
       }
-      toast.success("Submission sent! Awaiting publisher review.");
-      navigate({ to: "/app/submissions" });
+      setFiles([]);
+      setProofText("");
+      setSuccessOpen(true);
+      load();
     } catch (err: any) {
       toast.error(friendlyError(err, "Submission failed"));
     } finally { setBusy(false); }
