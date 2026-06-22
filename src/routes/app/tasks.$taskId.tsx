@@ -33,6 +33,7 @@ function TaskDetailPage() {
   const [proofText, setProofText] = useState("");
   const [busy, setBusy] = useState(false);
   const [activationOpen, setActivationOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
 
   const load = async () => {
     const { data: t } = await supabase.from("tasks")
