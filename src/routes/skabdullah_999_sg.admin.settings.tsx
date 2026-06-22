@@ -129,6 +129,15 @@ function SettingsPage() {
         contact_email: d.contact_email ?? "",
       });
       setSiteLogoUrl(d.site_logo_url ?? "");
+      setBonus({
+        signup_bonus_enabled: !!d.signup_bonus_enabled,
+        signup_bonus_amount: Number(d.signup_bonus_amount ?? 0),
+        signup_bonus_max_users: Number(d.signup_bonus_max_users ?? 0),
+        signup_bonus_start_at: d.signup_bonus_start_at
+          ? new Date(d.signup_bonus_start_at).toISOString().slice(0, 16)
+          : "",
+      });
+      setBonusGranted(Number(d.signup_bonus_granted_count ?? 0));
     }
   };
 
