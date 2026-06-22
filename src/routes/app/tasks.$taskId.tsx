@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Upload, ArrowLeft, Coins, Users2, Clock, ImageIcon, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ActivationRequiredDialog } from "@/components/activation-required-dialog";
+import { SubmissionSuccessDialog } from "@/components/submission-success-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
