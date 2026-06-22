@@ -47,6 +47,8 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useSiteTheme();
   const siteLogo = useSiteLogo();
+  const withdrawalsHidden = useWithdrawalsHidden();
+  const visibleItems = withdrawalsHidden ? items.filter((i) => i.to !== "/app/withdraw") : items;
 
   const [profileChecked, setProfileChecked] = useState(false);
   const [profileError, setProfileError] = useState("");
