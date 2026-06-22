@@ -23,19 +23,17 @@ export const Route = createFileRoute("/app/dashboard")({
 function StatCard({ icon: Icon, label, value, gradient, suffix = "", prefix = "", decimals = 0 }: any) {
   return (
     <Card className="relative overflow-hidden border-border/60 bg-card/80 backdrop-blur transition-all hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-0.5">
-      <div className={`absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-3xl ${gradient}`} />
-      <CardContent className="p-5 relative">
-        <div className="flex items-center justify-between">
-          <div className="min-w-0">
-            <p className="text-xs text-muted-foreground uppercase tracking-wider truncate">{label}</p>
-            <p className="text-2xl font-bold mt-2 tabular-nums">
-              <AnimatedCounter value={Number(value) || 0} prefix={prefix} suffix={suffix} decimals={decimals} />
-            </p>
-          </div>
-          <div className={`h-11 w-11 shrink-0 rounded-xl flex items-center justify-center ${gradient}`}>
-            <Icon className="h-5 w-5 text-white" />
+      <div className={`pointer-events-none absolute -top-10 -right-10 h-24 w-24 rounded-full opacity-10 blur-2xl ${gradient}`} />
+      <CardContent className="p-4 relative">
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-wider leading-tight">{label}</p>
+          <div className={`h-8 w-8 shrink-0 rounded-lg flex items-center justify-center ${gradient}`}>
+            <Icon className="h-4 w-4 text-white" />
           </div>
         </div>
+        <p className="text-lg sm:text-xl font-bold mt-3 tabular-nums truncate">
+          <AnimatedCounter value={Number(value) || 0} prefix={prefix} suffix={suffix} decimals={decimals} />
+        </p>
       </CardContent>
     </Card>
   );
