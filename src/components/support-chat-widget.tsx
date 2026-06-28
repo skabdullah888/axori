@@ -67,6 +67,17 @@ export function SupportChatWidget() {
   }, [uid]);
 
   useEffect(() => {
+    supabase
+      .from("settings")
+      .select("social_facebook,social_youtube,social_instagram,social_twitter,social_telegram,social_whatsapp,social_tiktok,social_linkedin")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setSocials(data as Record<string, string>);
+      });
+  }, []);
+
+  useEffect(() => {
     if (open && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
