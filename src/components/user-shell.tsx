@@ -264,7 +264,10 @@ export function UserShell({ title, children }: { title: string; children: ReactN
           <AdSlot placement="app_bottom" />
         </main>
       </div>
-      <BottomNav unread={unread} />
+      <BottomNav unread={(() => {
+        const tracked = new Set(visibleItems.flatMap((i) => (i.types.includes("*") ? [] : i.types)));
+        return Object.entries(unreadByType).reduce((s, [t, n]) => s + (tracked.has(t) ? 0 : n), 0);
+      })()} />
       <SupportChatWidget />
     </SiteThemeRoot>
   );
