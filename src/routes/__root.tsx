@@ -9,6 +9,8 @@ import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteAdsHead } from "@/components/site-ads-head";
 import { TopProgressBar } from "@/components/top-progress-bar";
+import { OfflineBanner } from "@/components/offline-banner";
+import { registerServiceWorker } from "@/lib/register-sw";
 
 function NotFoundComponent() {
   return (
