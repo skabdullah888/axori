@@ -32,6 +32,7 @@ export function SupportChatWidget() {
   const [text, setText] = useState("");
   const [unread, setUnread] = useState(0);
   const [sending, setSending] = useState(false);
+  const [socials, setSocials] = useState<Record<string, string>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
   const uid = session?.user?.id;
 
