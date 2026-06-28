@@ -133,13 +133,37 @@ export function SupportChatWidget() {
       {open && (
         <div className="fixed z-50 bottom-36 right-4 lg:bottom-24 lg:right-6 w-[calc(100vw-2rem)] max-w-sm h-[70vh] max-h-[520px] bg-card border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-200">
           <div className="px-4 py-3 bg-gradient-to-r from-primary/20 to-primary/5 border-b border-border flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center">
+            <div className="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
               <Headphones className="h-4 w-4 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold">Support</div>
               <div className="text-[10px] text-muted-foreground">Usually replies within a few hours</div>
             </div>
+            {(() => {
+              const active = SOCIAL_DEFS.filter((s) => (socials[s.key] ?? "").trim().length > 0);
+              if (active.length === 0) return null;
+              return (
+                <div className="flex items-center gap-1 shrink-0">
+                  {active.slice(0, 4).map(({ key, label, Icon, color }) => (
+                    <a
+                      key={key}
+                      href={socials[key]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={label}
+                      aria-label={label}
+                      className={cn(
+                        "h-7 w-7 rounded-full border border-border bg-background/60 text-muted-foreground flex items-center justify-center transition-colors",
+                        color,
+                      )}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </a>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
 
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-2 bg-background/40">
