@@ -622,6 +622,39 @@ export type Database = {
         }
         Relationships: []
       }
+      support_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read_by_admin: boolean
+          read_by_user: boolean
+          sender: string
+          sender_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          read_by_admin?: boolean
+          read_by_user?: boolean
+          sender: string
+          sender_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read_by_admin?: boolean
+          read_by_user?: boolean
+          sender?: string
+          sender_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
