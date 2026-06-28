@@ -9,6 +9,8 @@ import appCss from "../styles.css?url";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteAdsHead } from "@/components/site-ads-head";
 import { TopProgressBar } from "@/components/top-progress-bar";
+import { OfflineBanner } from "@/components/offline-banner";
+import { registerServiceWorker } from "@/lib/register-sw";
 
 function NotFoundComponent() {
   return (
@@ -93,17 +95,41 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   useEffect(() => {
+    registerServiceWorker();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
-    return () => subscription.unsubscribe();
+    // Block write actions when offline — surfaces a toast instead of silent failure.
+    const blockOffline = (e: Event) => {
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        const t = e.target as HTMLElement | null;
+        if (!t) return;
+        const el = t.closest("button, [role='button'], a[data-needs-online], form");
+        if (!el) return;
+        if (el.tagName === "A" || el.getAttribute("data-allow-offline") === "true") return;
+        if (el.tagName === "BUTTON" && (el as HTMLButtonElement).type === "button" && el.getAttribute("data-needs-online") !== "true" && el.closest("[data-allow-offline='true']")) return;
+        if (el.tagName === "FORM" || (el as HTMLButtonElement).type === "submit" || el.getAttribute("data-needs-online") === "true") {
+          e.preventDefault();
+          e.stopPropagation();
+          import("sonner").then(({ toast }) => toast.error("You are offline. Please reconnect to continue."));
+        }
+      }
+    };
+    document.addEventListener("click", blockOffline, true);
+    document.addEventListener("submit", blockOffline, true);
+    return () => {
+      subscription.unsubscribe();
+      document.removeEventListener("click", blockOffline, true);
+      document.removeEventListener("submit", blockOffline, true);
+    };
   }, [router, queryClient]);
   return (
     <QueryClientProvider client={queryClient}>
       <SiteAdsHead />
       <TopProgressBar />
+      <OfflineBanner />
       <Outlet />
       <Sonner />
     </QueryClientProvider>
