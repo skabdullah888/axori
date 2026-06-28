@@ -725,6 +725,7 @@ export type Database = {
       }
       tasks: {
         Row: {
+          auto_approve: boolean
           banner_url: string | null
           category: string | null
           completed_slots: number
@@ -745,6 +746,7 @@ export type Database = {
           total_slots: number
         }
         Insert: {
+          auto_approve?: boolean
           banner_url?: string | null
           category?: string | null
           completed_slots?: number
@@ -765,6 +767,7 @@ export type Database = {
           total_slots?: number
         }
         Update: {
+          auto_approve?: boolean
           banner_url?: string | null
           category?: string | null
           completed_slots?: number

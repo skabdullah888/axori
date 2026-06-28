@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle, User, ChevronRight } from "lucide-react";
+import { Megaphone, Plus, ListChecks, CheckCircle2, XCircle, Eye, Clock, BarChart3, Trash2, AlertTriangle, User, ChevronRight, Zap, Pencil } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -63,9 +63,11 @@ function PublishPage() {
     reward: "", total_slots: "1",
   });
   const [showPublisher, setShowPublisher] = useState(true);
+  const [autoApprove, setAutoApprove] = useState(false);
   const [rejectSub, setRejectSub] = useState<any | null>(null);
   const [cancelTask, setCancelTask] = useState<any | null>(null);
   const [viewSub, setViewSub] = useState<any | null>(null);
+  const [editTask, setEditTask] = useState<any | null>(null);
 
   async function confirmCancelTask() {
     if (!cancelTask) return;
@@ -165,15 +167,21 @@ function PublishPage() {
       });
       if (error || !newTaskId) { toast.error(friendlyError(error, "Failed to publish")); setBusy(false); return; }
 
-      // Persist publisher visibility preference on the freshly-created task.
-      if (!showPublisher) {
-        await (supabase as any).from("tasks").update({ show_publisher: false }).eq("id", newTaskId);
+      // Persist publisher visibility & auto-approve preferences on the freshly-created task.
+      if (!showPublisher || autoApprove) {
+        await (supabase as any).from("tasks").update({
+          show_publisher: showPublisher,
+          auto_approve: autoApprove,
+        }).eq("id", newTaskId);
       }
 
-      toast.success("Task submitted for admin review!");
+      toast.success(autoApprove
+        ? "Task submitted! Submissions will auto-approve once admin activates the task."
+        : "Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
       setShowPublisher(true);
+      setAutoApprove(false);
       setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
     } catch (err: any) {
       toast.error(friendlyError(err, "Failed to publish"));
@@ -339,6 +347,22 @@ function PublishPage() {
                     </div>
                   </div>
 
+                  {/* Auto-approve toggle */}
+                  <div className="flex items-start justify-between gap-3 p-3 rounded-lg bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/30">
+                    <div className="min-w-0 flex items-start gap-2">
+                      <Zap className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                      <div className="min-w-0">
+                        <Label htmlFor="auto-approve" className="text-sm">Auto-approve submissions</Label>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {autoApprove
+                            ? "⚡ Every submission will be approved instantly and the worker will be paid immediately. Use only for tasks where proof is trivial."
+                            : "Submissions wait for your manual review (recommended)."}
+                        </p>
+                      </div>
+                    </div>
+                    <Switch id="auto-approve" checked={autoApprove} onCheckedChange={setAutoApprove} />
+                  </div>
+
                   {/* Publisher visibility toggle */}
                   <div className="flex items-start justify-between gap-3 p-3 rounded-lg bg-accent/30 border border-border">
                     <div className="min-w-0">
@@ -417,16 +441,35 @@ function PublishPage() {
                         <p className="text-[10px] text-muted-foreground">paid out</p>
                       </div>
                       {!["completed", "rejected", "cancelled"].includes(t.status) && (
-                        <div className="w-full flex justify-end">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-destructive border-destructive/30 hover:bg-destructive/10"
-                            onClick={() => setCancelTask(t)}
-                          >
-                            <Trash2 className="h-3.5 w-3.5 mr-1" />
-                            Cancel task
-                          </Button>
+                        <div className="w-full flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/60">
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <Switch
+                              checked={!!t.auto_approve}
+                              onCheckedChange={async (v) => {
+                                const { error } = await (supabase as any).from("tasks").update({ auto_approve: v }).eq("id", t.id);
+                                if (error) { toast.error(friendlyError(error)); return; }
+                                toast.success(v ? "Auto-approve enabled" : "Auto-approve disabled");
+                                load();
+                              }}
+                            />
+                            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-amber-500" /> Auto-approve</span>
+                          </label>
+                          <div className="flex gap-2">
+                            {t.status === "pending" && (
+                              <Button size="sm" variant="outline" onClick={() => setEditTask(t)}>
+                                <Pencil className="h-3.5 w-3.5 mr-1" />Edit
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                              onClick={() => setCancelTask(t)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5 mr-1" />
+                              Cancel
+                            </Button>
+                          </div>
                         </div>
                       )}
                     </CardContent>
@@ -555,7 +598,72 @@ function PublishPage() {
         onApprove={() => { if (viewSub) { reviewSub(viewSub.id, true, viewSub.task_id, viewSub.user_id, viewSub._reward); setViewSub(null); } }}
         onReject={() => { if (viewSub) { setRejectSub(viewSub); setViewSub(null); } }}
       />
+      <EditTaskDialog task={editTask} onClose={() => setEditTask(null)} onSaved={() => { setEditTask(null); load(); }} />
     </>
+  );
+}
+
+function EditTaskDialog({ task, onClose, onSaved }: { task: any | null; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({ title: "", description: "", instructions: "", category: "general" });
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!task) return;
+    setForm({
+      title: task.title ?? "",
+      description: task.description ?? "",
+      instructions: task.instructions ?? "",
+      category: task.category ?? "general",
+    });
+  }, [task?.id]);
+
+  if (!task) return null;
+
+  const save = async () => {
+    if (!form.title.trim() || !form.instructions.trim()) { toast.error("Title and instructions are required"); return; }
+    setSaving(true);
+    const { error } = await (supabase as any).from("tasks").update({
+      title: form.title.trim(),
+      description: form.description,
+      instructions: form.instructions,
+      category: form.category,
+    }).eq("id", task.id);
+    setSaving(false);
+    if (error) { toast.error(friendlyError(error)); return; }
+    toast.success("Task updated");
+    onSaved();
+  };
+
+  return (
+    <Dialog open={!!task} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Edit pending task</DialogTitle>
+          <DialogDescription>You can edit this task while it's awaiting admin approval. Reward, slots and proof requirements are locked.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5"><Label>Title</Label>
+            <Input value={form.title} onChange={(e) => setForm(f => ({ ...f, title: e.target.value }))} maxLength={120} /></div>
+          <div className="space-y-1.5"><Label>Description</Label>
+            <Textarea rows={2} value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} /></div>
+          <div className="space-y-1.5"><Label>Detailed instructions</Label>
+            <Textarea rows={5} value={form.instructions} onChange={(e) => setForm(f => ({ ...f, instructions: e.target.value }))} /></div>
+          <div className="space-y-1.5"><Label>Category</Label>
+            <Select value={form.category} onValueChange={(v) => setForm(f => ({ ...f, category: v }))}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <div className="rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
+            Reward: ৳{Number(task.reward).toFixed(2)} · Slots: {task.total_slots} · Status: <b>{task.status}</b>
+          </div>
+          <div className="flex gap-2 pt-1">
+            <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancel</Button>
+            <Button className="flex-1" onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
