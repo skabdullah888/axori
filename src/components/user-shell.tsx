@@ -142,8 +142,9 @@ export function UserShell({ title, children }: { title: string; children: ReactN
   };
 
   if (loading || !isAuthed || !profileChecked) {
-    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
+    return <FullPageLoader label="Preparing your dashboard" />;
   }
+
 
   if (profileError) {
     return <div className="min-h-screen flex items-center justify-center px-4 text-center text-muted-foreground">{profileError}</div>;
