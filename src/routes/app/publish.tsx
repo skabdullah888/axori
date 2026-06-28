@@ -598,7 +598,72 @@ function PublishPage() {
         onApprove={() => { if (viewSub) { reviewSub(viewSub.id, true, viewSub.task_id, viewSub.user_id, viewSub._reward); setViewSub(null); } }}
         onReject={() => { if (viewSub) { setRejectSub(viewSub); setViewSub(null); } }}
       />
+      <EditTaskDialog task={editTask} onClose={() => setEditTask(null)} onSaved={() => { setEditTask(null); load(); }} />
     </>
+  );
+}
+
+function EditTaskDialog({ task, onClose, onSaved }: { task: any | null; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState({ title: "", description: "", instructions: "", category: "general" });
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!task) return;
+    setForm({
+      title: task.title ?? "",
+      description: task.description ?? "",
+      instructions: task.instructions ?? "",
+      category: task.category ?? "general",
+    });
+  }, [task?.id]);
+
+  if (!task) return null;
+
+  const save = async () => {
+    if (!form.title.trim() || !form.instructions.trim()) { toast.error("Title and instructions are required"); return; }
+    setSaving(true);
+    const { error } = await (supabase as any).from("tasks").update({
+      title: form.title.trim(),
+      description: form.description,
+      instructions: form.instructions,
+      category: form.category,
+    }).eq("id", task.id);
+    setSaving(false);
+    if (error) { toast.error(friendlyError(error)); return; }
+    toast.success("Task updated");
+    onSaved();
+  };
+
+  return (
+    <Dialog open={!!task} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Edit pending task</DialogTitle>
+          <DialogDescription>You can edit this task while it's awaiting admin approval. Reward, slots and proof requirements are locked.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div className="space-y-1.5"><Label>Title</Label>
+            <Input value={form.title} onChange={(e) => setForm(f => ({ ...f, title: e.target.value }))} maxLength={120} /></div>
+          <div className="space-y-1.5"><Label>Description</Label>
+            <Textarea rows={2} value={form.description} onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))} /></div>
+          <div className="space-y-1.5"><Label>Detailed instructions</Label>
+            <Textarea rows={5} value={form.instructions} onChange={(e) => setForm(f => ({ ...f, instructions: e.target.value }))} /></div>
+          <div className="space-y-1.5"><Label>Category</Label>
+            <Select value={form.category} onValueChange={(v) => setForm(f => ({ ...f, category: v }))}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <div className="rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
+            Reward: ৳{Number(task.reward).toFixed(2)} · Slots: {task.total_slots} · Status: <b>{task.status}</b>
+          </div>
+          <div className="flex gap-2 pt-1">
+            <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancel</Button>
+            <Button className="flex-1" onClick={save} disabled={saving}>{saving ? "Saving…" : "Save changes"}</Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
