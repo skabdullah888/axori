@@ -1,8 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send, Headphones } from "lucide-react";
+import { MessageCircle, X, Send, Headphones, Facebook, Youtube, Instagram, Twitter, Music2, Linkedin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+
+const SOCIAL_DEFS = [
+  { key: "social_facebook", label: "Facebook", Icon: Facebook, color: "hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2]" },
+  { key: "social_youtube", label: "YouTube", Icon: Youtube, color: "hover:bg-[#FF0000] hover:text-white hover:border-[#FF0000]" },
+  { key: "social_telegram", label: "Telegram", Icon: Send, color: "hover:bg-[#229ED9] hover:text-white hover:border-[#229ED9]" },
+  { key: "social_whatsapp", label: "WhatsApp", Icon: MessageCircle, color: "hover:bg-[#25D366] hover:text-white hover:border-[#25D366]" },
+  { key: "social_instagram", label: "Instagram", Icon: Instagram, color: "hover:bg-[#E1306C] hover:text-white hover:border-[#E1306C]" },
+  { key: "social_twitter", label: "Twitter / X", Icon: Twitter, color: "hover:bg-foreground hover:text-background" },
+  { key: "social_tiktok", label: "TikTok", Icon: Music2, color: "hover:bg-foreground hover:text-background" },
+  { key: "social_linkedin", label: "LinkedIn", Icon: Linkedin, color: "hover:bg-[#0A66C2] hover:text-white hover:border-[#0A66C2]" },
+] as const;
 
 type Msg = {
   id: string;
