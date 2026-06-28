@@ -265,6 +265,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
         </main>
       </div>
       <BottomNav unread={unread} />
+      <SupportChatWidget />
     </SiteThemeRoot>
   );
 }
