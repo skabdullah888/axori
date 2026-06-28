@@ -63,9 +63,11 @@ function PublishPage() {
     reward: "", total_slots: "1",
   });
   const [showPublisher, setShowPublisher] = useState(true);
+  const [autoApprove, setAutoApprove] = useState(false);
   const [rejectSub, setRejectSub] = useState<any | null>(null);
   const [cancelTask, setCancelTask] = useState<any | null>(null);
   const [viewSub, setViewSub] = useState<any | null>(null);
+  const [editTask, setEditTask] = useState<any | null>(null);
 
   async function confirmCancelTask() {
     if (!cancelTask) return;
