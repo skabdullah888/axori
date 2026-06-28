@@ -35,9 +35,9 @@ export function AdminShell({ title, children }: { title: string; children: React
   }, [loading, isAuthed, navigate, session]);
 
   if (loading || !checked || !isAdmin) {
-  if (loading || !checked || !isAdmin) {
     return <FullPageLoader label="Verifying admin access" />;
   }
+
 
 
   return (
