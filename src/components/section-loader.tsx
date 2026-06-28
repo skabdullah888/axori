@@ -2,6 +2,8 @@ import { Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useSiteLogo } from "@/hooks/use-site-logo";
+
 
 type Props = {
   label?: string;
