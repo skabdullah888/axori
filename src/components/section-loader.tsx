@@ -2,6 +2,8 @@ import { Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useSiteLogo } from "@/hooks/use-site-logo";
+
 
 type Props = {
   label?: string;
@@ -72,6 +74,71 @@ export function ListSkeleton({ count = 5, className }: { count?: number; classNa
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+/**
+ * Premium full-page loader — branded animated logo with orbit rings,
+ * gradient mesh background, and a shimmering progress bar. Used as the
+ * boot/auth-check splash for user & admin shells.
+ */
+export function FullPageLoader({ label = "Loading your experience" }: { label?: string }) {
+  const logo = useSiteLogo();
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background">
+      {/* Animated gradient mesh background */}
+      <div className="absolute inset-0 opacity-60">
+        <div className="absolute -top-1/4 -left-1/4 h-[60vmax] w-[60vmax] rounded-full bg-primary/30 blur-3xl animate-pulse" />
+        <div
+          className="absolute -bottom-1/4 -right-1/4 h-[60vmax] w-[60vmax] rounded-full bg-purple-500/20 blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 h-[40vmax] w-[40vmax] rounded-full bg-cyan-400/20 blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+      </div>
+
+      {/* Subtle grid */}
+      <div
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+
+      <div className="relative flex flex-col items-center gap-6 animate-fade-in">
+        {/* Orbiting rings around logo */}
+        <div className="relative h-28 w-28 flex items-center justify-center">
+          <div className="absolute inset-0 rounded-full border-2 border-primary/20" />
+          <div
+            className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary border-r-primary/60 animate-spin"
+            style={{ animationDuration: "1.4s" }}
+          />
+          <div
+            className="absolute inset-2 rounded-full border-2 border-transparent border-b-purple-400 border-l-purple-400/60 animate-spin"
+            style={{ animationDuration: "2s", animationDirection: "reverse" }}
+          />
+          <div className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/20 via-purple-500/10 to-cyan-400/20 backdrop-blur-sm" />
+          <div className="relative h-14 w-14 rounded-2xl bg-card/80 backdrop-blur-xl shadow-2xl shadow-primary/30 flex items-center justify-center ring-1 ring-border/50 animate-[pulse_2s_ease-in-out_infinite]">
+            <img src={logo} alt="" className="h-9 w-9 object-contain" />
+          </div>
+        </div>
+
+        {/* Label with shimmer */}
+        <div className="flex flex-col items-center gap-3">
+          <p className="text-sm font-medium bg-gradient-to-r from-foreground via-primary to-foreground bg-[length:200%_100%] bg-clip-text text-transparent animate-[shimmer_2.5s_linear_infinite]">
+            {label}
+          </p>
+          {/* Indeterminate progress bar */}
+          <div className="relative h-1 w-48 overflow-hidden rounded-full bg-muted/50">
+            <div className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-gradient-to-r from-transparent via-primary to-transparent animate-[loader-slide_1.4s_ease-in-out_infinite]" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

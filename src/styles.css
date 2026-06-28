@@ -140,3 +140,13 @@
 
 /* Sonner toast pretty: accent bar */
 .toast-pretty { position: relative; overflow: hidden; }
+
+/* Full-page premium loader */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes loader-slide {
+  0%   { left: -33%; }
+  100% { left: 100%; }
+}
