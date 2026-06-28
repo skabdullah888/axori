@@ -347,6 +347,22 @@ function PublishPage() {
                     </div>
                   </div>
 
+                  {/* Auto-approve toggle */}
+                  <div className="flex items-start justify-between gap-3 p-3 rounded-lg bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/30">
+                    <div className="min-w-0 flex items-start gap-2">
+                      <Zap className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                      <div className="min-w-0">
+                        <Label htmlFor="auto-approve" className="text-sm">Auto-approve submissions</Label>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {autoApprove
+                            ? "⚡ Every submission will be approved instantly and the worker will be paid immediately. Use only for tasks where proof is trivial."
+                            : "Submissions wait for your manual review (recommended)."}
+                        </p>
+                      </div>
+                    </div>
+                    <Switch id="auto-approve" checked={autoApprove} onCheckedChange={setAutoApprove} />
+                  </div>
+
                   {/* Publisher visibility toggle */}
                   <div className="flex items-start justify-between gap-3 p-3 rounded-lg bg-accent/30 border border-border">
                     <div className="min-w-0">
