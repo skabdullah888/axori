@@ -441,16 +441,35 @@ function PublishPage() {
                         <p className="text-[10px] text-muted-foreground">paid out</p>
                       </div>
                       {!["completed", "rejected", "cancelled"].includes(t.status) && (
-                        <div className="w-full flex justify-end">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-destructive border-destructive/30 hover:bg-destructive/10"
-                            onClick={() => setCancelTask(t)}
-                          >
-                            <Trash2 className="h-3.5 w-3.5 mr-1" />
-                            Cancel task
-                          </Button>
+                        <div className="w-full flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/60">
+                          <label className="flex items-center gap-2 text-xs cursor-pointer">
+                            <Switch
+                              checked={!!t.auto_approve}
+                              onCheckedChange={async (v) => {
+                                const { error } = await (supabase as any).from("tasks").update({ auto_approve: v }).eq("id", t.id);
+                                if (error) { toast.error(friendlyError(error)); return; }
+                                toast.success(v ? "Auto-approve enabled" : "Auto-approve disabled");
+                                load();
+                              }}
+                            />
+                            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-amber-500" /> Auto-approve</span>
+                          </label>
+                          <div className="flex gap-2">
+                            {t.status === "pending" && (
+                              <Button size="sm" variant="outline" onClick={() => setEditTask(t)}>
+                                <Pencil className="h-3.5 w-3.5 mr-1" />Edit
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                              onClick={() => setCancelTask(t)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5 mr-1" />
+                              Cancel
+                            </Button>
+                          </div>
                         </div>
                       )}
                     </CardContent>
