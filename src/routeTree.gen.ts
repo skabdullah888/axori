@@ -35,6 +35,7 @@ import { Route as AppAppealsRouteImport } from './routes/app/appeals'
 import { Route as Skabdullah_999_sgAdminUsersRouteImport } from './routes/skabdullah_999_sg.admin.users'
 import { Route as Skabdullah_999_sgAdminTutorialsRouteImport } from './routes/skabdullah_999_sg.admin.tutorials'
 import { Route as Skabdullah_999_sgAdminTasksRouteImport } from './routes/skabdullah_999_sg.admin.tasks'
+import { Route as Skabdullah_999_sgAdminSupportRouteImport } from './routes/skabdullah_999_sg.admin.support'
 import { Route as Skabdullah_999_sgAdminSettingsRouteImport } from './routes/skabdullah_999_sg.admin.settings'
 import { Route as Skabdullah_999_sgAdminSecurityLogsRouteImport } from './routes/skabdullah_999_sg.admin.security-logs'
 import { Route as Skabdullah_999_sgAdminPublishersRouteImport } from './routes/skabdullah_999_sg.admin.publishers'
@@ -181,6 +182,12 @@ const Skabdullah_999_sgAdminTasksRoute =
     path: '/skabdullah_999_sg/admin/tasks',
     getParentRoute: () => rootRouteImport,
   } as any)
+const Skabdullah_999_sgAdminSupportRoute =
+  Skabdullah_999_sgAdminSupportRouteImport.update({
+    id: '/skabdullah_999_sg/admin/support',
+    path: '/skabdullah_999_sg/admin/support',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const Skabdullah_999_sgAdminSettingsRoute =
   Skabdullah_999_sgAdminSettingsRouteImport.update({
     id: '/skabdullah_999_sg/admin/settings',
@@ -284,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/skabdullah_999_sg/admin/publishers': typeof Skabdullah_999_sgAdminPublishersRoute
   '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
+  '/skabdullah_999_sg/admin/support': typeof Skabdullah_999_sgAdminSupportRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
   '/skabdullah_999_sg/admin/tutorials': typeof Skabdullah_999_sgAdminTutorialsRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
@@ -324,6 +332,7 @@ export interface FileRoutesByTo {
   '/skabdullah_999_sg/admin/publishers': typeof Skabdullah_999_sgAdminPublishersRoute
   '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
+  '/skabdullah_999_sg/admin/support': typeof Skabdullah_999_sgAdminSupportRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
   '/skabdullah_999_sg/admin/tutorials': typeof Skabdullah_999_sgAdminTutorialsRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
@@ -365,6 +374,7 @@ export interface FileRoutesById {
   '/skabdullah_999_sg/admin/publishers': typeof Skabdullah_999_sgAdminPublishersRoute
   '/skabdullah_999_sg/admin/security-logs': typeof Skabdullah_999_sgAdminSecurityLogsRoute
   '/skabdullah_999_sg/admin/settings': typeof Skabdullah_999_sgAdminSettingsRoute
+  '/skabdullah_999_sg/admin/support': typeof Skabdullah_999_sgAdminSupportRoute
   '/skabdullah_999_sg/admin/tasks': typeof Skabdullah_999_sgAdminTasksRoute
   '/skabdullah_999_sg/admin/tutorials': typeof Skabdullah_999_sgAdminTutorialsRoute
   '/skabdullah_999_sg/admin/users': typeof Skabdullah_999_sgAdminUsersRoute
@@ -407,6 +417,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/publishers'
     | '/skabdullah_999_sg/admin/security-logs'
     | '/skabdullah_999_sg/admin/settings'
+    | '/skabdullah_999_sg/admin/support'
     | '/skabdullah_999_sg/admin/tasks'
     | '/skabdullah_999_sg/admin/tutorials'
     | '/skabdullah_999_sg/admin/users'
@@ -447,6 +458,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/publishers'
     | '/skabdullah_999_sg/admin/security-logs'
     | '/skabdullah_999_sg/admin/settings'
+    | '/skabdullah_999_sg/admin/support'
     | '/skabdullah_999_sg/admin/tasks'
     | '/skabdullah_999_sg/admin/tutorials'
     | '/skabdullah_999_sg/admin/users'
@@ -487,6 +499,7 @@ export interface FileRouteTypes {
     | '/skabdullah_999_sg/admin/publishers'
     | '/skabdullah_999_sg/admin/security-logs'
     | '/skabdullah_999_sg/admin/settings'
+    | '/skabdullah_999_sg/admin/support'
     | '/skabdullah_999_sg/admin/tasks'
     | '/skabdullah_999_sg/admin/tutorials'
     | '/skabdullah_999_sg/admin/users'
@@ -515,6 +528,7 @@ export interface RootRouteChildren {
   Skabdullah_999_sgAdminPublishersRoute: typeof Skabdullah_999_sgAdminPublishersRoute
   Skabdullah_999_sgAdminSecurityLogsRoute: typeof Skabdullah_999_sgAdminSecurityLogsRoute
   Skabdullah_999_sgAdminSettingsRoute: typeof Skabdullah_999_sgAdminSettingsRoute
+  Skabdullah_999_sgAdminSupportRoute: typeof Skabdullah_999_sgAdminSupportRoute
   Skabdullah_999_sgAdminTasksRoute: typeof Skabdullah_999_sgAdminTasksRoute
   Skabdullah_999_sgAdminTutorialsRoute: typeof Skabdullah_999_sgAdminTutorialsRoute
   Skabdullah_999_sgAdminUsersRoute: typeof Skabdullah_999_sgAdminUsersRoute
@@ -707,6 +721,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Skabdullah_999_sgAdminTasksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/skabdullah_999_sg/admin/support': {
+      id: '/skabdullah_999_sg/admin/support'
+      path: '/skabdullah_999_sg/admin/support'
+      fullPath: '/skabdullah_999_sg/admin/support'
+      preLoaderRoute: typeof Skabdullah_999_sgAdminSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/skabdullah_999_sg/admin/settings': {
       id: '/skabdullah_999_sg/admin/settings'
       path: '/skabdullah_999_sg/admin/settings'
@@ -860,6 +881,7 @@ const rootRouteChildren: RootRouteChildren = {
   Skabdullah_999_sgAdminSecurityLogsRoute:
     Skabdullah_999_sgAdminSecurityLogsRoute,
   Skabdullah_999_sgAdminSettingsRoute: Skabdullah_999_sgAdminSettingsRoute,
+  Skabdullah_999_sgAdminSupportRoute: Skabdullah_999_sgAdminSupportRoute,
   Skabdullah_999_sgAdminTasksRoute: Skabdullah_999_sgAdminTasksRoute,
   Skabdullah_999_sgAdminTutorialsRoute: Skabdullah_999_sgAdminTutorialsRoute,
   Skabdullah_999_sgAdminUsersRoute: Skabdullah_999_sgAdminUsersRoute,
