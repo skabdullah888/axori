@@ -11,6 +11,7 @@ import { SiteAdsHead } from "@/components/site-ads-head";
 import { TopProgressBar } from "@/components/top-progress-bar";
 import { OfflineBanner } from "@/components/offline-banner";
 import { registerServiceWorker } from "@/lib/register-sw";
+import { PWABackButton } from "@/components/pwa-back-button";
 
 function NotFoundComponent() {
   return (
@@ -130,6 +131,7 @@ function RootComponent() {
       <SiteAdsHead />
       <TopProgressBar />
       <OfflineBanner />
+      <PWABackButton />
       <Outlet />
       <Sonner />
     </QueryClientProvider>
