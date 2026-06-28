@@ -16,6 +16,7 @@ import { useSiteLogo } from "@/hooks/use-site-logo";
 import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 import { BottomNav } from "@/components/bottom-nav";
 import { SupportChatWidget } from "@/components/support-chat-widget";
+import { FullPageLoader } from "@/components/section-loader";
 
 const items = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, types: [] as string[] },
