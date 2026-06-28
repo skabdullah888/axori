@@ -15,6 +15,7 @@ const items = [
   { to: `${BASE}/users`, label: "Users", icon: Users, types: [] as string[] },
   { to: `${BASE}/publishers`, label: "Publishers", icon: Building2, types: [] as string[] },
   { to: `${BASE}/tasks`, label: "Tasks", icon: ListTodo, types: ["task_published", "submission_new"] },
+  { to: `${BASE}/support`, label: "Support Chat", icon: MessageCircle, types: ["support_message"] },
   { to: `${BASE}/notifications`, label: "Notifications", icon: Bell, types: ["*"] },
   { to: `${BASE}/settings`, label: "Settings", icon: SettingsIcon, types: [] as string[] },
   { to: `${BASE}/tutorials`, label: "Tutorial Videos", icon: Video, types: [] as string[] },
