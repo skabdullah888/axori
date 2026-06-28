@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminSidebar } from "./admin-sidebar";
+import { FullPageLoader } from "@/components/section-loader";
 
 export function AdminShell({ title, children }: { title: string; children: ReactNode }) {
   const { isAuthed, loading, session } = useAuth();
