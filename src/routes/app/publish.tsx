@@ -167,15 +167,21 @@ function PublishPage() {
       });
       if (error || !newTaskId) { toast.error(friendlyError(error, "Failed to publish")); setBusy(false); return; }
 
-      // Persist publisher visibility preference on the freshly-created task.
-      if (!showPublisher) {
-        await (supabase as any).from("tasks").update({ show_publisher: false }).eq("id", newTaskId);
+      // Persist publisher visibility & auto-approve preferences on the freshly-created task.
+      if (!showPublisher || autoApprove) {
+        await (supabase as any).from("tasks").update({
+          show_publisher: showPublisher,
+          auto_approve: autoApprove,
+        }).eq("id", newTaskId);
       }
 
-      toast.success("Task submitted for admin review!");
+      toast.success(autoApprove
+        ? "Task submitted! Submissions will auto-approve once admin activates the task."
+        : "Task submitted for admin review!");
       setForm({ title: "", description: "", instructions: "", category: "general", reward: "", total_slots: "1" });
       setBannerFile(null); setBannerPreview(null);
       setShowPublisher(true);
+      setAutoApprove(false);
       setProofFields([{ id: crypto.randomUUID(), type: "image", label: "Proof screenshot", required: true }]);
     } catch (err: any) {
       toast.error(friendlyError(err, "Failed to publish"));
