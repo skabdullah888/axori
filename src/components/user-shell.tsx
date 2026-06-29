@@ -171,7 +171,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{theme.appTagline}</div>
           </div>
         </div>
-        <button className="lg:hidden text-muted-foreground" onClick={() => setMobileOpen(false)}><X className="h-5 w-5" /></button>
+        <button aria-label="Close menu" className="lg:hidden text-muted-foreground" onClick={() => setMobileOpen(false)}><X className="h-5 w-5" /></button>
       </div>
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
         {visibleItems.map((it) => {
