@@ -18,7 +18,15 @@ import { useWithdrawalsHidden } from "@/hooks/use-withdrawals-hidden";
 import { AnimatedCounter } from "@/components/animated-counter";
 
 export const Route = createFileRoute("/app/wallet")({
-  head: () => ({ meta: [{ title: "Wallet — AxoraBD" }] }),
+  head: () => ({
+    meta: [
+      { title: "Wallet — AxoraBD" },
+      { name: "description", content: "Manage your AxoraBD wallet — view balance, deposits, withdrawals and transaction history." },
+      { property: "og:title", content: "Wallet — AxoraBD" },
+      { property: "og:description", content: "Track your AxoraBD balance and payouts." },
+      { name: "robots", content: "noindex, follow" },
+    ],
+  }),
   staticData: { title: "Wallet" },
   component: WalletPage,
 });

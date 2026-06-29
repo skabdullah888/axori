@@ -90,7 +90,7 @@ export const SITE_THEMES: Record<SiteThemeId, SiteTheme> = {
     },
     meta: {
       title: `${SITE_NAME} | Earn Money Online in Bangladesh`,
-      description: `${SITE_NAME} is Bangladesh's trusted online earning & micro-task platform. Complete simple tasks, submit proofs, earn money and withdraw easily via bKash, Nagad, Rocket.`,
+      description: `Earn online in Bangladesh with ${SITE_NAME}. Complete micro-tasks, submit proofs and withdraw via bKash, Nagad & Rocket.`,
     },
     appTagline: "Earn tasks",
   },

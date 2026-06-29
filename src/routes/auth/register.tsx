@@ -9,7 +9,16 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/auth/register")({
-  head: () => ({ meta: [{ title: "Register — AxoraBD" }] }),
+  head: () => ({
+    meta: [
+      { title: "Sign Up — AxoraBD" },
+      { name: "description", content: "Create your free AxoraBD account in seconds and start earning online in Bangladesh by completing simple micro-tasks." },
+      { property: "og:title", content: "Sign Up — AxoraBD" },
+      { property: "og:description", content: "Join AxoraBD free and start earning with micro-tasks today." },
+      { property: "og:url", content: "https://axorabd.site/auth/register" },
+    ],
+    links: [{ rel: "canonical", href: "https://axorabd.site/auth/register" }],
+  }),
   component: RegisterPage,
   validateSearch: (s: Record<string, unknown>) => ({ ref: (s.ref as string) || "" }),
 });
