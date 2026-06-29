@@ -214,7 +214,7 @@ export function UserShell({ title, children }: { title: string; children: ReactN
       <div className="lg:ml-64">
         <header className="h-16 border-b border-border bg-card/40 backdrop-blur-xl flex items-center justify-between px-4 lg:px-6 sticky top-0 z-20">
           <div className="flex items-center gap-3">
-            <button className="lg:hidden" onClick={() => setMobileOpen(true)}><Menu className="h-5 w-5" /></button>
+            <button aria-label="Open menu" className="lg:hidden" onClick={() => setMobileOpen(true)}><Menu className="h-5 w-5" /></button>
             <h1 className="text-base lg:text-lg font-semibold">{title}</h1>
           </div>
           <div className="flex items-center gap-3">
