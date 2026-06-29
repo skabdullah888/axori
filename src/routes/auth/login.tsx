@@ -9,7 +9,16 @@ import { useAuth } from "@/hooks/use-auth";
 import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/auth/login")({
-  head: () => ({ meta: [{ title: "Login — AxoraBD" }] }),
+  head: () => ({
+    meta: [
+      { title: "Login — AxoraBD" },
+      { name: "description", content: "Log in to your AxoraBD account to complete tasks, track earnings and withdraw via bKash, Nagad or Rocket." },
+      { property: "og:title", content: "Login — AxoraBD" },
+      { property: "og:description", content: "Sign in to AxoraBD and continue earning online in Bangladesh." },
+      { property: "og:url", content: "https://axorabd.site/auth/login" },
+    ],
+    links: [{ rel: "canonical", href: "https://axorabd.site/auth/login" }],
+  }),
   component: LoginPage,
 });
 
