@@ -1,0 +1,12 @@
+# AxoraBD
+
+> AxoraBD (Axora BD) is Bangladesh's trusted micro-task & earning platform. Users complete simple online tasks, submit proofs, earn rewards and withdraw via bKash, Nagad or Rocket.
+
+AxoraBD lets publishers post paid micro-tasks (likes, follows, comments, subscribes, views, app installs, etc.) and lets earners complete those tasks for cash rewards. Payouts go to local mobile-money wallets in Bangladesh.
+
+## Pages
+
+- [Home](/): Overview of AxoraBD, features, stats, how it works.
+- [About](/about): Mission, vision, contact and social links.
+- [Sign Up](/auth/register): Create a free AxoraBD account.
+- [Login](/auth/login): Sign in to an existing account.
