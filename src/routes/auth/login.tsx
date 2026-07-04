@@ -9,6 +9,9 @@ import { useAuth } from "@/hooks/use-auth";
 import { friendlyError } from "@/lib/friendly-error";
 
 export const Route = createFileRoute("/auth/login")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Login — AxoraBD" },
@@ -24,6 +27,7 @@ export const Route = createFileRoute("/auth/login")({
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const { isAuthed, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,8 +36,11 @@ function LoginPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && isAuthed) navigate({ to: "/app/dashboard" });
-  }, [isAuthed, loading, navigate]);
+    if (!loading && isAuthed) {
+      if (next) { window.location.href = next; return; }
+      navigate({ to: "/app/dashboard" });
+    }
+  }, [isAuthed, loading, navigate, next]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +48,7 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
     if (error) { setError(friendlyError(error)); return; }
+    if (next) { window.location.href = next; return; }
     navigate({ to: "/app/dashboard" });
   };
 
