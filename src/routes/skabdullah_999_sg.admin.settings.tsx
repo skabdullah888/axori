@@ -16,6 +16,7 @@ import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone,
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LogoDropzone } from "@/components/logo-dropzone";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
   head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
@@ -847,23 +848,50 @@ function SettingsPage() {
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Current active logo from DB */}
+              <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/40">
+                <img
+                  src={(row?.site_logo_url && String(row.site_logo_url).trim()) || "/favicon.png"}
+                  alt="Current logo"
+                  className="h-14 w-14 rounded-lg object-cover border bg-background"
+                />
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold text-foreground">Current logo</div>
+                  <div className="text-xs text-muted-foreground break-all">
+                    {row?.site_logo_url && String(row.site_logo_url).trim() ? row.site_logo_url : "Default (no custom logo set)"}
+                  </div>
+                </div>
+              </div>
+
+              <LogoDropzone onUploaded={(url) => setSiteLogoUrl(url)} />
+
               <div className="space-y-1.5">
-                <Label className="text-xs">Logo URL</Label>
+                <Label className="text-xs">Or paste a logo URL</Label>
                 <Input
                   placeholder="https://example.com/logo.png"
                   value={siteLogoUrl}
                   onChange={(e) => setSiteLogoUrl(e.target.value)}
                 />
-                <p className="text-xs text-muted-foreground">Square images (e.g. 128×128 PNG) work best.</p>
+                <p className="text-xs text-muted-foreground">Square images (e.g. 128×128 PNG) work best. Shows in header, sidebar, About page, and browser tab.</p>
               </div>
-              {siteLogoUrl.trim() && (
-                <div className="flex items-center gap-3 p-3 rounded-lg border bg-card/40">
-                  <img src={siteLogoUrl} alt="Logo preview" className="h-12 w-12 rounded-lg object-cover border" />
-                  <div className="text-xs text-muted-foreground break-all">{siteLogoUrl}</div>
+
+              {siteLogoUrl.trim() && siteLogoUrl !== (row?.site_logo_url ?? "") && (
+                <div className="flex items-center gap-3 p-3 rounded-lg border border-primary/40 bg-primary/5">
+                  <img src={siteLogoUrl} alt="New logo preview" className="h-12 w-12 rounded-lg object-cover border bg-background" />
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold text-primary">New logo (not saved)</div>
+                    <div className="text-xs text-muted-foreground break-all">{siteLogoUrl}</div>
+                  </div>
                 </div>
               )}
-              <div className="flex justify-end pt-2">
-                <Button onClick={saveLogo} disabled={savingLogo}>
+
+              <div className="flex justify-between items-center pt-2 gap-2">
+                {siteLogoUrl.trim() && (
+                  <Button variant="outline" size="sm" onClick={() => setSiteLogoUrl("")}>
+                    Clear
+                  </Button>
+                )}
+                <Button onClick={saveLogo} disabled={savingLogo} className="ml-auto">
                   {savingLogo ? "Saving…" : "Save logo"}
                 </Button>
               </div>

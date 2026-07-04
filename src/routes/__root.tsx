@@ -12,6 +12,7 @@ import { TopProgressBar } from "@/components/top-progress-bar";
 import { OfflineBanner } from "@/components/offline-banner";
 import { registerServiceWorker } from "@/lib/register-sw";
 import { PWABackButton } from "@/components/pwa-back-button";
+import { DynamicFavicon } from "@/components/dynamic-favicon";
 
 function NotFoundComponent() {
   return (
@@ -129,6 +130,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SiteAdsHead />
+      <DynamicFavicon />
       <TopProgressBar />
       <OfflineBanner />
       <PWABackButton />
