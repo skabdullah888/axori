@@ -72,47 +72,32 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
           <div
             className={`absolute inset-y-0 left-1/2 w-1/2 z-20 transition-transform duration-700 ease-in-out ${isRegister ? "-translate-x-full" : "translate-x-0"}`}
           >
-            <div className="relative h-full w-full overflow-hidden">
-              {/* inner content moves 2x to counter parent for classic effect */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary/80 flex items-center justify-center px-10 text-primary-foreground transition-transform duration-700 ease-in-out ${isRegister ? "translate-x-1/2" : "-translate-x-1/2"}`}
-                style={{ width: "200%", left: isRegister ? "-100%" : "0%" }}
-              >
-                {!isRegister ? (
-                  <div className="text-center max-w-sm animate-in fade-in slide-in-from-right-4 duration-500">
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5">
-                      <Sparkles className="h-7 w-7" />
-                    </div>
-                    <h2 className="text-3xl font-bold mb-3">Hello, Friend!</h2>
-                    <p className="text-sm/relaxed opacity-90 mb-8">
-                      Bangladesh's #1 social engagement community. Sign up and start growing your YouTube, Facebook, TikTok & Instagram today.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => switchTo("register")}
-                      className="inline-flex items-center gap-2 rounded-full border-2 border-primary-foreground/90 px-8 py-2.5 text-sm font-semibold tracking-wide uppercase hover:bg-primary-foreground hover:text-primary transition-colors"
-                    >
-                      Sign Up
-                    </button>
+            <div className="relative h-full w-full overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/85 text-primary-foreground">
+              {/* decorative blobs */}
+              <div className="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full bg-primary-foreground/10 blur-2xl" />
+              <div className="pointer-events-none absolute -bottom-20 -right-10 h-64 w-64 rounded-full bg-primary-foreground/5 blur-2xl" />
+
+              <div key={isRegister ? "welcome-back" : "hello-friend"} className="absolute inset-0 flex items-center justify-center px-8 animate-in fade-in duration-500">
+                <div className="text-center max-w-xs">
+                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5">
+                    <Sparkles className="h-7 w-7" />
                   </div>
-                ) : (
-                  <div className="text-center max-w-sm animate-in fade-in slide-in-from-left-4 duration-500">
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5">
-                      <Sparkles className="h-7 w-7" />
-                    </div>
-                    <h2 className="text-3xl font-bold mb-3">Welcome Back!</h2>
-                    <p className="text-sm/relaxed opacity-90 mb-8">
-                      Already a member? Sign in to continue completing engagement tasks and earning rewards.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => switchTo("login")}
-                      className="inline-flex items-center gap-2 rounded-full border-2 border-primary-foreground/90 px-8 py-2.5 text-sm font-semibold tracking-wide uppercase hover:bg-primary-foreground hover:text-primary transition-colors"
-                    >
-                      Sign In
-                    </button>
-                  </div>
-                )}
+                  <h2 className="text-3xl font-bold mb-3">
+                    {isRegister ? "Welcome Back!" : "Hello, Friend!"}
+                  </h2>
+                  <p className="text-sm/relaxed opacity-90 mb-8">
+                    {isRegister
+                      ? "Already a member? Sign in to continue completing engagement tasks and earning rewards."
+                      : "Bangladesh's #1 social engagement community. Sign up and grow your YouTube, Facebook, TikTok & Instagram today."}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => switchTo(isRegister ? "login" : "register")}
+                    className="inline-flex items-center gap-2 rounded-full border-2 border-primary-foreground/90 px-8 py-2.5 text-sm font-semibold tracking-wide uppercase hover:bg-primary-foreground hover:text-primary transition-colors"
+                  >
+                    {isRegister ? "Sign In" : "Sign Up"}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
