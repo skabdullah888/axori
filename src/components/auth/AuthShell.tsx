@@ -30,6 +30,7 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
   const navigate = useNavigate();
   const { isAuthed, loading } = useAuth();
   const [mode, setMode] = useState<Mode>(initialMode);
+  const siteLogo = useSiteLogo();
 
   useEffect(() => {
     if (!loading && isAuthed) {
