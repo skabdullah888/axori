@@ -17,7 +17,7 @@ export default defineTool({
     let q = sb
       .from("task_submissions")
       .select("id,task_id,status,note,created_at,updated_at,tasks(title,reward)")
-      .eq("user_id", ctx.getUserId())
+      .eq("user_id", ctx.getUserId()!)
       .order("created_at", { ascending: false })
       .limit(limit);
     if (status) q = q.eq("status", status);

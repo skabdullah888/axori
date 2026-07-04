@@ -13,7 +13,7 @@ export default defineTool({
     const { data, error } = await sb
       .from("profiles")
       .select("username,full_name,email,balance,trust_score,status,is_publisher,checkin_streak,withdrawal_method,withdrawal_account,referral_code,created_at")
-      .eq("user_id", ctx.getUserId())
+      .eq("user_id", ctx.getUserId()!)
       .maybeSingle();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) return { content: [{ type: "text", text: "Profile not found" }], isError: true };

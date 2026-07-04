@@ -16,7 +16,7 @@ export default defineTool({
     const { data, error } = await sb
       .from("notifications")
       .select("*")
-      .eq("user_id", ctx.getUserId())
+      .eq("user_id", ctx.getUserId()!)
       .order("created_at", { ascending: false })
       .limit(limit);
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
