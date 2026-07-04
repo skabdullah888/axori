@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
-import { AlertCircle, Eye, EyeOff, Mail, Lock, User, Phone, Gift, ArrowRight, ArrowLeft, Sparkles, MailCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Mail, Lock, User, Phone, Gift, MailCheck, Sparkles, ArrowLeft, ArrowRight } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { friendlyError } from "@/lib/friendly-error";
+import { useSiteLogo, DEFAULT_SITE_LOGO } from "@/hooks/use-site-logo";
 
 type Mode = "login" | "register";
 
@@ -29,6 +30,7 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
   const navigate = useNavigate();
   const { isAuthed, loading } = useAuth();
   const [mode, setMode] = useState<Mode>(initialMode);
+  const siteLogo = useSiteLogo();
 
   useEffect(() => {
     if (!loading && isAuthed) {
@@ -79,8 +81,8 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
 
               <div key={isRegister ? "welcome-back" : "hello-friend"} className="absolute inset-0 flex items-center justify-center px-8 animate-in fade-in duration-500">
                 <div className="text-center max-w-xs">
-                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5">
-                    <Sparkles className="h-7 w-7" />
+                  <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5 overflow-hidden">
+                    <img src={siteLogo || DEFAULT_SITE_LOGO} alt="Site logo" className="h-12 w-12 object-contain" onError={(e) => { (e.currentTarget as HTMLImageElement).src = DEFAULT_SITE_LOGO; }} />
                   </div>
                   <h2 className="text-3xl font-bold mb-3">
                     {isRegister ? "Welcome Back!" : "Hello, Friend!"}
@@ -106,8 +108,8 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
         {/* Mobile: single stacked form with tab toggle */}
         <div className="md:hidden p-6">
           <div className="text-center mb-6">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 mb-3 shadow-lg shadow-primary/30">
-              <Sparkles className="h-6 w-6 text-primary-foreground" />
+            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 mb-3 shadow-lg shadow-primary/30 overflow-hidden p-2">
+              <img src={siteLogo || DEFAULT_SITE_LOGO} alt="Site logo" className="h-full w-full object-contain" onError={(e) => { (e.currentTarget as HTMLImageElement).src = DEFAULT_SITE_LOGO; }} />
             </div>
             <h1 className="text-2xl font-bold tracking-tight">{isRegister ? "Join AxoraBD" : "Welcome back"}</h1>
             <p className="text-xs text-muted-foreground mt-1">
