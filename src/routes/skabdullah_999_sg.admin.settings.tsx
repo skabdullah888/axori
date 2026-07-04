@@ -16,6 +16,7 @@ import { Settings2, Wallet, Plus, Trash2, CreditCard, Palette, Check, Megaphone,
 import { SITE_THEME_LIST, type SiteThemeId } from "@/lib/site-themes";
 import { AD_PLACEMENTS, AD_PROVIDERS, AD_RECOMMENDATIONS, AD_EXTRA_CATALOG, emptyAdsConfig, parseAdsConfig, type AdsConfig, type AdPlacement, type AdProvider } from "@/lib/ads";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LogoDropzone } from "@/components/logo-dropzone";
 
 export const Route = createFileRoute("/skabdullah_999_sg/admin/settings")({
   head: () => ({ meta: [{ title: "Admin Settings — AxoraBD" }] }),
