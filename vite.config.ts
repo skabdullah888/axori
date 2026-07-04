@@ -8,6 +8,7 @@ import path from "node:path";
 import { loadEnv } from "vite";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { VitePWA } from "vite-plugin-pwa";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
 // Load all (non VITE_) env vars into process.env so server routes can read
 // secrets like SUPABASE_SERVICE_ROLE_KEY and LOVABLE_API_KEY at runtime.
@@ -36,6 +37,7 @@ export default defineConfig({
       },
     },
     plugins: [
+      mcpPlugin(),
       VitePWA({
         registerType: "autoUpdate",
         injectRegister: null,

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SubmissionsRouteImport } from './routes/submissions'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AboutRouteImport } from './routes/about'
@@ -32,6 +33,8 @@ import { Route as AppNotificationsRouteImport } from './routes/app/notifications
 import { Route as AppDepositRouteImport } from './routes/app/deposit'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAppealsRouteImport } from './routes/app/appeals'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Skabdullah_999_sgAdminUsersRouteImport } from './routes/skabdullah_999_sg.admin.users'
 import { Route as Skabdullah_999_sgAdminTutorialsRouteImport } from './routes/skabdullah_999_sg.admin.tutorials'
 import { Route as Skabdullah_999_sgAdminTasksRouteImport } from './routes/skabdullah_999_sg.admin.tasks'
@@ -45,6 +48,8 @@ import { Route as Skabdullah_999_sgAdminLoginRouteImport } from './routes/skabdu
 import { Route as Skabdullah_999_sgAdminDashboardRouteImport } from './routes/skabdullah_999_sg.admin.dashboard'
 import { Route as Skabdullah_999_sgAdminAppealsRouteImport } from './routes/skabdullah_999_sg.admin.appeals'
 import { Route as AppTasksTaskIdRouteImport } from './routes/app/tasks.$taskId'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -62,6 +67,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   id: '/robots.txt',
   path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -164,6 +174,18 @@ const AppAppealsRoute = AppAppealsRouteImport.update({
   path: '/appeals',
   getParentRoute: () => AppRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const Skabdullah_999_sgAdminUsersRoute =
   Skabdullah_999_sgAdminUsersRouteImport.update({
     id: '/skabdullah_999_sg/admin/users',
@@ -241,6 +263,17 @@ const AppTasksTaskIdRoute = AppTasksTaskIdRouteImport.update({
   path: '/$taskId',
   getParentRoute: () => AppTasksRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -263,9 +296,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/app': typeof AppRouteWithChildren
+  '/mcp': typeof McpRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submissions': typeof SubmissionsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
@@ -282,6 +318,8 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
   '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
   '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
@@ -304,9 +342,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/app': typeof AppRouteWithChildren
+  '/mcp': typeof McpRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submissions': typeof SubmissionsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
@@ -323,6 +364,8 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
   '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
   '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
@@ -346,9 +389,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/ads.txt': typeof AdsDottxtRoute
   '/app': typeof AppRouteWithChildren
+  '/mcp': typeof McpRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/submissions': typeof SubmissionsRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/app/appeals': typeof AppAppealsRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/deposit': typeof AppDepositRoute
@@ -365,6 +411,8 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/app/tasks/$taskId': typeof AppTasksTaskIdRoute
   '/skabdullah_999_sg/admin/appeals': typeof Skabdullah_999_sgAdminAppealsRoute
   '/skabdullah_999_sg/admin/dashboard': typeof Skabdullah_999_sgAdminDashboardRoute
@@ -389,9 +437,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/app'
+    | '/mcp'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/submissions'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
@@ -408,6 +459,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/reset-password'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/app/tasks/$taskId'
     | '/skabdullah_999_sg/admin/appeals'
     | '/skabdullah_999_sg/admin/dashboard'
@@ -430,9 +483,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/app'
+    | '/mcp'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/submissions'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
@@ -449,6 +505,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/reset-password'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/app/tasks/$taskId'
     | '/skabdullah_999_sg/admin/appeals'
     | '/skabdullah_999_sg/admin/dashboard'
@@ -471,9 +529,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/ads.txt'
     | '/app'
+    | '/mcp'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/submissions'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/app/appeals'
     | '/app/dashboard'
     | '/app/deposit'
@@ -490,6 +551,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/reset-password'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/app/tasks/$taskId'
     | '/skabdullah_999_sg/admin/appeals'
     | '/skabdullah_999_sg/admin/dashboard'
@@ -513,13 +576,18 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdsDottxtRoute: typeof AdsDottxtRoute
   AppRoute: typeof AppRouteWithChildren
+  McpRoute: typeof McpRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubmissionsRoute: typeof SubmissionsRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
   AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   Skabdullah_999_sgAdminAppealsRoute: typeof Skabdullah_999_sgAdminAppealsRoute
   Skabdullah_999_sgAdminDashboardRoute: typeof Skabdullah_999_sgAdminDashboardRoute
   Skabdullah_999_sgAdminLoginRoute: typeof Skabdullah_999_sgAdminLoginRoute
@@ -558,6 +626,13 @@ declare module '@tanstack/react-router' {
       path: '/robots.txt'
       fullPath: '/robots.txt'
       preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -700,6 +775,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAppealsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/skabdullah_999_sg/admin/users': {
       id: '/skabdullah_999_sg/admin/users'
       path: '/skabdullah_999_sg/admin/users'
@@ -791,6 +880,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTasksTaskIdRouteImport
       parentRoute: typeof AppTasksRoute
     }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
       path: '/lovable/email/queue/process'
@@ -864,13 +967,19 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdsDottxtRoute: AdsDottxtRoute,
   AppRoute: AppRouteWithChildren,
+  McpRoute: McpRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubmissionsRoute: SubmissionsRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
   AuthResetPasswordRoute: AuthResetPasswordRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   Skabdullah_999_sgAdminAppealsRoute: Skabdullah_999_sgAdminAppealsRoute,
   Skabdullah_999_sgAdminDashboardRoute: Skabdullah_999_sgAdminDashboardRoute,
   Skabdullah_999_sgAdminLoginRoute: Skabdullah_999_sgAdminLoginRoute,
@@ -892,3 +1001,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
