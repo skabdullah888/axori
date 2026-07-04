@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
-import { AlertCircle, Eye, EyeOff, Mail, Lock, User, Phone, Gift, MailCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Mail, Lock, User, Phone, Gift, MailCheck, Sparkles, ArrowLeft, ArrowRight } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
