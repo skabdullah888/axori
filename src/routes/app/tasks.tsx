@@ -34,10 +34,10 @@ function shuffle<T>(arr: T[]): T[] {
 export const Route = createFileRoute("/app/tasks")({
   head: () => ({
     meta: [
-      { title: "Tasks — AxoraBD" },
-      { name: "description", content: "Browse available micro-tasks on AxoraBD. Pick a job, submit proof and earn rewards instantly." },
-      { property: "og:title", content: "Tasks — AxoraBD" },
-      { property: "og:description", content: "Browse and complete paid micro-tasks on AxoraBD." },
+      { title: "Engagement Tasks — AxoraBD" },
+      { name: "description", content: "Browse real social engagement tasks on AxoraBD — Like, Comment, Follow, Subscribe, View & Share. Complete tasks, submit proof and earn rewards instantly." },
+      { property: "og:title", content: "Engagement Tasks — AxoraBD" },
+      { property: "og:description", content: "Pick engagement tasks on AxoraBD and help creators grow while earning rewards." },
       { name: "robots", content: "noindex, follow" },
     ],
   }),
