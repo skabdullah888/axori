@@ -89,8 +89,8 @@ export const SITE_THEMES: Record<SiteThemeId, SiteTheme> = {
       body: `${SITE_NAME} is Bangladesh's trusted micro-task & earning platform. Join thousands of users already earning online through ${SITE_NAME}.`,
     },
     meta: {
-      title: `${SITE_NAME} | Earn Money Online in Bangladesh`,
-      description: `Earn online in Bangladesh with ${SITE_NAME}. Complete micro-tasks, submit proofs and withdraw via bKash, Nagad & Rocket.`,
+      title: `${SITE_NAME} | Real Social Engagement & Growth in Bangladesh`,
+      description: `Grow on YouTube, Facebook, TikTok & Instagram with ${SITE_NAME}. Get real Likes, Comments, Follows, Subscribers & Views by engaging with the community — earn rewards & cash out via bKash, Nagad, Rocket.`,
     },
     appTagline: "Earn tasks",
   },
