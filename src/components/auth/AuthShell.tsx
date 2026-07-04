@@ -81,8 +81,8 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
 
               <div key={isRegister ? "welcome-back" : "hello-friend"} className="absolute inset-0 flex items-center justify-center px-8 animate-in fade-in duration-500">
                 <div className="text-center max-w-xs">
-                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5">
-                    <Sparkles className="h-7 w-7" />
+                  <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur mb-5 overflow-hidden">
+                    <img src={siteLogo || DEFAULT_SITE_LOGO} alt="Site logo" className="h-12 w-12 object-contain" onError={(e) => { (e.currentTarget as HTMLImageElement).src = DEFAULT_SITE_LOGO; }} />
                   </div>
                   <h2 className="text-3xl font-bold mb-3">
                     {isRegister ? "Welcome Back!" : "Hello, Friend!"}
