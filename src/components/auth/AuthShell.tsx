@@ -108,8 +108,8 @@ export function AuthShell({ initialMode, nextPath, referral }: { initialMode: Mo
         {/* Mobile: single stacked form with tab toggle */}
         <div className="md:hidden p-6">
           <div className="text-center mb-6">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 mb-3 shadow-lg shadow-primary/30">
-              <Sparkles className="h-6 w-6 text-primary-foreground" />
+            <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/60 mb-3 shadow-lg shadow-primary/30 overflow-hidden p-2">
+              <img src={siteLogo || DEFAULT_SITE_LOGO} alt="Site logo" className="h-full w-full object-contain" onError={(e) => { (e.currentTarget as HTMLImageElement).src = DEFAULT_SITE_LOGO; }} />
             </div>
             <h1 className="text-2xl font-bold tracking-tight">{isRegister ? "Join AxoraBD" : "Welcome back"}</h1>
             <p className="text-xs text-muted-foreground mt-1">
