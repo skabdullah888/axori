@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
-import { AlertCircle, Eye, EyeOff, Mail, Lock, User, Phone, Gift, ArrowRight, ArrowLeft, Sparkles, MailCheck } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Mail, Lock, User, Phone, Gift, MailCheck } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { friendlyError } from "@/lib/friendly-error";
+import { useSiteLogo, DEFAULT_SITE_LOGO } from "@/hooks/use-site-logo";
 
 type Mode = "login" | "register";
 
