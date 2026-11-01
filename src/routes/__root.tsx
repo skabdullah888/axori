@@ -20,7 +20,7 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold">404</h1>
         <p className="mt-2 text-sm text-muted-foreground">Page not found.</p>
-        <Link to="/dashboard" className="inline-block mt-6 px-4 py-2 rounded-md bg-primary text-primary-foreground">
+        <Link to="/app/dashboard" className="inline-block mt-6 px-4 py-2 rounded-md bg-primary text-primary-foreground">
           Go to dashboard
         </Link>
       </div>

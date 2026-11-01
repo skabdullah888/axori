@@ -12,7 +12,7 @@ export const Route = createFileRoute("/auth/register")({
     ],
     links: [{ rel: "canonical", href: "https://axorabd.site/auth/register" }],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({ ref: (s.ref as string) || "" }),
+  validateSearch: (s: Record<string, unknown>): { ref?: string } => ({ ref: typeof s.ref === "string" ? s.ref : undefined }),
   component: RegisterPage,
 });
 
