@@ -44,10 +44,10 @@ export function PWABackButton() {
       if (typeof window !== "undefined" && window.history.length > 1) {
         router.history.back();
       } else {
-        router.navigate({ to: "/dashboard" });
+        router.navigate({ to: "/app/dashboard" });
       }
     } catch {
-      router.navigate({ to: "/dashboard" });
+      router.navigate({ to: "/app/dashboard" });
     }
   };
 
